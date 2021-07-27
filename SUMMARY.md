@@ -29,6 +29,7 @@
     * [Selector Scopes](_includes/content/selector-scopes.md)
     * [Selectors](_includes/content/selectors.md)
     * [Serviceaccountmatch](_includes/content/serviceaccountmatch.md)
+    * [Servicematch](_includes/content/servicematch.md)
     * [Testing Data Migration](_includes/content/testing-data-migration.md)
   - Geek Details
     * [Cni Aws](_includes/geek-details/cni-aws.md)
