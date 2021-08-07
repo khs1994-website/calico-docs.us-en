@@ -16,6 +16,7 @@
     * [Hostendpoints Upgrade](_includes/content/hostendpoints-upgrade.md)
     * [Httpmatch](_includes/content/httpmatch.md)
     * [Icmp](_includes/content/icmp.md)
+    * [Install Awscni Routetable Issue](_includes/content/install-awscni-routetable-issue.md)
     * [Install Calico Upgrade](_includes/content/install-calico-upgrade.md)
     * [Install K 8 S Addons](_includes/content/install-k8s-addons.md)
     * [Install Openshift Manifests](_includes/content/install-openshift-manifests.md)
