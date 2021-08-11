@@ -355,6 +355,7 @@
     * [VPP Dataplane](reference/vpp/index.md)
     * [VPP Dataplane Implementation Details](reference/vpp/technical-details.md)
     * [Primary Interface Configuration](reference/vpp/uplink-configuration.md)
+  * [Calico API](reference/api.md)
   * [Frequently Asked Questions](reference/faq.md)
   * [Reference](reference/index.md)
   * [Getting Involved](reference/involved.md)
