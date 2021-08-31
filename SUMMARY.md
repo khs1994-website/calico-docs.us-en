@@ -134,6 +134,7 @@
     * [Quickstart For Calico On Micro K 8 S](getting-started/kubernetes/microk8s.md)
     * [Quickstart For Calico On Minikube](getting-started/kubernetes/minikube.md)
     * [Quickstart For Calico On Kubernetes](getting-started/kubernetes/quickstart.md)
+    * [Install Calico On A Rancher Kubernetes Engine Cluster](getting-started/kubernetes/rancher.md)
     * [System Requirements](getting-started/kubernetes/requirements.md)
   - Openshift
     * [Open Shift](getting-started/openshift/index.md)
