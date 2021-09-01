@@ -174,6 +174,13 @@
     * [Override Policy](hack/remove-calico-policy/override-policy.md)
     * [Remove Policy](hack/remove-calico-policy/remove-policy.md)
 - Maintenance
+  - Clis
+    - [Calicoctl](maintenance/clis/calicoctl/index.md)
+      - Configure
+        * [Configure Calicoctl To Connect To An Etcd Datastore](maintenance/clis/calicoctl/configure/etcd.md)
+        * [Configure Calicoctl](maintenance/clis/calicoctl/configure/overview.md)
+        * [Configure Calicoctl To Connect To The Kubernetes API Datastore](maintenance/clis/calicoctl/configure/kdd.md)
+      * [Install Calicoctl](maintenance/clis/calicoctl/install.md)
   - Ebpf
     * [Creating An EKS Cluster For E BPF Mode](maintenance/ebpf/ebpf-and-eks.md)
     * [Enable The E BPF Dataplane](maintenance/ebpf/enabling-bpf.md)
