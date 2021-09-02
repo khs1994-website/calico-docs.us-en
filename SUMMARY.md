@@ -58,15 +58,15 @@
 - About
   * [About Calico](about/about-calico.md)
   * [About E BPF](about/about-ebpf.md)
+  * [About Kubernetes Networking](about/about-k8s-networking.md)
   * [About Kubernetes Egress](about/about-kubernetes-egress.md)
   * [About Kubernetes Ingress](about/about-kubernetes-ingress.md)
-  * [About Kubernetes Networking](about/about-kubernetes-networking.md)
   * [About Kubernetes Services](about/about-kubernetes-services.md)
   * [About Network Policy](about/about-network-policy.md)
   * [About Networking](about/about-networking.md)
   * [About](about/index.md)
 - Calico Enterprise
-  * [Calico Enterprise](calico-enterprise/index.md)
+  * [Calico Cloud](calico-enterprise/index.md)
 - Getting Started
   - Bare Metal
     - Installation
