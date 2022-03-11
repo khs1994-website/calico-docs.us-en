@@ -2,8 +2,6 @@
 
 - [Api](api/README.md)
 - [Apiserver](apiserver/README.md)
-  - Test
-    - [Certs](apiserver/test/certs/README.md)
 - [App Policy](app-policy/README.md)
 - [Calico](calico/README.md)
   - Includes
@@ -436,12 +434,8 @@
       - Input
         - V 1
           - [Migration](calicoctl/test-data/convert/input/v1/migration/README.md)
-  - Tests
-    - [Certs](calicoctl/tests/certs/README.md)
   * [CONTRIBUTING](calicoctl/CONTRIBUTING.md)
 - [Cni Plugin](cni-plugin/README.md)
-  - Tests
-    - [Certs](cni-plugin/tests/certs/README.md)
   * [Configuration](cni-plugin/configuration.md)
 - [Confd](confd/README.md)
   - Docs
@@ -466,8 +460,6 @@
   - Bpf Gpl
     - Include
       - [Libbpf](felix/bpf-gpl/include/libbpf/README.md)
-  - Fv
-    - [Certs](felix/fv/certs/README.md)
   - [K 8 Sfv](felix/k8sfv/README.md)
     * [Monitoring](felix/k8sfv/monitoring.md)
   * [CHANGES](felix/CHANGES.md)
@@ -475,9 +467,9 @@
 - Hack
   - Release
     * [RELEASING](hack/release/RELEASING.md)
+  - Test
+    - [Certs](hack/test/certs/README.md)
 - [Kube Controllers](kube-controllers/README.md)
-  - Tests
-    - [Certs](kube-controllers/tests/certs/README.md)
 - [Libcalico Go](libcalico-go/README.md)
   - Docs
     * [Data Model](libcalico-go/docs/data-model.md)
