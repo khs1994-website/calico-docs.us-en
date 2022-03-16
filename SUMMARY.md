@@ -466,6 +466,7 @@
   * [CONTRIBUTING](felix/CONTRIBUTING.md)
 - Hack
   - Release
+    - [Packaging](hack/release/packaging/README.md)
     * [RELEASING](hack/release/RELEASING.md)
   - Test
     - [Certs](hack/test/certs/README.md)
