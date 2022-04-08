@@ -136,6 +136,7 @@ type Config struct {
 	IPSetsRefreshInterval          time.Duration
 	RouteRefreshInterval           time.Duration
 	DeviceRouteSourceAddress       net.IP
+	DeviceRouteSourceAddressIPv6   net.IP
 	DeviceRouteProtocol            netlink.RouteProtocol
 	RemoveExternalRoutes           bool
 	IptablesRefreshInterval        time.Duration
@@ -145,6 +146,8 @@ type Config struct {
 	IptablesLockTimeout            time.Duration
 	IptablesLockProbeInterval      time.Duration
 	XDPRefreshInterval             time.Duration
+
+	FloatingIPsEnabled bool
 
 	Wireguard wireguard.Config
 
@@ -562,9 +565,7 @@ func NewIntDataplaneDriver(config Config) *InternalDataplane {
 	bpfMapContext := bpfmap.CreateBPFMapContext(config.BPFMapSizeIPSets, config.BPFMapSizeNATFrontend,
 		config.BPFMapSizeNATBackend, config.BPFMapSizeNATAffinity, config.BPFMapSizeRoute, config.BPFMapSizeConntrack, config.BPFMapRepin)
 
-	var (
-		bpfEndpointManager *bpfEndpointManager
-	)
+	var bpfEndpointManager *bpfEndpointManager
 
 	if config.BPFEnabled {
 		log.Info("BPF enabled, starting BPF endpoint manager and map manager.")
@@ -680,10 +681,12 @@ func NewIntDataplaneDriver(config Config) *InternalDataplane {
 		dp.endpointStatusCombiner.OnEndpointStatusUpdate,
 		config.BPFEnabled,
 		bpfEndpointManager,
-		callbacks)
+		callbacks,
+		config.FloatingIPsEnabled,
+	)
 	dp.RegisterManager(epManager)
 	dp.endpointsSourceV4 = epManager
-	dp.RegisterManager(newFloatingIPManager(natTableV4, ruleRenderer, 4))
+	dp.RegisterManager(newFloatingIPManager(natTableV4, ruleRenderer, 4, config.FloatingIPsEnabled))
 	dp.RegisterManager(newMasqManager(ipSetsV4, natTableV4, ruleRenderer, config.MaxIPSetSize, 4))
 	if config.RulesConfig.IPIPEnabled {
 		// Add a manager to keep the all-hosts IP set up to date.
@@ -758,7 +761,7 @@ func NewIntDataplaneDriver(config Config) *InternalDataplane {
 
 		routeTableV6 := routetable.New(
 			interfaceRegexes, 6, false, config.NetlinkTimeout,
-			config.DeviceRouteSourceAddress, config.DeviceRouteProtocol, config.RemoveExternalRoutes, 0,
+			config.DeviceRouteSourceAddressIPv6, config.DeviceRouteProtocol, config.RemoveExternalRoutes, 0,
 			dp.loopSummarizer, routetable.WithLivenessCB(dp.reportHealth))
 
 		if !config.BPFEnabled {
@@ -783,8 +786,10 @@ func NewIntDataplaneDriver(config Config) *InternalDataplane {
 			dp.endpointStatusCombiner.OnEndpointStatusUpdate,
 			config.BPFEnabled,
 			nil,
-			callbacks))
-		dp.RegisterManager(newFloatingIPManager(natTableV6, ruleRenderer, 6))
+			callbacks,
+			config.FloatingIPsEnabled,
+		))
+		dp.RegisterManager(newFloatingIPManager(natTableV6, ruleRenderer, 6, config.FloatingIPsEnabled))
 		dp.RegisterManager(newMasqManager(ipSetsV6, natTableV6, ruleRenderer, config.MaxIPSetSize, 6))
 		dp.RegisterManager(newServiceLoopManager(filterTableV6, ruleRenderer, 6))
 	}
@@ -2044,9 +2049,7 @@ func (d *InternalDataplane) reportHealth() {
 type dummyLock struct{}
 
 func (d dummyLock) Lock() {
-
 }
 
 func (d dummyLock) Unlock() {
-
 }
