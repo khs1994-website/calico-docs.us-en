@@ -465,6 +465,8 @@
   * [CHANGES](felix/CHANGES.md)
   * [CONTRIBUTING](felix/CONTRIBUTING.md)
 - Hack
+  - Docs
+    * [Adding An Api](hack/docs/adding-an-api.md)
   - Release
     - [Packaging](hack/release/packaging/README.md)
     * [RELEASING](hack/release/RELEASING.md)
