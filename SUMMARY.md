@@ -297,8 +297,6 @@
       * [Calicoctl Version](calico/reference/calicoctl/version.md)
     - Cni Plugin
       * [Configure The Calico CNI Plugins](calico/reference/cni-plugin/configuration.md)
-    - Dikastes
-      * [Configuring Dikastes](calico/reference/dikastes/configuration.md)
     - Etcd Rbac
       * [Calico Key And Path Prefixes](calico/reference/etcd-rbac/calico-etcdv3-paths.md)
       * [Generating Certificates](calico/reference/etcd-rbac/certificate-generation.md)
