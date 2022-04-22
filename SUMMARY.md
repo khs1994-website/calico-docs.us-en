@@ -134,6 +134,7 @@
         * [Get Started With VPP Networking](calico/getting-started/kubernetes/vpp/getting-started.md)
         * [VPP Dataplane Tech Preview](calico/getting-started/kubernetes/vpp/index.md)
         * [I Psec Configuration With VPP](calico/getting-started/kubernetes/vpp/ipsec.md)
+        * [Details Of VPP Implementation Known Issues](calico/getting-started/kubernetes/vpp/specifics.md)
       * [Install Using Helm](calico/getting-started/kubernetes/helm.md)
       * [Kubernetes](calico/getting-started/kubernetes/index.md)
       * [Quickstart For Calico On Micro K 8 S](calico/getting-started/kubernetes/microk8s.md)
