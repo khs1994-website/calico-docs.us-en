@@ -10,6 +10,7 @@
     - Content
       * [Auto Hostendpoints Migrate](calico/_includes/content/auto-hostendpoints-migrate.md)
       * [Calico Upgrade](calico/_includes/content/calico-upgrade.md)
+      * [Calico Windows Install](calico/_includes/content/calico-windows-install.md)
       * [Calicoctl Convert](calico/_includes/content/calicoctl-convert.md)
       * [Calicoctl Version](calico/_includes/content/calicoctl-version.md)
       * [Config Calico Upgrade Etcd](calico/_includes/content/config-calico-upgrade-etcd.md)
@@ -27,6 +28,7 @@
       * [Install K 8 S Addons](calico/_includes/content/install-k8s-addons.md)
       * [Install Openshift Manifests](calico/_includes/content/install-openshift-manifests.md)
       * [Ipnat](calico/_includes/content/ipnat.md)
+      * [Kube Apiserver Host Port](calico/_includes/content/kube-apiserver-host-port.md)
       * [Openstack Etcd Auth](calico/_includes/content/openstack-etcd-auth.md)
       * [Pod Cidr Sed](calico/_includes/content/pod-cidr-sed.md)
       * [Ports](calico/_includes/content/ports.md)
