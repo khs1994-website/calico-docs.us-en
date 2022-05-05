@@ -190,7 +190,6 @@
           * [Configure Calicoctl To Connect To The Kubernetes API Datastore](calico/maintenance/clis/calicoctl/configure/kdd.md)
         * [Install Calicoctl](calico/maintenance/clis/calicoctl/install.md)
     - Ebpf
-      * [Creating An EKS Cluster For E BPF Mode](calico/maintenance/ebpf/ebpf-and-eks.md)
       * [Enable The E BPF Dataplane](calico/maintenance/ebpf/enabling-bpf.md)
       * [E BPF Dataplane Mode](calico/maintenance/ebpf/index.md)
       * [E BPF Use Cases](calico/maintenance/ebpf/use-cases-ebpf.md)
@@ -212,7 +211,6 @@
     * [Manage TLS Certificates Used By Calico](calico/maintenance/certificate-management.md)
     * [Migrate Calico Data From An Etcdv 3 Datastore To A Kubernetes Datastore](calico/maintenance/datastore-migration.md)
     * [Decommission A Node](calico/maintenance/decommissioning-a-node.md)
-    * [Creating An EKS Cluster For E BPF Mode](calico/maintenance/ebpf-and-eks.md)
     * [Enable The E BPF Dataplane](calico/maintenance/enabling-bpf.md)
     * [Maintenance](calico/maintenance/index.md)
     * [Enable Kubectl To Manage Calico AP Is](calico/maintenance/install-apiserver.md)
