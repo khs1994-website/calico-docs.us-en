@@ -17,6 +17,7 @@
       * [Deleting Etcd V 2 V 3 Data](calico/_includes/content/deleting-etcd-v2-v3-data.md)
       * [Determine Ipam](calico/_includes/content/determine-ipam.md)
       * [Docker Container Service](calico/_includes/content/docker-container-service.md)
+      * [Ebpf Value](calico/_includes/content/ebpf-value.md)
       * [Endpointport](calico/_includes/content/endpointport.md)
       * [Entityrule](calico/_includes/content/entityrule.md)
       * [Environment File](calico/_includes/content/environment-file.md)
@@ -190,8 +191,10 @@
           * [Configure Calicoctl To Connect To The Kubernetes API Datastore](calico/maintenance/clis/calicoctl/configure/kdd.md)
         * [Install Calicoctl](calico/maintenance/clis/calicoctl/install.md)
     - Ebpf
-      * [Enable The E BPF Dataplane](calico/maintenance/ebpf/enabling-bpf.md)
+      * [Enable The E BPF Dataplane](calico/maintenance/ebpf/enabling-ebpf.md)
       * [E BPF Dataplane Mode](calico/maintenance/ebpf/index.md)
+      * [Install In E BPF Mode](calico/maintenance/ebpf/install.md)
+      * [Troubleshoot E BPF Mode](calico/maintenance/ebpf/troubleshoot-ebpf.md)
       * [E BPF Use Cases](calico/maintenance/ebpf/use-cases-ebpf.md)
     - Image Options
       * [Configure Use Of Your Image Registry](calico/maintenance/image-options/alternate-registry.md)
@@ -205,7 +208,6 @@
       * [Troubleshooting Commands](calico/maintenance/troubleshoot/commands.md)
       * [Component Logs](calico/maintenance/troubleshoot/component-logs.md)
       * [Troubleshoot](calico/maintenance/troubleshoot/index.md)
-      * [Troubleshooting E BPF Mode](calico/maintenance/troubleshoot/troubleshoot-ebpf.md)
       * [Troubleshooting And Diagnostics](calico/maintenance/troubleshoot/troubleshooting.md)
       * [VPP Dataplane Troubleshooting](calico/maintenance/troubleshoot/vpp.md)
     * [Manage TLS Certificates Used By Calico](calico/maintenance/certificate-management.md)
