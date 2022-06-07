@@ -5,8 +5,6 @@
 - [App Policy](app-policy/README.md)
 - [Calico](calico/README.md)
   - Includes
-    - Charts
-      - [Tigera Operator](calico/_includes/charts/tigera-operator/README.md)
     - Content
       * [Auto Hostendpoints Migrate](calico/_includes/content/auto-hostendpoints-migrate.md)
       * [Calico Upgrade](calico/_includes/content/calico-upgrade.md)
@@ -424,8 +422,6 @@
     * [Get Started With Kubernetes Network Policy](calico/security/kubernetes-network-policy.md)
     * [Apply Calico Policy To Kubernetes Node Ports](calico/security/kubernetes-node-ports.md)
     * [Protect Kubernetes Nodes](calico/security/kubernetes-nodes.md)
-  - Upgrade
-    - [v2.5](calico/upgrade/v2.5/README.md)
   * [AUTHORS](calico/AUTHORS.md)
   * [DOC STYLE GUIDE](calico/DOC_STYLE_GUIDE.md)
   * [Project Calico Documentation Archives](calico/releases.md)
@@ -436,6 +432,9 @@
         - V 1
           - [Migration](calicoctl/test-data/convert/input/v1/migration/README.md)
   * [CONTRIBUTING](calicoctl/CONTRIBUTING.md)
+- Charts
+  - [Calico](charts/calico/README.md)
+  - [Tigera Operator](charts/tigera-operator/README.md)
 - [Cni Plugin](cni-plugin/README.md)
   * [Configuration](cni-plugin/configuration.md)
 - [Confd](confd/README.md)
@@ -482,6 +481,7 @@
       - crd.projectcalico.org
         - [V 1](libcalico-go/lib/apis/crd.projectcalico.org/v1/README.md)
   - [Test](libcalico-go/test/README.md)
+- [Manifests](manifests/README.md)
 - [Networking Calico](networking-calico/README.md)
   * [CONTRIBUTING](networking-calico/CONTRIBUTING.md)
 - [Node](node/README.md)
