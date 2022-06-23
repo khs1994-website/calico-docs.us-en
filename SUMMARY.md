@@ -249,6 +249,7 @@
     * [Restrict A Pod To Use An IP Address In A Specific Range](calico/networking/legacy-firewalls.md)
     * [Migrate From One IP Pool To Another](calico/networking/migrate-pools.md)
     * [Configure MTU To Maximize Network Performance](calico/networking/mtu.md)
+    * [Use A Specific MAC Address For A Pod](calico/networking/pod-mac-address.md)
     * [Accelerate Istio Network Performance](calico/networking/sidecar-acceleration.md)
     * [Use IPVS Kube Proxy](calico/networking/use-ipvs.md)
     * [Use A Specific IP Address With A Pod](calico/networking/use-specific-ip.md)
