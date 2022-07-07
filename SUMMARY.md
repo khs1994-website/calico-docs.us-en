@@ -24,7 +24,6 @@
       * [Httpmatch](calico/_includes/content/httpmatch.md)
       * [Icmp](calico/_includes/content/icmp.md)
       * [Install Calico Upgrade](calico/_includes/content/install-calico-upgrade.md)
-      * [Install K 8 S Addons](calico/_includes/content/install-k8s-addons.md)
       * [Install Openshift Manifests](calico/_includes/content/install-openshift-manifests.md)
       * [Ipnat](calico/_includes/content/ipnat.md)
       * [Kube Apiserver Host Port](calico/_includes/content/kube-apiserver-host-port.md)
