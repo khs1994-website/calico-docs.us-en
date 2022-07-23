@@ -1,0 +1,7194 @@
+
+<!DOCTYPE HTML>
+<html lang="us-en" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Auto Hostendpoints Migrate · Calico 英文文档</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../../../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../../../gitbook/gitbook-plugin-prism/prism-solarizedlight.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../../../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="calico-upgrade.html" />
+    
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+    
+        
+        <li>
+            <a href="https://docs.khs1994.com" target="_blank" class="custom-link">Home</a>
+        </li>
+    
+    
+
+    
+    <li class="divider"></li>
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../../../">
+            
+                <a href="../../../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../../../api/">
+            
+                <a href="../../../api/">
+            
+                    
+                    Api
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../../../apiserver/">
+            
+                <a href="../../../apiserver/">
+            
+                    
+                    Apiserver
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="../../../app-policy/">
+            
+                <a href="../../../app-policy/">
+            
+                    
+                    App Policy
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="../../">
+            
+                <a href="../../">
+            
+                    
+                    Calico
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.1" >
+            
+                <span>
+            
+                    
+                    Includes
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.1.1" >
+            
+                <span>
+            
+                    
+                    Content
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter active" data-level="1.5.1.1.1" data-path="auto-hostendpoints-migrate.html">
+            
+                <a href="auto-hostendpoints-migrate.html">
+            
+                    
+                    Auto Hostendpoints Migrate
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.1.2" data-path="calico-upgrade.html">
+            
+                <a href="calico-upgrade.html">
+            
+                    
+                    Calico Upgrade
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.1.3" data-path="calico-windows-install.html">
+            
+                <a href="calico-windows-install.html">
+            
+                    
+                    Calico Windows Install
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.1.4" data-path="calicoctl-convert.html">
+            
+                <a href="calicoctl-convert.html">
+            
+                    
+                    Calicoctl Convert
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.1.5" data-path="calicoctl-version.html">
+            
+                <a href="calicoctl-version.html">
+            
+                    
+                    Calicoctl Version
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.1.6" data-path="config-calico-upgrade-etcd.html">
+            
+                <a href="config-calico-upgrade-etcd.html">
+            
+                    
+                    Config Calico Upgrade Etcd
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.1.7" data-path="deleting-etcd-v2-v3-data.html">
+            
+                <a href="deleting-etcd-v2-v3-data.html">
+            
+                    
+                    Deleting Etcd V 2 V 3 Data
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.1.8" data-path="determine-ipam.html">
+            
+                <a href="determine-ipam.html">
+            
+                    
+                    Determine Ipam
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.1.9" data-path="docker-container-service.html">
+            
+                <a href="docker-container-service.html">
+            
+                    
+                    Docker Container Service
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.1.10" data-path="ebpf-value.html">
+            
+                <a href="ebpf-value.html">
+            
+                    
+                    Ebpf Value
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.1.11" data-path="endpointport.html">
+            
+                <a href="endpointport.html">
+            
+                    
+                    Endpointport
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.1.12" data-path="entityrule.html">
+            
+                <a href="entityrule.html">
+            
+                    
+                    Entityrule
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.1.13" data-path="environment-file.html">
+            
+                <a href="environment-file.html">
+            
+                    
+                    Environment File
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.1.14" data-path="felix-init-datastore.html">
+            
+                <a href="felix-init-datastore.html">
+            
+                    
+                    Felix Init Datastore
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.1.15" data-path="hostendpoints-upgrade.html">
+            
+                <a href="hostendpoints-upgrade.html">
+            
+                    
+                    Hostendpoints Upgrade
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.1.16" data-path="httpmatch.html">
+            
+                <a href="httpmatch.html">
+            
+                    
+                    Httpmatch
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.1.17" data-path="icmp.html">
+            
+                <a href="icmp.html">
+            
+                    
+                    Icmp
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.1.18" data-path="install-calico-upgrade.html">
+            
+                <a href="install-calico-upgrade.html">
+            
+                    
+                    Install Calico Upgrade
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.1.19" data-path="install-openshift-manifests.html">
+            
+                <a href="install-openshift-manifests.html">
+            
+                    
+                    Install Openshift Manifests
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.1.20" data-path="ipnat.html">
+            
+                <a href="ipnat.html">
+            
+                    
+                    Ipnat
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.1.21" data-path="kube-apiserver-host-port.html">
+            
+                <a href="kube-apiserver-host-port.html">
+            
+                    
+                    Kube Apiserver Host Port
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.1.22" data-path="openstack-etcd-auth.html">
+            
+                <a href="openstack-etcd-auth.html">
+            
+                    
+                    Openstack Etcd Auth
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.1.23" data-path="pod-cidr-sed.html">
+            
+                <a href="pod-cidr-sed.html">
+            
+                    
+                    Pod Cidr Sed
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.1.24" data-path="ports.html">
+            
+                <a href="ports.html">
+            
+                    
+                    Ports
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.1.25" data-path="reqs-kernel.html">
+            
+                <a href="reqs-kernel.html">
+            
+                    
+                    Reqs Kernel
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.1.26" data-path="reqs-sys.html">
+            
+                <a href="reqs-sys.html">
+            
+                    
+                    Reqs Sys
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.1.27" data-path="rule.html">
+            
+                <a href="rule.html">
+            
+                    
+                    Rule
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.1.28" data-path="selector-scopes.html">
+            
+                <a href="selector-scopes.html">
+            
+                    
+                    Selector Scopes
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.1.29" data-path="selectors.html">
+            
+                <a href="selectors.html">
+            
+                    
+                    Selectors
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.1.30" data-path="serviceaccountmatch.html">
+            
+                <a href="serviceaccountmatch.html">
+            
+                    
+                    Serviceaccountmatch
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.1.31" data-path="servicematch.html">
+            
+                <a href="servicematch.html">
+            
+                    
+                    Servicematch
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.1.32" data-path="testing-data-migration.html">
+            
+                <a href="testing-data-migration.html">
+            
+                    
+                    Testing Data Migration
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.2" >
+            
+                <span>
+            
+                    
+                    Geek Details
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.1.2.1" data-path="../geek-details/cni-aws.html">
+            
+                <a href="../geek-details/cni-aws.html">
+            
+                    
+                    Cni Aws
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.2.2" data-path="../geek-details/cni-azure.html">
+            
+                <a href="../geek-details/cni-azure.html">
+            
+                    
+                    Cni Azure
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.2.3" data-path="../geek-details/cni-calico.html">
+            
+                <a href="../geek-details/cni-calico.html">
+            
+                    
+                    Cni Calico
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.2.4" data-path="../geek-details/cni-kubenet.html">
+            
+                <a href="../geek-details/cni-kubenet.html">
+            
+                    
+                    Cni Kubenet
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.2.5" data-path="../geek-details/cross-subnet-ipip.html">
+            
+                <a href="../geek-details/cross-subnet-ipip.html">
+            
+                    
+                    Cross Subnet Ipip
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.2.6" data-path="../geek-details/cross-subnet-vxlan.html">
+            
+                <a href="../geek-details/cross-subnet-vxlan.html">
+            
+                    
+                    Cross Subnet Vxlan
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.2.7" data-path="../geek-details/datastore-etcd.html">
+            
+                <a href="../geek-details/datastore-etcd.html">
+            
+                    
+                    Datastore Etcd
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.2.8" data-path="../geek-details/datastore-kubernetes.html">
+            
+                <a href="../geek-details/datastore-kubernetes.html">
+            
+                    
+                    Datastore Kubernetes
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.2.9" data-path="../geek-details/info.html">
+            
+                <a href="../geek-details/info.html">
+            
+                    
+                    Info
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.2.10" data-path="../geek-details/ipam-aws.html">
+            
+                <a href="../geek-details/ipam-aws.html">
+            
+                    
+                    Ipam Aws
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.2.11" data-path="../geek-details/ipam-azure.html">
+            
+                <a href="../geek-details/ipam-azure.html">
+            
+                    
+                    Ipam Azure
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.2.12" data-path="../geek-details/ipam-calico.html">
+            
+                <a href="../geek-details/ipam-calico.html">
+            
+                    
+                    Ipam Calico
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.2.13" data-path="../geek-details/ipam-host-local.html">
+            
+                <a href="../geek-details/ipam-host-local.html">
+            
+                    
+                    Ipam Host Local
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.2.14" data-path="../geek-details/overlay-ipip.html">
+            
+                <a href="../geek-details/overlay-ipip.html">
+            
+                    
+                    Overlay Ipip
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.2.15" data-path="../geek-details/overlay-no.html">
+            
+                <a href="../geek-details/overlay-no.html">
+            
+                    
+                    Overlay No
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.2.16" data-path="../geek-details/overlay-vxlan.html">
+            
+                <a href="../geek-details/overlay-vxlan.html">
+            
+                    
+                    Overlay Vxlan
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.2.17" data-path="../geek-details/policy-calico.html">
+            
+                <a href="../geek-details/policy-calico.html">
+            
+                    
+                    Policy Calico
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.2.18" data-path="../geek-details/policy-none.html">
+            
+                <a href="../geek-details/policy-none.html">
+            
+                    
+                    Policy None
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.2.19" data-path="../geek-details/routing-bgp.html">
+            
+                <a href="../geek-details/routing-bgp.html">
+            
+                    
+                    Routing Bgp
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.2.20" data-path="../geek-details/routing-calico.html">
+            
+                <a href="../geek-details/routing-calico.html">
+            
+                    
+                    Routing Calico
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.2.21" data-path="../geek-details/routing-static.html">
+            
+                <a href="../geek-details/routing-static.html">
+            
+                    
+                    Routing Static
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.1.2.22" data-path="../geek-details/routing-vpc-native.html">
+            
+                <a href="../geek-details/routing-vpc-native.html">
+            
+                    
+                    Routing Vpc Native
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2" >
+            
+                <span>
+            
+                    
+                    About
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.2.1" data-path="../../about/about-calico.html">
+            
+                <a href="../../about/about-calico.html">
+            
+                    
+                    About Calico
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2.2" data-path="../../about/about-ebpf.html">
+            
+                <a href="../../about/about-ebpf.html">
+            
+                    
+                    About E BPF
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2.3" data-path="../../about/about-k8s-networking.html">
+            
+                <a href="../../about/about-k8s-networking.html">
+            
+                    
+                    About Kubernetes Networking
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2.4" data-path="../../about/about-kubernetes-egress.html">
+            
+                <a href="../../about/about-kubernetes-egress.html">
+            
+                    
+                    About Kubernetes Egress
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2.5" data-path="../../about/about-kubernetes-ingress.html">
+            
+                <a href="../../about/about-kubernetes-ingress.html">
+            
+                    
+                    About Kubernetes Ingress
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2.6" data-path="../../about/about-kubernetes-services.html">
+            
+                <a href="../../about/about-kubernetes-services.html">
+            
+                    
+                    About Kubernetes Services
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2.7" data-path="../../about/about-network-policy.html">
+            
+                <a href="../../about/about-network-policy.html">
+            
+                    
+                    About Network Policy
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2.8" data-path="../../about/about-networking.html">
+            
+                <a href="../../about/about-networking.html">
+            
+                    
+                    About Networking
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2.9" data-path="../../about/">
+            
+                <a href="../../about/">
+            
+                    
+                    About
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.3" >
+            
+                <span>
+            
+                    
+                    Calico Enterprise
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.3.1" data-path="../../calico-enterprise/">
+            
+                <a href="../../calico-enterprise/">
+            
+                    
+                    Calico Cloud
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4" >
+            
+                <span>
+            
+                    
+                    Getting Started
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.4.1" >
+            
+                <span>
+            
+                    
+                    Bare Metal
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.4.1.1" >
+            
+                <span>
+            
+                    
+                    Installation
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.4.1.1.1" data-path="../../getting-started/bare-metal/installation/binary-mgr.html">
+            
+                <a href="../../getting-started/bare-metal/installation/binary-mgr.html">
+            
+                    
+                    Binary Install With Package Manager
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.1.1.2" data-path="../../getting-started/bare-metal/installation/binary.html">
+            
+                <a href="../../getting-started/bare-metal/installation/binary.html">
+            
+                    
+                    Binary Install Without Package Manager
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.1.1.3" data-path="../../getting-started/bare-metal/installation/container.html">
+            
+                <a href="../../getting-started/bare-metal/installation/container.html">
+            
+                    
+                    Docker Container Install
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.1.1.4" data-path="../../getting-started/bare-metal/installation/">
+            
+                <a href="../../getting-started/bare-metal/installation/">
+            
+                    
+                    Index
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.1.2" data-path="../../getting-started/bare-metal/about.html">
+            
+                <a href="../../getting-started/bare-metal/about.html">
+            
+                    
+                    About Non Cluster Hosts
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.1.3" data-path="../../getting-started/bare-metal/">
+            
+                <a href="../../getting-started/bare-metal/">
+            
+                    
+                    Non Cluster Hosts
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.1.4" data-path="../../getting-started/bare-metal/requirements.html">
+            
+                <a href="../../getting-started/bare-metal/requirements.html">
+            
+                    
+                    System Requirements
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.2" >
+            
+                <span>
+            
+                    
+                    Clis
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.4.2.1" data-path="../../getting-started/clis/calicoctl/">
+            
+                <a href="../../getting-started/clis/calicoctl/">
+            
+                    
+                    Calicoctl
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.4.2.1.1" >
+            
+                <span>
+            
+                    
+                    Configure
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.4.2.1.1.1" data-path="../../getting-started/clis/calicoctl/configure/etcd.html">
+            
+                <a href="../../getting-started/clis/calicoctl/configure/etcd.html">
+            
+                    
+                    Configure Calicoctl To Connect To An Etcd Datastore
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.2.1.1.2" data-path="../../getting-started/clis/calicoctl/configure/">
+            
+                <a href="../../getting-started/clis/calicoctl/configure/">
+            
+                    
+                    Index
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.2.1.1.3" data-path="../../getting-started/clis/calicoctl/configure/kdd.html">
+            
+                <a href="../../getting-started/clis/calicoctl/configure/kdd.html">
+            
+                    
+                    Configure Calicoctl To Connect To The Kubernetes API Datastore
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.2.1.1.4" data-path="../../getting-started/clis/calicoctl/configure/overview.html">
+            
+                <a href="../../getting-started/clis/calicoctl/configure/overview.html">
+            
+                    
+                    Configure Calicoctl
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3" >
+            
+                <span>
+            
+                    
+                    Kubernetes
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.4.3.1" >
+            
+                <span>
+            
+                    
+                    Flannel
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.4.3.1.1" data-path="../../getting-started/kubernetes/flannel/flannel.html">
+            
+                <a href="../../getting-started/kubernetes/flannel/flannel.html">
+            
+                    
+                    Install Calico For Policy And Flannel Aka Canal For Networking
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.1.2" data-path="../../getting-started/kubernetes/flannel/">
+            
+                <a href="../../getting-started/kubernetes/flannel/">
+            
+                    
+                    Flannel
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.1.3" data-path="../../getting-started/kubernetes/flannel/migration-from-flannel.html">
+            
+                <a href="../../getting-started/kubernetes/flannel/migration-from-flannel.html">
+            
+                    
+                    Migrate A Kubernetes Cluster From Flannel Canal To Calico
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.2" >
+            
+                <span>
+            
+                    
+                    Hardway
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.4.3.2.1" data-path="../../getting-started/kubernetes/hardway/configure-bgp-peering.html">
+            
+                <a href="../../getting-started/kubernetes/hardway/configure-bgp-peering.html">
+            
+                    
+                    Configure BGP Peering
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.2.2" data-path="../../getting-started/kubernetes/hardway/configure-ip-pools.html">
+            
+                <a href="../../getting-started/kubernetes/hardway/configure-ip-pools.html">
+            
+                    
+                    Configure IP Pools
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.2.3" data-path="../../getting-started/kubernetes/hardway/end-user-rbac.html">
+            
+                <a href="../../getting-started/kubernetes/hardway/end-user-rbac.html">
+            
+                    
+                    End User RBAC
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.2.4" data-path="../../getting-started/kubernetes/hardway/">
+            
+                <a href="../../getting-started/kubernetes/hardway/">
+            
+                    
+                    Index
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.2.5" data-path="../../getting-started/kubernetes/hardway/install-cni-plugin.html">
+            
+                <a href="../../getting-started/kubernetes/hardway/install-cni-plugin.html">
+            
+                    
+                    Install CNI Plugin
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.2.6" data-path="../../getting-started/kubernetes/hardway/install-node.html">
+            
+                <a href="../../getting-started/kubernetes/hardway/install-node.html">
+            
+                    
+                    Install Calico Node
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.2.7" data-path="../../getting-started/kubernetes/hardway/install-typha.html">
+            
+                <a href="../../getting-started/kubernetes/hardway/install-typha.html">
+            
+                    
+                    Install Typha
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.2.8" data-path="../../getting-started/kubernetes/hardway/istio-integration.html">
+            
+                <a href="../../getting-started/kubernetes/hardway/istio-integration.html">
+            
+                    
+                    Istio Integration
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.2.9" data-path="../../getting-started/kubernetes/hardway/overview.html">
+            
+                <a href="../../getting-started/kubernetes/hardway/overview.html">
+            
+                    
+                    Calico The Hard Way
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.2.10" data-path="../../getting-started/kubernetes/hardway/standing-up-kubernetes.html">
+            
+                <a href="../../getting-started/kubernetes/hardway/standing-up-kubernetes.html">
+            
+                    
+                    Stand Up Kubernetes
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.2.11" data-path="../../getting-started/kubernetes/hardway/test-network-policy.html">
+            
+                <a href="../../getting-started/kubernetes/hardway/test-network-policy.html">
+            
+                    
+                    Test Network Policy
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.2.12" data-path="../../getting-started/kubernetes/hardway/test-networking.html">
+            
+                <a href="../../getting-started/kubernetes/hardway/test-networking.html">
+            
+                    
+                    Test Networking
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.2.13" data-path="../../getting-started/kubernetes/hardway/the-calico-datastore.html">
+            
+                <a href="../../getting-started/kubernetes/hardway/the-calico-datastore.html">
+            
+                    
+                    The Calico Datastore
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.3" >
+            
+                <span>
+            
+                    
+                    Installation
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.4.3.3.1" data-path="../../getting-started/kubernetes/installation/config-options.html">
+            
+                <a href="../../getting-started/kubernetes/installation/config-options.html">
+            
+                    
+                    Customize Calico Configuration
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.4" >
+            
+                <span>
+            
+                    
+                    K 3 S
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.4.3.4.1" data-path="../../getting-started/kubernetes/k3s/">
+            
+                <a href="../../getting-started/kubernetes/k3s/">
+            
+                    
+                    K 3 S
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.4.2" data-path="../../getting-started/kubernetes/k3s/multi-node-install.html">
+            
+                <a href="../../getting-started/kubernetes/k3s/multi-node-install.html">
+            
+                    
+                    K 3 S Multi Node Install
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.4.3" data-path="../../getting-started/kubernetes/k3s/quickstart.html">
+            
+                <a href="../../getting-started/kubernetes/k3s/quickstart.html">
+            
+                    
+                    Quickstart For Calico On K 3 S
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.5" >
+            
+                <span>
+            
+                    
+                    Managed Public Cloud
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.4.3.5.1" data-path="../../getting-started/kubernetes/managed-public-cloud/aks.html">
+            
+                <a href="../../getting-started/kubernetes/managed-public-cloud/aks.html">
+            
+                    
+                    Microsoft Azure Kubernetes Service AKS
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.5.2" data-path="../../getting-started/kubernetes/managed-public-cloud/eks.html">
+            
+                <a href="../../getting-started/kubernetes/managed-public-cloud/eks.html">
+            
+                    
+                    Amazon Elastic Kubernetes Service EKS
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.5.3" data-path="../../getting-started/kubernetes/managed-public-cloud/gke.html">
+            
+                <a href="../../getting-started/kubernetes/managed-public-cloud/gke.html">
+            
+                    
+                    Google Kubernetes Engine GKE
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.5.4" data-path="../../getting-started/kubernetes/managed-public-cloud/iks.html">
+            
+                <a href="../../getting-started/kubernetes/managed-public-cloud/iks.html">
+            
+                    
+                    IBM Cloud Kubernetes Service IKS
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.5.5" data-path="../../getting-started/kubernetes/managed-public-cloud/">
+            
+                <a href="../../getting-started/kubernetes/managed-public-cloud/">
+            
+                    
+                    Managed Public Cloud
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.6" >
+            
+                <span>
+            
+                    
+                    Self Managed Onprem
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.4.3.6.1" data-path="../../getting-started/kubernetes/self-managed-onprem/">
+            
+                <a href="../../getting-started/kubernetes/self-managed-onprem/">
+            
+                    
+                    Self Managed On Premises
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.6.2" data-path="../../getting-started/kubernetes/self-managed-onprem/onpremises.html">
+            
+                <a href="../../getting-started/kubernetes/self-managed-onprem/onpremises.html">
+            
+                    
+                    Install Calico Networking And Network Policy For On Premises Deployments
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.7" >
+            
+                <span>
+            
+                    
+                    Self Managed Public Cloud
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.4.3.7.1" data-path="../../getting-started/kubernetes/self-managed-public-cloud/aws.html">
+            
+                <a href="../../getting-started/kubernetes/self-managed-public-cloud/aws.html">
+            
+                    
+                    Self Managed Kubernetes In Amazon Web Services AWS
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.7.2" data-path="../../getting-started/kubernetes/self-managed-public-cloud/azure.html">
+            
+                <a href="../../getting-started/kubernetes/self-managed-public-cloud/azure.html">
+            
+                    
+                    Self Managed Kubernetes In Microsoft Azure
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.7.3" data-path="../../getting-started/kubernetes/self-managed-public-cloud/do.html">
+            
+                <a href="../../getting-started/kubernetes/self-managed-public-cloud/do.html">
+            
+                    
+                    Self Managed Kubernetes In Digital Ocean DO
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.7.4" data-path="../../getting-started/kubernetes/self-managed-public-cloud/gce.html">
+            
+                <a href="../../getting-started/kubernetes/self-managed-public-cloud/gce.html">
+            
+                    
+                    Self Managed Kubernetes In Google Compute Engine GCE
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.7.5" data-path="../../getting-started/kubernetes/self-managed-public-cloud/">
+            
+                <a href="../../getting-started/kubernetes/self-managed-public-cloud/">
+            
+                    
+                    Self Managed Public Cloud
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.8" >
+            
+                <span>
+            
+                    
+                    Vpp
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.4.3.8.1" data-path="../../getting-started/kubernetes/vpp/getting-started.html">
+            
+                <a href="../../getting-started/kubernetes/vpp/getting-started.html">
+            
+                    
+                    Get Started With VPP Networking
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.8.2" data-path="../../getting-started/kubernetes/vpp/">
+            
+                <a href="../../getting-started/kubernetes/vpp/">
+            
+                    
+                    VPP Dataplane Tech Preview
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.8.3" data-path="../../getting-started/kubernetes/vpp/ipsec.html">
+            
+                <a href="../../getting-started/kubernetes/vpp/ipsec.html">
+            
+                    
+                    I Psec Configuration With VPP
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.8.4" data-path="../../getting-started/kubernetes/vpp/specifics.html">
+            
+                <a href="../../getting-started/kubernetes/vpp/specifics.html">
+            
+                    
+                    Details Of VPP Implementation Known Issues
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.9" data-path="../../getting-started/kubernetes/helm.html">
+            
+                <a href="../../getting-started/kubernetes/helm.html">
+            
+                    
+                    Install Using Helm
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.10" data-path="../../getting-started/kubernetes/">
+            
+                <a href="../../getting-started/kubernetes/">
+            
+                    
+                    Kubernetes
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.11" data-path="../../getting-started/kubernetes/microk8s.html">
+            
+                <a href="../../getting-started/kubernetes/microk8s.html">
+            
+                    
+                    Quickstart For Calico On Micro K 8 S
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.12" data-path="../../getting-started/kubernetes/minikube.html">
+            
+                <a href="../../getting-started/kubernetes/minikube.html">
+            
+                    
+                    Quickstart For Calico On Minikube
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.13" data-path="../../getting-started/kubernetes/quickstart.html">
+            
+                <a href="../../getting-started/kubernetes/quickstart.html">
+            
+                    
+                    Quickstart For Calico On Kubernetes
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.14" data-path="../../getting-started/kubernetes/rancher.html">
+            
+                <a href="../../getting-started/kubernetes/rancher.html">
+            
+                    
+                    Install Calico On A Rancher Kubernetes Engine Cluster
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.3.15" data-path="../../getting-started/kubernetes/requirements.html">
+            
+                <a href="../../getting-started/kubernetes/requirements.html">
+            
+                    
+                    System Requirements
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.4" >
+            
+                <span>
+            
+                    
+                    Openshift
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.4.4.1" data-path="../../getting-started/openshift/">
+            
+                <a href="../../getting-started/openshift/">
+            
+                    
+                    Open Shift
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.4.2" data-path="../../getting-started/openshift/installation.html">
+            
+                <a href="../../getting-started/openshift/installation.html">
+            
+                    
+                    Install An Open Shift 4 Cluster With Calico
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.4.3" data-path="../../getting-started/openshift/requirements.html">
+            
+                <a href="../../getting-started/openshift/requirements.html">
+            
+                    
+                    System Requirements
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.5" >
+            
+                <span>
+            
+                    
+                    Openstack
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.4.5.1" >
+            
+                <span>
+            
+                    
+                    Installation
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.4.5.1.1" data-path="../../getting-started/openstack/installation/devstack.html">
+            
+                <a href="../../getting-started/openstack/installation/devstack.html">
+            
+                    
+                    Dev Stack
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.5.1.2" data-path="../../getting-started/openstack/installation/">
+            
+                <a href="../../getting-started/openstack/installation/">
+            
+                    
+                    Index
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.5.1.3" data-path="../../getting-started/openstack/installation/overview.html">
+            
+                <a href="../../getting-started/openstack/installation/overview.html">
+            
+                    
+                    Calico On Open Stack
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.5.1.4" data-path="../../getting-started/openstack/installation/redhat.html">
+            
+                <a href="../../getting-started/openstack/installation/redhat.html">
+            
+                    
+                    Red Hat Enterprise Linux
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.5.1.5" data-path="../../getting-started/openstack/installation/ubuntu.html">
+            
+                <a href="../../getting-started/openstack/installation/ubuntu.html">
+            
+                    
+                    Ubuntu
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.5.2" data-path="../../getting-started/openstack/">
+            
+                <a href="../../getting-started/openstack/">
+            
+                    
+                    Index
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.5.3" data-path="../../getting-started/openstack/overview.html">
+            
+                <a href="../../getting-started/openstack/overview.html">
+            
+                    
+                    Calico For Open Stack
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.5.4" data-path="../../getting-started/openstack/requirements.html">
+            
+                <a href="../../getting-started/openstack/requirements.html">
+            
+                    
+                    System Requirements
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.5.5" data-path="../../getting-started/openstack/verification.html">
+            
+                <a href="../../getting-started/openstack/verification.html">
+            
+                    
+                    Verify Your Deployment
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.6" >
+            
+                <span>
+            
+                    
+                    Windows Calico
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.4.6.1" >
+            
+                <span>
+            
+                    
+                    Kubernetes
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.4.6.1.1" data-path="../../getting-started/windows-calico/kubernetes/">
+            
+                <a href="../../getting-started/windows-calico/kubernetes/">
+            
+                    
+                    Kubernetes
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.6.1.2" data-path="../../getting-started/windows-calico/kubernetes/rancher.html">
+            
+                <a href="../../getting-started/windows-calico/kubernetes/rancher.html">
+            
+                    
+                    Install Calico For Windows On A Rancher Kubernetes Engine Cluster
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.6.1.3" data-path="../../getting-started/windows-calico/kubernetes/requirements.html">
+            
+                <a href="../../getting-started/windows-calico/kubernetes/requirements.html">
+            
+                    
+                    Requirements
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.6.1.4" data-path="../../getting-started/windows-calico/kubernetes/standard.html">
+            
+                <a href="../../getting-started/windows-calico/kubernetes/standard.html">
+            
+                    
+                    Install Calico For Windows
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.6.2" >
+            
+                <span>
+            
+                    
+                    Openshift
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.4.6.2.1" data-path="../../getting-started/windows-calico/openshift/">
+            
+                <a href="../../getting-started/windows-calico/openshift/">
+            
+                    
+                    Open Shift
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.6.2.2" data-path="../../getting-started/windows-calico/openshift/installation.html">
+            
+                <a href="../../getting-started/windows-calico/openshift/installation.html">
+            
+                    
+                    Install An Open Shift 4 Cluster On Windows Nodes
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.6.3" data-path="../../getting-started/windows-calico/demo.html">
+            
+                <a href="../../getting-started/windows-calico/demo.html">
+            
+                    
+                    Basic Policy Demo
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.6.4" data-path="../../getting-started/windows-calico/">
+            
+                <a href="../../getting-started/windows-calico/">
+            
+                    
+                    Calico For Windows
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.6.5" data-path="../../getting-started/windows-calico/kubeconfig.html">
+            
+                <a href="../../getting-started/windows-calico/kubeconfig.html">
+            
+                    
+                    Create Kubeconfig For Windows Nodes
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.6.6" data-path="../../getting-started/windows-calico/limitations.html">
+            
+                <a href="../../getting-started/windows-calico/limitations.html">
+            
+                    
+                    Limitations And Known Issues
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.6.7" data-path="../../getting-started/windows-calico/maintain.html">
+            
+                <a href="../../getting-started/windows-calico/maintain.html">
+            
+                    
+                    Start And Stop Calico For Windows Services
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.6.8" data-path="../../getting-started/windows-calico/quickstart.html">
+            
+                <a href="../../getting-started/windows-calico/quickstart.html">
+            
+                    
+                    Quickstart
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.6.9" data-path="../../getting-started/windows-calico/troubleshoot.html">
+            
+                <a href="../../getting-started/windows-calico/troubleshoot.html">
+            
+                    
+                    Troubleshoot Calico For Windows
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4.7" data-path="../../getting-started/">
+            
+                <a href="../../getting-started/">
+            
+                    
+                    Install Calico
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.5" >
+            
+                <span>
+            
+                    
+                    Hack
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.5.1" data-path="../../hack/development-environment/">
+            
+                <a href="../../hack/development-environment/">
+            
+                    
+                    Development Environment
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.5.2" data-path="../../hack/remove-calico-policy/">
+            
+                <a href="../../hack/remove-calico-policy/">
+            
+                    
+                    Remove Calico Policy
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.5.2.1" data-path="../../hack/remove-calico-policy/override-policy.html">
+            
+                <a href="../../hack/remove-calico-policy/override-policy.html">
+            
+                    
+                    Override Policy
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.5.2.2" data-path="../../hack/remove-calico-policy/remove-policy.html">
+            
+                <a href="../../hack/remove-calico-policy/remove-policy.html">
+            
+                    
+                    Remove Policy
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6" >
+            
+                <span>
+            
+                    
+                    Maintenance
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.6.1" >
+            
+                <span>
+            
+                    
+                    Clis
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.6.1.1" data-path="../../maintenance/clis/calicoctl/">
+            
+                <a href="../../maintenance/clis/calicoctl/">
+            
+                    
+                    Calicoctl
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.6.1.1.1" >
+            
+                <span>
+            
+                    
+                    Configure
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.6.1.1.1.1" data-path="../../maintenance/clis/calicoctl/configure/etcd.html">
+            
+                <a href="../../maintenance/clis/calicoctl/configure/etcd.html">
+            
+                    
+                    Configure Calicoctl To Connect To An Etcd Datastore
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6.1.1.1.2" data-path="../../maintenance/clis/calicoctl/configure/overview.html">
+            
+                <a href="../../maintenance/clis/calicoctl/configure/overview.html">
+            
+                    
+                    Configure Calicoctl
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6.1.1.1.3" data-path="../../maintenance/clis/calicoctl/configure/kdd.html">
+            
+                <a href="../../maintenance/clis/calicoctl/configure/kdd.html">
+            
+                    
+                    Configure Calicoctl To Connect To The Kubernetes API Datastore
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6.1.1.2" data-path="../../maintenance/clis/calicoctl/install.html">
+            
+                <a href="../../maintenance/clis/calicoctl/install.html">
+            
+                    
+                    Install Calicoctl
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6.2" >
+            
+                <span>
+            
+                    
+                    Ebpf
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.6.2.1" data-path="../../maintenance/ebpf/enabling-ebpf.html">
+            
+                <a href="../../maintenance/ebpf/enabling-ebpf.html">
+            
+                    
+                    Enable The E BPF Dataplane
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6.2.2" data-path="../../maintenance/ebpf/">
+            
+                <a href="../../maintenance/ebpf/">
+            
+                    
+                    E BPF Dataplane Mode
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6.2.3" data-path="../../maintenance/ebpf/install.html">
+            
+                <a href="../../maintenance/ebpf/install.html">
+            
+                    
+                    Install In E BPF Mode
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6.2.4" data-path="../../maintenance/ebpf/troubleshoot-ebpf.html">
+            
+                <a href="../../maintenance/ebpf/troubleshoot-ebpf.html">
+            
+                    
+                    Troubleshoot E BPF Mode
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6.2.5" data-path="../../maintenance/ebpf/use-cases-ebpf.html">
+            
+                <a href="../../maintenance/ebpf/use-cases-ebpf.html">
+            
+                    
+                    E BPF Use Cases
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6.3" >
+            
+                <span>
+            
+                    
+                    Image Options
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.6.3.1" data-path="../../maintenance/image-options/alternate-registry.html">
+            
+                <a href="../../maintenance/image-options/alternate-registry.html">
+            
+                    
+                    Configure Use Of Your Image Registry
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6.3.2" data-path="../../maintenance/image-options/imageset.html">
+            
+                <a href="../../maintenance/image-options/imageset.html">
+            
+                    
+                    Install Images By Registry Digest
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6.3.3" data-path="../../maintenance/image-options/">
+            
+                <a href="../../maintenance/image-options/">
+            
+                    
+                    Install Using An Alternate Registry
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6.4" >
+            
+                <span>
+            
+                    
+                    Monitor
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.6.4.1" data-path="../../maintenance/monitor/">
+            
+                <a href="../../maintenance/monitor/">
+            
+                    
+                    Monitor
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6.4.2" data-path="../../maintenance/monitor/monitor-component-metrics.html">
+            
+                <a href="../../maintenance/monitor/monitor-component-metrics.html">
+            
+                    
+                    Monitor Calico Component Metrics
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6.4.3" data-path="../../maintenance/monitor/monitor-component-visual.html">
+            
+                <a href="../../maintenance/monitor/monitor-component-visual.html">
+            
+                    
+                    Visualizing Metrics Via Grafana
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6.5" >
+            
+                <span>
+            
+                    
+                    Troubleshoot
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.6.5.1" data-path="../../maintenance/troubleshoot/commands.html">
+            
+                <a href="../../maintenance/troubleshoot/commands.html">
+            
+                    
+                    Troubleshooting Commands
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6.5.2" data-path="../../maintenance/troubleshoot/component-logs.html">
+            
+                <a href="../../maintenance/troubleshoot/component-logs.html">
+            
+                    
+                    Component Logs
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6.5.3" data-path="../../maintenance/troubleshoot/">
+            
+                <a href="../../maintenance/troubleshoot/">
+            
+                    
+                    Troubleshoot
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6.5.4" data-path="../../maintenance/troubleshoot/troubleshooting.html">
+            
+                <a href="../../maintenance/troubleshoot/troubleshooting.html">
+            
+                    
+                    Troubleshooting And Diagnostics
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6.5.5" data-path="../../maintenance/troubleshoot/vpp.html">
+            
+                <a href="../../maintenance/troubleshoot/vpp.html">
+            
+                    
+                    VPP Dataplane Troubleshooting
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6.6" data-path="../../maintenance/certificate-management.html">
+            
+                <a href="../../maintenance/certificate-management.html">
+            
+                    
+                    Manage TLS Certificates Used By Calico
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6.7" data-path="../../maintenance/datastore-migration.html">
+            
+                <a href="../../maintenance/datastore-migration.html">
+            
+                    
+                    Migrate Calico Data From An Etcdv 3 Datastore To A Kubernetes Datastore
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6.8" data-path="../../maintenance/decommissioning-a-node.html">
+            
+                <a href="../../maintenance/decommissioning-a-node.html">
+            
+                    
+                    Decommission A Node
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6.9" data-path="../../maintenance/enabling-bpf.html">
+            
+                <a href="../../maintenance/enabling-bpf.html">
+            
+                    
+                    Enable The E BPF Dataplane
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6.10" data-path="../../maintenance/">
+            
+                <a href="../../maintenance/">
+            
+                    
+                    Maintenance
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6.11" data-path="../../maintenance/install-apiserver.html">
+            
+                <a href="../../maintenance/install-apiserver.html">
+            
+                    
+                    Enable Kubectl To Manage Calico AP Is
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6.12" data-path="../../maintenance/kubernetes-upgrade.html">
+            
+                <a href="../../maintenance/kubernetes-upgrade.html">
+            
+                    
+                    Upgrade Calico On Kubernetes
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6.13" data-path="../../maintenance/openshift-upgrade.html">
+            
+                <a href="../../maintenance/openshift-upgrade.html">
+            
+                    
+                    Upgrade Calico On Open Shift 4
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6.14" data-path="../../maintenance/openstack-upgrade.html">
+            
+                <a href="../../maintenance/openstack-upgrade.html">
+            
+                    
+                    Upgrade Calico On Open Stack
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6.15" data-path="../../maintenance/operator-migration.html">
+            
+                <a href="../../maintenance/operator-migration.html">
+            
+                    
+                    Migrate Calico To An Operator Managed Installation
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6.16" data-path="../../maintenance/upgrading.html">
+            
+                <a href="../../maintenance/upgrading.html">
+            
+                    
+                    Upgrade
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7" >
+            
+                <span>
+            
+                    
+                    Networking
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.7.1" >
+            
+                <span>
+            
+                    
+                    Calico Enterprise
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.7.1.1" data-path="../../networking/calico-enterprise/federation.html">
+            
+                <a href="../../networking/calico-enterprise/federation.html">
+            
+                    
+                    Federation
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7.1.2" data-path="../../networking/calico-enterprise/">
+            
+                <a href="../../networking/calico-enterprise/">
+            
+                    
+                    Calico Enterprise
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7.1.3" data-path="../../networking/calico-enterprise/network-visibility.html">
+            
+                <a href="../../networking/calico-enterprise/network-visibility.html">
+            
+                    
+                    Network Visibility
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7.1.4" data-path="../../networking/calico-enterprise/user-console.html">
+            
+                <a href="../../networking/calico-enterprise/user-console.html">
+            
+                    
+                    User Console
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7.2" >
+            
+                <span>
+            
+                    
+                    Openstack
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.7.2.1" data-path="../../networking/openstack/configuration.html">
+            
+                <a href="../../networking/openstack/configuration.html">
+            
+                    
+                    Configure Systems For Use With Calico
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7.2.2" data-path="../../networking/openstack/connectivity.html">
+            
+                <a href="../../networking/openstack/connectivity.html">
+            
+                    
+                    IP Addressing And Connectivity
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7.2.3" data-path="../../networking/openstack/dev-machine-setup.html">
+            
+                <a href="../../networking/openstack/dev-machine-setup.html">
+            
+                    
+                    Set Up A Development Machine
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7.2.4" data-path="../../networking/openstack/floating-ips.html">
+            
+                <a href="../../networking/openstack/floating-ips.html">
+            
+                    
+                    Floating I Ps
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7.2.5" data-path="../../networking/openstack/host-routes.html">
+            
+                <a href="../../networking/openstack/host-routes.html">
+            
+                    
+                    Host Routes
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7.3" data-path="../../networking/add-floating-ip.html">
+            
+                <a href="../../networking/add-floating-ip.html">
+            
+                    
+                    Add A Floating IP To A Pod
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7.4" data-path="../../networking/advertise-service-ips.html">
+            
+                <a href="../../networking/advertise-service-ips.html">
+            
+                    
+                    Advertise Kubernetes Service IP Addresses
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7.5" data-path="../../networking/assign-ip-addresses-topology.html">
+            
+                <a href="../../networking/assign-ip-addresses-topology.html">
+            
+                    
+                    Assign IP Addresses Based On Topology
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7.6" data-path="../../networking/bgp.html">
+            
+                <a href="../../networking/bgp.html">
+            
+                    
+                    Configure BGP Peering
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7.7" data-path="../../networking/change-block-size.html">
+            
+                <a href="../../networking/change-block-size.html">
+            
+                    
+                    Change IP Pool Block Size
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7.8" data-path="../../networking/configuring.html">
+            
+                <a href="../../networking/configuring.html">
+            
+                    
+                    Configure Networking
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7.9" data-path="../../networking/determine-best-networking.html">
+            
+                <a href="../../networking/determine-best-networking.html">
+            
+                    
+                    Determine Best Networking Option
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7.10" data-path="../../networking/enabling-ipvs.html">
+            
+                <a href="../../networking/enabling-ipvs.html">
+            
+                    
+                    Enable IPVS In Kubernetes
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7.11" data-path="../../networking/external-connectivity.html">
+            
+                <a href="../../networking/external-connectivity.html">
+            
+                    
+                    External Connectivity
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7.12" data-path="../../networking/get-started-ip-addresses.html">
+            
+                <a href="../../networking/get-started-ip-addresses.html">
+            
+                    
+                    Get Started With IP Address Management
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7.13" data-path="../../networking/">
+            
+                <a href="../../networking/">
+            
+                    
+                    Networking
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7.14" data-path="../../networking/ip-autodetection.html">
+            
+                <a href="../../networking/ip-autodetection.html">
+            
+                    
+                    Configure IP Autodetection
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7.15" data-path="../../networking/ipam.html">
+            
+                <a href="../../networking/ipam.html">
+            
+                    
+                    IP Address Management
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7.16" data-path="../../networking/ipv6-control-plane.html">
+            
+                <a href="../../networking/ipv6-control-plane.html">
+            
+                    
+                    Configure Kubernetes Control Plane To Operate Over I Pv 6
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7.17" data-path="../../networking/ipv6.html">
+            
+                <a href="../../networking/ipv6.html">
+            
+                    
+                    Configure Dual Stack Or I Pv 6 Only
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7.18" data-path="../../networking/legacy-firewalls.html">
+            
+                <a href="../../networking/legacy-firewalls.html">
+            
+                    
+                    Restrict A Pod To Use An IP Address In A Specific Range
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7.19" data-path="../../networking/migrate-pools.html">
+            
+                <a href="../../networking/migrate-pools.html">
+            
+                    
+                    Migrate From One IP Pool To Another
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7.20" data-path="../../networking/mtu.html">
+            
+                <a href="../../networking/mtu.html">
+            
+                    
+                    Configure MTU To Maximize Network Performance
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7.21" data-path="../../networking/pod-mac-address.html">
+            
+                <a href="../../networking/pod-mac-address.html">
+            
+                    
+                    Use A Specific MAC Address For A Pod
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7.22" data-path="../../networking/sidecar-acceleration.html">
+            
+                <a href="../../networking/sidecar-acceleration.html">
+            
+                    
+                    Accelerate Istio Network Performance
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7.23" data-path="../../networking/use-ipvs.html">
+            
+                <a href="../../networking/use-ipvs.html">
+            
+                    
+                    Use IPVS Kube Proxy
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7.24" data-path="../../networking/use-specific-ip.html">
+            
+                <a href="../../networking/use-specific-ip.html">
+            
+                    
+                    Use A Specific IP Address With A Pod
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7.25" data-path="../../networking/vxlan-ipip.html">
+            
+                <a href="../../networking/vxlan-ipip.html">
+            
+                    
+                    Overlay Networking
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.7.26" data-path="../../networking/workloads-outside-cluster.html">
+            
+                <a href="../../networking/workloads-outside-cluster.html">
+            
+                    
+                    Configure Outgoing NAT
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8" >
+            
+                <span>
+            
+                    
+                    Reference
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.8.1" >
+            
+                <span>
+            
+                    
+                    Architecture
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.8.1.1" >
+            
+                <span>
+            
+                    
+                    Design
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.8.1.1.1" data-path="../../reference/architecture/design/">
+            
+                <a href="../../reference/architecture/design/">
+            
+                    
+                    Network Design
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.1.1.2" data-path="../../reference/architecture/design/l2-interconnect-fabric.html">
+            
+                <a href="../../reference/architecture/design/l2-interconnect-fabric.html">
+            
+                    
+                    Calico Over Ethernet Fabrics
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.1.1.3" data-path="../../reference/architecture/design/l3-interconnect-fabric.html">
+            
+                <a href="../../reference/architecture/design/l3-interconnect-fabric.html">
+            
+                    
+                    Calico Over IP Fabrics
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.1.2" data-path="../../reference/architecture/data-path.html">
+            
+                <a href="../../reference/architecture/data-path.html">
+            
+                    
+                    The Calico Data Path IP Routing And Iptables
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.1.3" data-path="../../reference/architecture/">
+            
+                <a href="../../reference/architecture/">
+            
+                    
+                    Architecture
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.1.4" data-path="../../reference/architecture/overview.html">
+            
+                <a href="../../reference/architecture/overview.html">
+            
+                    
+                    Component Architecture
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.2" >
+            
+                <span>
+            
+                    
+                    Calicoctl
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.8.2.1" >
+            
+                <span>
+            
+                    
+                    Datastore
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.8.2.1.1" >
+            
+                <span>
+            
+                    
+                    Migrate
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.8.2.1.1.1" data-path="../../reference/calicoctl/datastore/migrate/export.html">
+            
+                <a href="../../reference/calicoctl/datastore/migrate/export.html">
+            
+                    
+                    Calicoctl Datastore Migrate Export
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.2.1.1.2" data-path="../../reference/calicoctl/datastore/migrate/import.html">
+            
+                <a href="../../reference/calicoctl/datastore/migrate/import.html">
+            
+                    
+                    Calicoctl Datastore Migrate Import
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.2.1.1.3" data-path="../../reference/calicoctl/datastore/migrate/">
+            
+                <a href="../../reference/calicoctl/datastore/migrate/">
+            
+                    
+                    Index
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.2.1.1.4" data-path="../../reference/calicoctl/datastore/migrate/lock.html">
+            
+                <a href="../../reference/calicoctl/datastore/migrate/lock.html">
+            
+                    
+                    Calicoctl Datastore Migrate Lock
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.2.1.1.5" data-path="../../reference/calicoctl/datastore/migrate/overview.html">
+            
+                <a href="../../reference/calicoctl/datastore/migrate/overview.html">
+            
+                    
+                    Calicoctl Datastore Migrate
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.2.1.1.6" data-path="../../reference/calicoctl/datastore/migrate/unlock.html">
+            
+                <a href="../../reference/calicoctl/datastore/migrate/unlock.html">
+            
+                    
+                    Calicoctl Datastore Migrate Unlock
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.2.1.2" data-path="../../reference/calicoctl/datastore/">
+            
+                <a href="../../reference/calicoctl/datastore/">
+            
+                    
+                    Index
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.2.1.3" data-path="../../reference/calicoctl/datastore/overview.html">
+            
+                <a href="../../reference/calicoctl/datastore/overview.html">
+            
+                    
+                    Calicoctl Datastore
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.2.2" >
+            
+                <span>
+            
+                    
+                    Ipam
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.8.2.2.1" data-path="../../reference/calicoctl/ipam/check.html">
+            
+                <a href="../../reference/calicoctl/ipam/check.html">
+            
+                    
+                    Calicoctl Ipam Check
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.2.2.2" data-path="../../reference/calicoctl/ipam/show.html">
+            
+                <a href="../../reference/calicoctl/ipam/show.html">
+            
+                    
+                    Calicoctl Ipam
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.2.2.3" data-path="../../reference/calicoctl/ipam/">
+            
+                <a href="../../reference/calicoctl/ipam/">
+            
+                    
+                    Index
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.2.3" >
+            
+                <span>
+            
+                    
+                    Node
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.8.2.3.1" data-path="../../reference/calicoctl/node/checksystem.html">
+            
+                <a href="../../reference/calicoctl/node/checksystem.html">
+            
+                    
+                    Calicoctl Node Checksystem
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.2.3.2" data-path="../../reference/calicoctl/node/diags.html">
+            
+                <a href="../../reference/calicoctl/node/diags.html">
+            
+                    
+                    Calicoctl Node Diags
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.2.3.3" data-path="../../reference/calicoctl/node/">
+            
+                <a href="../../reference/calicoctl/node/">
+            
+                    
+                    Index
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.2.3.4" data-path="../../reference/calicoctl/node/overview.html">
+            
+                <a href="../../reference/calicoctl/node/overview.html">
+            
+                    
+                    Calicoctl Node
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.2.3.5" data-path="../../reference/calicoctl/node/run.html">
+            
+                <a href="../../reference/calicoctl/node/run.html">
+            
+                    
+                    Calicoctl Node Run
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.2.3.6" data-path="../../reference/calicoctl/node/status.html">
+            
+                <a href="../../reference/calicoctl/node/status.html">
+            
+                    
+                    Calicoctl Node Status
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.2.4" data-path="../../reference/calicoctl/apply.html">
+            
+                <a href="../../reference/calicoctl/apply.html">
+            
+                    
+                    Calicoctl Apply
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.2.5" data-path="../../reference/calicoctl/convert.html">
+            
+                <a href="../../reference/calicoctl/convert.html">
+            
+                    
+                    Calicoctl Convert
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.2.6" data-path="../../reference/calicoctl/create.html">
+            
+                <a href="../../reference/calicoctl/create.html">
+            
+                    
+                    Calicoctl Create
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.2.7" data-path="../../reference/calicoctl/delete.html">
+            
+                <a href="../../reference/calicoctl/delete.html">
+            
+                    
+                    Calicoctl Delete
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.2.8" data-path="../../reference/calicoctl/get.html">
+            
+                <a href="../../reference/calicoctl/get.html">
+            
+                    
+                    Calicoctl Get
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.2.9" data-path="../../reference/calicoctl/">
+            
+                <a href="../../reference/calicoctl/">
+            
+                    
+                    Index
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.2.10" data-path="../../reference/calicoctl/label.html">
+            
+                <a href="../../reference/calicoctl/label.html">
+            
+                    
+                    Calicoctl Label
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.2.11" data-path="../../reference/calicoctl/overview.html">
+            
+                <a href="../../reference/calicoctl/overview.html">
+            
+                    
+                    Calicoctl User Reference
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.2.12" data-path="../../reference/calicoctl/patch.html">
+            
+                <a href="../../reference/calicoctl/patch.html">
+            
+                    
+                    Calicoctl Patch
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.2.13" data-path="../../reference/calicoctl/replace.html">
+            
+                <a href="../../reference/calicoctl/replace.html">
+            
+                    
+                    Calicoctl Replace
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.2.14" data-path="../../reference/calicoctl/version.html">
+            
+                <a href="../../reference/calicoctl/version.html">
+            
+                    
+                    Calicoctl Version
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.3" >
+            
+                <span>
+            
+                    
+                    Cni Plugin
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.8.3.1" data-path="../../reference/cni-plugin/configuration.html">
+            
+                <a href="../../reference/cni-plugin/configuration.html">
+            
+                    
+                    Configure The Calico CNI Plugins
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.4" >
+            
+                <span>
+            
+                    
+                    Etcd Rbac
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.8.4.1" data-path="../../reference/etcd-rbac/calico-etcdv3-paths.html">
+            
+                <a href="../../reference/etcd-rbac/calico-etcdv3-paths.html">
+            
+                    
+                    Calico Key And Path Prefixes
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.4.2" data-path="../../reference/etcd-rbac/certificate-generation.html">
+            
+                <a href="../../reference/etcd-rbac/certificate-generation.html">
+            
+                    
+                    Generating Certificates
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.4.3" data-path="../../reference/etcd-rbac/">
+            
+                <a href="../../reference/etcd-rbac/">
+            
+                    
+                    Index
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.4.4" data-path="../../reference/etcd-rbac/kubernetes-advanced.html">
+            
+                <a href="../../reference/etcd-rbac/kubernetes-advanced.html">
+            
+                    
+                    Segmenting Etcd On Kubernetes Advanced
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.4.5" data-path="../../reference/etcd-rbac/kubernetes.html">
+            
+                <a href="../../reference/etcd-rbac/kubernetes.html">
+            
+                    
+                    Segmenting Etcd On Kubernetes Basic
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.4.6" data-path="../../reference/etcd-rbac/overview.html">
+            
+                <a href="../../reference/etcd-rbac/overview.html">
+            
+                    
+                    Setting Up Etcd Certificates For RBAC
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.4.7" data-path="../../reference/etcd-rbac/users-and-roles.html">
+            
+                <a href="../../reference/etcd-rbac/users-and-roles.html">
+            
+                    
+                    Creating Users And Roles
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.5" >
+            
+                <span>
+            
+                    
+                    Felix
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.8.5.1" data-path="../../reference/felix/configuration.html">
+            
+                <a href="../../reference/felix/configuration.html">
+            
+                    
+                    Configuring Felix
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.5.2" data-path="../../reference/felix/">
+            
+                <a href="../../reference/felix/">
+            
+                    
+                    Felix
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.5.3" data-path="../../reference/felix/prometheus.html">
+            
+                <a href="../../reference/felix/prometheus.html">
+            
+                    
+                    Prometheus Statistics
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.6" >
+            
+                <span>
+            
+                    
+                    Host Endpoints
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.8.6.1" data-path="../../reference/host-endpoints/connectivity.html">
+            
+                <a href="../../reference/host-endpoints/connectivity.html">
+            
+                    
+                    Creating Policy For Basic Connectivity
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.6.2" data-path="../../reference/host-endpoints/conntrack.html">
+            
+                <a href="../../reference/host-endpoints/conntrack.html">
+            
+                    
+                    Connection Tracking
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.6.3" data-path="../../reference/host-endpoints/failsafe.html">
+            
+                <a href="../../reference/host-endpoints/failsafe.html">
+            
+                    
+                    Failsafe Rules
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.6.4" data-path="../../reference/host-endpoints/forwarded.html">
+            
+                <a href="../../reference/host-endpoints/forwarded.html">
+            
+                    
+                    Apply On Forwarded Traffic
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.6.5" data-path="../../reference/host-endpoints/">
+            
+                <a href="../../reference/host-endpoints/">
+            
+                    
+                    Index
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.6.6" data-path="../../reference/host-endpoints/objects.html">
+            
+                <a href="../../reference/host-endpoints/objects.html">
+            
+                    
+                    Creating Host Endpoint Objects
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.6.7" data-path="../../reference/host-endpoints/overview.html">
+            
+                <a href="../../reference/host-endpoints/overview.html">
+            
+                    
+                    Host Endpoints
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.6.8" data-path="../../reference/host-endpoints/pre-dnat.html">
+            
+                <a href="../../reference/host-endpoints/pre-dnat.html">
+            
+                    
+                    Pre DNAT Policy
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.6.9" data-path="../../reference/host-endpoints/selector.html">
+            
+                <a href="../../reference/host-endpoints/selector.html">
+            
+                    
+                    Selector Based Policies
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.6.10" data-path="../../reference/host-endpoints/summary.html">
+            
+                <a href="../../reference/host-endpoints/summary.html">
+            
+                    
+                    Summary
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.7" data-path="../../reference/installation/">
+            
+                <a href="../../reference/installation/">
+            
+                    
+                    Installation
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.8" data-path="../../reference/kube-controllers/">
+            
+                <a href="../../reference/kube-controllers/">
+            
+                    
+                    Kube Controllers
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.8.8.1" data-path="../../reference/kube-controllers/configuration.html">
+            
+                <a href="../../reference/kube-controllers/configuration.html">
+            
+                    
+                    Configuring The Calico Kubernetes Controllers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.8.2" data-path="../../reference/kube-controllers/prometheus.html">
+            
+                <a href="../../reference/kube-controllers/prometheus.html">
+            
+                    
+                    Prometheus Statistics
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.9" >
+            
+                <span>
+            
+                    
+                    Legal
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.8.9.1" data-path="../../reference/legal/alp.html">
+            
+                <a href="../../reference/legal/alp.html">
+            
+                    
+                    Application Layer Policy Attributions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.9.2" data-path="../../reference/legal/calicoctl.html">
+            
+                <a href="../../reference/legal/calicoctl.html">
+            
+                    
+                    Calicoctl Attributions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.9.3" data-path="../../reference/legal/cni.html">
+            
+                <a href="../../reference/legal/cni.html">
+            
+                    
+                    CNI Plugin Attributions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.9.4" data-path="../../reference/legal/confd.html">
+            
+                <a href="../../reference/legal/confd.html">
+            
+                    
+                    Confd Attributions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.9.5" data-path="../../reference/legal/felix.html">
+            
+                <a href="../../reference/legal/felix.html">
+            
+                    
+                    Felix Attributions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.9.6" data-path="../../reference/legal/">
+            
+                <a href="../../reference/legal/">
+            
+                    
+                    Attributions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.9.7" data-path="../../reference/legal/kube-controllers.html">
+            
+                <a href="../../reference/legal/kube-controllers.html">
+            
+                    
+                    Kubernetes Controllers Attributions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.9.8" data-path="../../reference/legal/node.html">
+            
+                <a href="../../reference/legal/node.html">
+            
+                    
+                    Calico Node Attributions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.9.9" data-path="../../reference/legal/typha.html">
+            
+                <a href="../../reference/legal/typha.html">
+            
+                    
+                    Typha Attributions
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.10" >
+            
+                <span>
+            
+                    
+                    Node
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.8.10.1" data-path="../../reference/node/configuration.html">
+            
+                <a href="../../reference/node/configuration.html">
+            
+                    
+                    Configuring Calico Node
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.11" >
+            
+                <span>
+            
+                    
+                    Public Cloud
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.8.11.1" data-path="../../reference/public-cloud/aws.html">
+            
+                <a href="../../reference/public-cloud/aws.html">
+            
+                    
+                    Amazon Web Services
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.11.2" data-path="../../reference/public-cloud/azure.html">
+            
+                <a href="../../reference/public-cloud/azure.html">
+            
+                    
+                    Azure
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.11.3" data-path="../../reference/public-cloud/gce.html">
+            
+                <a href="../../reference/public-cloud/gce.html">
+            
+                    
+                    Google Compute Engine
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.11.4" data-path="../../reference/public-cloud/ibm.html">
+            
+                <a href="../../reference/public-cloud/ibm.html">
+            
+                    
+                    IBM Cloud
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.11.5" data-path="../../reference/public-cloud/">
+            
+                <a href="../../reference/public-cloud/">
+            
+                    
+                    Configuration On Public Clouds
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.12" >
+            
+                <span>
+            
+                    
+                    Resources
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.8.12.1" data-path="../../reference/resources/bgpconfig.html">
+            
+                <a href="../../reference/resources/bgpconfig.html">
+            
+                    
+                    BGP Configuration
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.12.2" data-path="../../reference/resources/bgppeer.html">
+            
+                <a href="../../reference/resources/bgppeer.html">
+            
+                    
+                    BGP Peer
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.12.3" data-path="../../reference/resources/caliconodestatus.html">
+            
+                <a href="../../reference/resources/caliconodestatus.html">
+            
+                    
+                    Calico Node Status
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.12.4" data-path="../../reference/resources/felixconfig.html">
+            
+                <a href="../../reference/resources/felixconfig.html">
+            
+                    
+                    Felix Configuration
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.12.5" data-path="../../reference/resources/globalnetworkpolicy.html">
+            
+                <a href="../../reference/resources/globalnetworkpolicy.html">
+            
+                    
+                    Global Network Policy
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.12.6" data-path="../../reference/resources/globalnetworkset.html">
+            
+                <a href="../../reference/resources/globalnetworkset.html">
+            
+                    
+                    Global Network Set
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.12.7" data-path="../../reference/resources/hostendpoint.html">
+            
+                <a href="../../reference/resources/hostendpoint.html">
+            
+                    
+                    Host Endpoint
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.12.8" data-path="../../reference/resources/">
+            
+                <a href="../../reference/resources/">
+            
+                    
+                    Index
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.12.9" data-path="../../reference/resources/ippool.html">
+            
+                <a href="../../reference/resources/ippool.html">
+            
+                    
+                    IP Pool
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.12.10" data-path="../../reference/resources/ipreservation.html">
+            
+                <a href="../../reference/resources/ipreservation.html">
+            
+                    
+                    IP Reservation
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.12.11" data-path="../../reference/resources/kubecontrollersconfig.html">
+            
+                <a href="../../reference/resources/kubecontrollersconfig.html">
+            
+                    
+                    Kubernetes Controllers Configuration
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.12.12" data-path="../../reference/resources/networkpolicy.html">
+            
+                <a href="../../reference/resources/networkpolicy.html">
+            
+                    
+                    Network Policy
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.12.13" data-path="../../reference/resources/networkset.html">
+            
+                <a href="../../reference/resources/networkset.html">
+            
+                    
+                    Network Set
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.12.14" data-path="../../reference/resources/node.html">
+            
+                <a href="../../reference/resources/node.html">
+            
+                    
+                    Node
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.12.15" data-path="../../reference/resources/overview.html">
+            
+                <a href="../../reference/resources/overview.html">
+            
+                    
+                    Resource Definitions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.12.16" data-path="../../reference/resources/profile.html">
+            
+                <a href="../../reference/resources/profile.html">
+            
+                    
+                    Profile
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.12.17" data-path="../../reference/resources/workloadendpoint.html">
+            
+                <a href="../../reference/resources/workloadendpoint.html">
+            
+                    
+                    Workload Endpoint
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.13" >
+            
+                <span>
+            
+                    
+                    Typha
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.8.13.1" data-path="../../reference/typha/configuration.html">
+            
+                <a href="../../reference/typha/configuration.html">
+            
+                    
+                    Configuring Typha
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.13.2" data-path="../../reference/typha/">
+            
+                <a href="../../reference/typha/">
+            
+                    
+                    Typha
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.13.3" data-path="../../reference/typha/overview.html">
+            
+                <a href="../../reference/typha/overview.html">
+            
+                    
+                    Typha Overview
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.13.4" data-path="../../reference/typha/prometheus.html">
+            
+                <a href="../../reference/typha/prometheus.html">
+            
+                    
+                    Prometheus Statistics
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.14" >
+            
+                <span>
+            
+                    
+                    Vpp
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.8.14.1" data-path="../../reference/vpp/host-network.html">
+            
+                <a href="../../reference/vpp/host-network.html">
+            
+                    
+                    Host Network Configuration
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.14.2" data-path="../../reference/vpp/">
+            
+                <a href="../../reference/vpp/">
+            
+                    
+                    VPP Dataplane
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.14.3" data-path="../../reference/vpp/technical-details.html">
+            
+                <a href="../../reference/vpp/technical-details.html">
+            
+                    
+                    VPP Dataplane Implementation Details
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.14.4" data-path="../../reference/vpp/uplink-configuration.html">
+            
+                <a href="../../reference/vpp/uplink-configuration.html">
+            
+                    
+                    Primary Interface Configuration
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.15" data-path="../../reference/api.html">
+            
+                <a href="../../reference/api.html">
+            
+                    
+                    Calico API
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.16" data-path="../../reference/faq.html">
+            
+                <a href="../../reference/faq.html">
+            
+                    
+                    Frequently Asked Questions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.17" data-path="../../reference/">
+            
+                <a href="../../reference/">
+            
+                    
+                    Reference
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.8.18" data-path="../../reference/involved.html">
+            
+                <a href="../../reference/involved.html">
+            
+                    
+                    Getting Involved
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9" >
+            
+                <span>
+            
+                    
+                    Release Notes
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.9.1" data-path="../../release-notes/">
+            
+                <a href="../../release-notes/">
+            
+                    
+                    Release Notes
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10" >
+            
+                <span>
+            
+                    
+                    Security
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.10.1" >
+            
+                <span>
+            
+                    
+                    Calico Enterprise
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.10.1.1" data-path="../../security/calico-enterprise/compliance.html">
+            
+                <a href="../../security/calico-enterprise/compliance.html">
+            
+                    
+                    Advanced Compliance Controls
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.1.2" data-path="../../security/calico-enterprise/egress-access-controls.html">
+            
+                <a href="../../security/calico-enterprise/egress-access-controls.html">
+            
+                    
+                    Advanced Egress Access Controls
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.1.3" data-path="../../security/calico-enterprise/federation.html">
+            
+                <a href="../../security/calico-enterprise/federation.html">
+            
+                    
+                    Federation
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.1.4" data-path="../../security/calico-enterprise/">
+            
+                <a href="../../security/calico-enterprise/">
+            
+                    
+                    Calico Enterprise
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.1.5" data-path="../../security/calico-enterprise/network-visibility.html">
+            
+                <a href="../../security/calico-enterprise/network-visibility.html">
+            
+                    
+                    Network Visibility
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.1.6" data-path="../../security/calico-enterprise/policy-workflow.html">
+            
+                <a href="../../security/calico-enterprise/policy-workflow.html">
+            
+                    
+                    Policy Workflow
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.1.7" data-path="../../security/calico-enterprise/threat-defense.html">
+            
+                <a href="../../security/calico-enterprise/threat-defense.html">
+            
+                    
+                    Threat Defense
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.1.8" data-path="../../security/calico-enterprise/user-console.html">
+            
+                <a href="../../security/calico-enterprise/user-console.html">
+            
+                    
+                    Calico Enterprise Manager User Interface
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.2" >
+            
+                <span>
+            
+                    
+                    Comms
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.10.2.1" data-path="../../security/comms/crypto-auth.html">
+            
+                <a href="../../security/comms/crypto-auth.html">
+            
+                    
+                    Configure Encryption And Authentication To Secure Calico Components
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.2.2" data-path="../../security/comms/">
+            
+                <a href="../../security/comms/">
+            
+                    
+                    Secure Calico Component Communications
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.2.3" data-path="../../security/comms/reduce-nodes.html">
+            
+                <a href="../../security/comms/reduce-nodes.html">
+            
+                    
+                    Schedule Typha For Scaling To Well Known Nodes
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.2.4" data-path="../../security/comms/secure-bgp.html">
+            
+                <a href="../../security/comms/secure-bgp.html">
+            
+                    
+                    Secure BGP Sessions
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.2.5" data-path="../../security/comms/secure-metrics.html">
+            
+                <a href="../../security/comms/secure-metrics.html">
+            
+                    
+                    Secure Calico Prometheus Endpoints
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.3" >
+            
+                <span>
+            
+                    
+                    Tutorials
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.10.3.1" >
+            
+                <span>
+            
+                    
+                    App Layer Policy
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.10.3.1.1" data-path="../../security/tutorials/app-layer-policy/enforce-policy-istio.html">
+            
+                <a href="../../security/tutorials/app-layer-policy/enforce-policy-istio.html">
+            
+                    
+                    Enforce Calico Network Policy Using Istio Tutorial
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.3.2" >
+            
+                <span>
+            
+                    
+                    Kubernetes Policy Demo
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.10.3.2.1" data-path="../../security/tutorials/kubernetes-policy-demo/kubernetes-demo.html">
+            
+                <a href="../../security/tutorials/kubernetes-policy-demo/kubernetes-demo.html">
+            
+                    
+                    Kubernetes Policy Demo
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.3.3" data-path="../../security/tutorials/calico-policy.html">
+            
+                <a href="../../security/tutorials/calico-policy.html">
+            
+                    
+                    Calico Policy Tutorial
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.3.4" data-path="../../security/tutorials/kubernetes-policy-advanced.html">
+            
+                <a href="../../security/tutorials/kubernetes-policy-advanced.html">
+            
+                    
+                    Kubernetes Policy Advanced Tutorial
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.3.5" data-path="../../security/tutorials/kubernetes-policy-basic.html">
+            
+                <a href="../../security/tutorials/kubernetes-policy-basic.html">
+            
+                    
+                    Kubernetes Policy Basic Tutorial
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.3.6" data-path="../../security/tutorials/protect-hosts.html">
+            
+                <a href="../../security/tutorials/protect-hosts.html">
+            
+                    
+                    Protect Hosts Tutorial
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.4" data-path="../../security/adopt-zero-trust.html">
+            
+                <a href="../../security/adopt-zero-trust.html">
+            
+                    
+                    Adopt A Zero Trust Network Model For Security
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.5" data-path="../../security/app-layer-policy.html">
+            
+                <a href="../../security/app-layer-policy.html">
+            
+                    
+                    Enforce Network Policy For Istio
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.6" data-path="../../security/calico-network-policy.html">
+            
+                <a href="../../security/calico-network-policy.html">
+            
+                    
+                    Get Started With Calico Network Policy
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.7" data-path="../../security/calico-policy.html">
+            
+                <a href="../../security/calico-policy.html">
+            
+                    
+                    Calico Policy
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.8" data-path="../../security/defend-dos-attack.html">
+            
+                <a href="../../security/defend-dos-attack.html">
+            
+                    
+                    Defend Against Do S Attacks
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.9" data-path="../../security/encrypt-cluster-pod-traffic.html">
+            
+                <a href="../../security/encrypt-cluster-pod-traffic.html">
+            
+                    
+                    Encrypt In Cluster Pod Traffic
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.10" data-path="../../security/external-ips-policy.html">
+            
+                <a href="../../security/external-ips-policy.html">
+            
+                    
+                    Use External I Ps Or Networks Rules In Policy
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.11" data-path="../../security/extreme-traffic.html">
+            
+                <a href="../../security/extreme-traffic.html">
+            
+                    
+                    Policy For Extreme Traffic
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.12" data-path="../../security/get-started.html">
+            
+                <a href="../../security/get-started.html">
+            
+                    
+                    Get Started With Policy
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.13" data-path="../../security/high-connection-workloads.html">
+            
+                <a href="../../security/high-connection-workloads.html">
+            
+                    
+                    Enable Extreme High Connection Workloads
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.14" data-path="../../security/host-forwarded-traffic.html">
+            
+                <a href="../../security/host-forwarded-traffic.html">
+            
+                    
+                    Apply Policy To Forwarded Traffic
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.15" data-path="../../security/hosts.html">
+            
+                <a href="../../security/hosts.html">
+            
+                    
+                    Policy For Hosts
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.16" data-path="../../security/http-methods.html">
+            
+                <a href="../../security/http-methods.html">
+            
+                    
+                    Use HTTP Methods And Paths In Policy Rules
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.17" data-path="../../security/icmp-ping.html">
+            
+                <a href="../../security/icmp-ping.html">
+            
+                    
+                    Use ICMP Ping Rules In Policy
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.18" data-path="../../security/">
+            
+                <a href="../../security/">
+            
+                    
+                    Security
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.19" data-path="../../security/istio.html">
+            
+                <a href="../../security/istio.html">
+            
+                    
+                    Policy For Istio
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.20" data-path="../../security/kubernetes-default-deny.html">
+            
+                <a href="../../security/kubernetes-default-deny.html">
+            
+                    
+                    Enable Default Deny For Kubernetes Pods
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.21" data-path="../../security/kubernetes-network-policy.html">
+            
+                <a href="../../security/kubernetes-network-policy.html">
+            
+                    
+                    Get Started With Kubernetes Network Policy
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.22" data-path="../../security/kubernetes-node-ports.html">
+            
+                <a href="../../security/kubernetes-node-ports.html">
+            
+                    
+                    Apply Calico Policy To Kubernetes Node Ports
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.10.23" data-path="../../security/kubernetes-nodes.html">
+            
+                <a href="../../security/kubernetes-nodes.html">
+            
+                    
+                    Protect Kubernetes Nodes
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.11" data-path="../../DOC_STYLE_GUIDE.html">
+            
+                <a href="../../DOC_STYLE_GUIDE.html">
+            
+                    
+                    DOC STYLE GUIDE
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.12" data-path="../../releases.html">
+            
+                <a href="../../releases.html">
+            
+                    
+                    Project Calico Documentation Archives
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="../../../calicoctl/">
+            
+                <a href="../../../calicoctl/">
+            
+                    
+                    Calicoctl
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.6.1" >
+            
+                <span>
+            
+                    
+                    Test Data
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.6.1.1" >
+            
+                <span>
+            
+                    
+                    Convert
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.6.1.1.1" >
+            
+                <span>
+            
+                    
+                    Input
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.6.1.1.1.1" >
+            
+                <span>
+            
+                    
+                    V 1
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.6.1.1.1.1.1" data-path="../../../calicoctl/test-data/convert/input/v1/migration/">
+            
+                <a href="../../../calicoctl/test-data/convert/input/v1/migration/">
+            
+                    
+                    Migration
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.2" data-path="../../../calicoctl/CONTRIBUTING.html">
+            
+                <a href="../../../calicoctl/CONTRIBUTING.html">
+            
+                    
+                    CONTRIBUTING
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" >
+            
+                <span>
+            
+                    
+                    Charts
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.7.1" data-path="../../../charts/calico/">
+            
+                <a href="../../../charts/calico/">
+            
+                    
+                    Calico
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.2" data-path="../../../charts/tigera-operator/">
+            
+                <a href="../../../charts/tigera-operator/">
+            
+                    
+                    Tigera Operator
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="../../../cni-plugin/">
+            
+                <a href="../../../cni-plugin/">
+            
+                    
+                    Cni Plugin
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.8.1" data-path="../../../cni-plugin/configuration.html">
+            
+                <a href="../../../cni-plugin/configuration.html">
+            
+                    
+                    Configuration
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="../../../confd/">
+            
+                <a href="../../../confd/">
+            
+                    
+                    Confd
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.9.1" >
+            
+                <span>
+            
+                    
+                    Docs
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.9.1.1" data-path="../../../confd/docs/command-line-flags.html">
+            
+                <a href="../../../confd/docs/command-line-flags.html">
+            
+                    
+                    Command Line Flags
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.1.2" data-path="../../../confd/docs/configuration-guide.html">
+            
+                <a href="../../../confd/docs/configuration-guide.html">
+            
+                    
+                    Configuration Guide
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.1.3" data-path="../../../confd/docs/dns-srv-records.html">
+            
+                <a href="../../../confd/docs/dns-srv-records.html">
+            
+                    
+                    Dns Srv Records
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.1.4" data-path="../../../confd/docs/installation.html">
+            
+                <a href="../../../confd/docs/installation.html">
+            
+                    
+                    Installation
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.1.5" data-path="../../../confd/docs/logging.html">
+            
+                <a href="../../../confd/docs/logging.html">
+            
+                    
+                    Logging
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.1.6" data-path="../../../confd/docs/noop-mode.html">
+            
+                <a href="../../../confd/docs/noop-mode.html">
+            
+                    
+                    Noop Mode
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.1.7" data-path="../../../confd/docs/quick-start-guide.html">
+            
+                <a href="../../../confd/docs/quick-start-guide.html">
+            
+                    
+                    Quick Start Guide
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.1.8" data-path="../../../confd/docs/release-checklist.html">
+            
+                <a href="../../../confd/docs/release-checklist.html">
+            
+                    
+                    Release Checklist
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.1.9" data-path="../../../confd/docs/template-resources.html">
+            
+                <a href="../../../confd/docs/template-resources.html">
+            
+                    
+                    Template Resources
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.1.10" data-path="../../../confd/docs/templates.html">
+            
+                <a href="../../../confd/docs/templates.html">
+            
+                    
+                    Templates
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.1.11" data-path="../../../confd/docs/tomcat-sample.html">
+            
+                <a href="../../../confd/docs/tomcat-sample.html">
+            
+                    
+                    Tomcat Sample
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.2" >
+            
+                <span>
+            
+                    
+                    Etc
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.9.2.1" >
+            
+                <span>
+            
+                    
+                    Calico
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.9.2.1.1" >
+            
+                <span>
+            
+                    
+                    Confd
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.9.2.1.1.1" data-path="../../../confd/etc/calico/confd/templates/">
+            
+                <a href="../../../confd/etc/calico/confd/templates/">
+            
+                    
+                    Templates
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.3" data-path="../../../confd/tests/">
+            
+                <a href="../../../confd/tests/">
+            
+                    
+                    Tests
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.4" data-path="../../../confd/CONTRIBUTING.html">
+            
+                <a href="../../../confd/CONTRIBUTING.html">
+            
+                    
+                    CONTRIBUTING
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="../../../felix/">
+            
+                <a href="../../../felix/">
+            
+                    
+                    Felix
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.10.1" >
+            
+                <span>
+            
+                    
+                    Bpf Gpl
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.10.1.1" >
+            
+                <span>
+            
+                    
+                    Include
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.10.1.1.1" data-path="../../../felix/bpf-gpl/include/libbpf/">
+            
+                <a href="../../../felix/bpf-gpl/include/libbpf/">
+            
+                    
+                    Libbpf
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.2" data-path="../../../felix/k8sfv/">
+            
+                <a href="../../../felix/k8sfv/">
+            
+                    
+                    K 8 Sfv
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.10.2.1" data-path="../../../felix/k8sfv/monitoring.html">
+            
+                <a href="../../../felix/k8sfv/monitoring.html">
+            
+                    
+                    Monitoring
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.3" data-path="../../../felix/CHANGES.html">
+            
+                <a href="../../../felix/CHANGES.html">
+            
+                    
+                    CHANGES
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.4" data-path="../../../felix/CONTRIBUTING.html">
+            
+                <a href="../../../felix/CONTRIBUTING.html">
+            
+                    
+                    CONTRIBUTING
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11" >
+            
+                <span>
+            
+                    
+                    Hack
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.11.1" >
+            
+                <span>
+            
+                    
+                    Docs
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.11.1.1" data-path="../../../hack/docs/adding-an-api.html">
+            
+                <a href="../../../hack/docs/adding-an-api.html">
+            
+                    
+                    Adding An Api
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11.2" >
+            
+                <span>
+            
+                    
+                    Release
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.11.2.1" data-path="../../../hack/release/packaging/">
+            
+                <a href="../../../hack/release/packaging/">
+            
+                    
+                    Packaging
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11.2.2" data-path="../../../hack/release/RELEASING.html">
+            
+                <a href="../../../hack/release/RELEASING.html">
+            
+                    
+                    RELEASING
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11.3" >
+            
+                <span>
+            
+                    
+                    Test
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.11.3.1" data-path="../../../hack/test/certs/">
+            
+                <a href="../../../hack/test/certs/">
+            
+                    
+                    Certs
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.12" data-path="../../../kube-controllers/">
+            
+                <a href="../../../kube-controllers/">
+            
+                    
+                    Kube Controllers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13" data-path="../../../libcalico-go/">
+            
+                <a href="../../../libcalico-go/">
+            
+                    
+                    Libcalico Go
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.13.1" >
+            
+                <span>
+            
+                    
+                    Docs
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.13.1.1" data-path="../../../libcalico-go/docs/data-model.html">
+            
+                <a href="../../../libcalico-go/docs/data-model.html">
+            
+                    
+                    Data Model
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13.2" >
+            
+                <span>
+            
+                    
+                    Lib
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.13.2.1" >
+            
+                <span>
+            
+                    
+                    Apis
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.13.2.1.1" >
+            
+                <span>
+            
+                    
+                    crd.projectcalico.org
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.13.2.1.1.1" data-path="../../../libcalico-go/lib/apis/crd.projectcalico.org/v1/">
+            
+                <a href="../../../libcalico-go/lib/apis/crd.projectcalico.org/v1/">
+            
+                    
+                    V 1
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13.3" data-path="../../../libcalico-go/test/">
+            
+                <a href="../../../libcalico-go/test/">
+            
+                    
+                    Test
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.14" data-path="../../../manifests/">
+            
+                <a href="../../../manifests/">
+            
+                    
+                    Manifests
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.15" data-path="../../../networking-calico/">
+            
+                <a href="../../../networking-calico/">
+            
+                    
+                    Networking Calico
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.15.1" data-path="../../../networking-calico/CONTRIBUTING.html">
+            
+                <a href="../../../networking-calico/CONTRIBUTING.html">
+            
+                    
+                    CONTRIBUTING
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.16" data-path="../../../node/">
+            
+                <a href="../../../node/">
+            
+                    
+                    Node
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.17" data-path="../../../pod2daemon/">
+            
+                <a href="../../../pod2daemon/">
+            
+                    
+                    Pod 2 Daemon
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.18" data-path="../../../typha/">
+            
+                <a href="../../../typha/">
+            
+                    
+                    Typha
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.18.1" data-path="../../../typha/CONTRIBUTING.html">
+            
+                <a href="../../../typha/CONTRIBUTING.html">
+            
+                    
+                    CONTRIBUTING
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.19" data-path="../../../AUTHORS.html">
+            
+                <a href="../../../AUTHORS.html">
+            
+                    
+                    AUTHORS
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.20" data-path="../../../CONTRIBUTING_CODE.html">
+            
+                <a href="../../../CONTRIBUTING_CODE.html">
+            
+                    
+                    CONTRIBUTING CODE
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.21" data-path="../../../CONTRIBUTING_DOCS.html">
+            
+                <a href="../../../CONTRIBUTING_DOCS.html">
+            
+                    
+                    CONTRIBUTING DOCS
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.22" data-path="../../../DEVELOPER_GUIDE.html">
+            
+                <a href="../../../DEVELOPER_GUIDE.html">
+            
+                    
+                    DEVELOPER GUIDE
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="../../.." >Auto Hostendpoints Migrate</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h2 id="migrating-to-auto-host-endpoints">Migrating to auto host endpoints</h2>
+<blockquote>
+<p><strong>Important</strong>: Auto host endpoints have an allow-all profile attached which allows all traffic in the absence of network policy.
+This may result in unexpected behavior and data.
+{: .alert .alert-danger}</p>
+</blockquote>
+<p>In order to migrate existing all-interfaces host endpoints to -managed auto host endpoints:</p>
+<ol>
+<li><p>Add any labels on existing all-interfaces host endpoints to their corresponding  nodes.  manages labels on automatic host endpoints by syncing
+labels from their nodes. Any labels on existing all-interfaces host endpoints should be added to their respective nodes.
+For example, if your existing all-interface host endpoint for node <strong>node1</strong> has the label <strong>environment: dev</strong>, then you must add that same label to its node:</p>
+<pre class="language-"><code class="lang-bash">kubectl label node node1 <span class="token assign-left variable">environment</span><span class="token operator">=</span>dev
+</code></pre>
+</li>
+<li><p>Enable auto host endpoints by following the <a href="../../../security/kubernetes-nodes#enable-automatic-host-endpoints">enable automatic host endpoints how-to guide</a>.
+Note that automatic host endpoints are created with a profile attached that allows all traffic in the absence of network policy.</p>
+<pre class="language-"><code class="lang-bash">calicoctl patch kubecontrollersconfiguration default --patch<span class="token operator">=</span><span class="token string">&apos;{&quot;spec&quot;: {&quot;controllers&quot;: {&quot;node&quot;: {&quot;hostEndpoint&quot;: {&quot;autoCreate&quot;: &quot;Enabled&quot;}}}}}&apos;</span>
+</code></pre>
+</li>
+<li><p>Delete old all-interfaces host endpoints. You can distinguish host endpoints managed by  from others in several ways. First, automatic host endpoints
+have the label <strong>projectcalico.org/created-by: calico-kube-controllers</strong>. Secondly, automatic host endpoints&apos; name have the suffix <strong>-auto-hep</strong>.</p>
+<pre class="language-"><code class="lang-bash">calicoctl delete hostendpoint <span class="token operator">&lt;</span>old_hostendpoint_name<span class="token operator">&gt;</span>
+</code></pre>
+</li>
+</ol>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                
+                <a href="calico-upgrade.html" class="navigation navigation-next navigation-unique" aria-label="Next page: Calico Upgrade">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Auto Hostendpoints Migrate","level":"1.5.1.1.1","depth":4,"next":{"title":"Calico Upgrade","level":"1.5.1.1.2","depth":4,"path":"calico/_includes/content/calico-upgrade.md","ref":"calico/_includes/content/calico-upgrade.md","articles":[]},"previous":{"title":"Content","level":"1.5.1.1","depth":3,"ref":"","articles":[{"title":"Auto Hostendpoints Migrate","level":"1.5.1.1.1","depth":4,"path":"calico/_includes/content/auto-hostendpoints-migrate.md","ref":"calico/_includes/content/auto-hostendpoints-migrate.md","articles":[]},{"title":"Calico Upgrade","level":"1.5.1.1.2","depth":4,"path":"calico/_includes/content/calico-upgrade.md","ref":"calico/_includes/content/calico-upgrade.md","articles":[]},{"title":"Calico Windows Install","level":"1.5.1.1.3","depth":4,"path":"calico/_includes/content/calico-windows-install.md","ref":"calico/_includes/content/calico-windows-install.md","articles":[]},{"title":"Calicoctl Convert","level":"1.5.1.1.4","depth":4,"path":"calico/_includes/content/calicoctl-convert.md","ref":"calico/_includes/content/calicoctl-convert.md","articles":[]},{"title":"Calicoctl Version","level":"1.5.1.1.5","depth":4,"path":"calico/_includes/content/calicoctl-version.md","ref":"calico/_includes/content/calicoctl-version.md","articles":[]},{"title":"Config Calico Upgrade Etcd","level":"1.5.1.1.6","depth":4,"path":"calico/_includes/content/config-calico-upgrade-etcd.md","ref":"calico/_includes/content/config-calico-upgrade-etcd.md","articles":[]},{"title":"Deleting Etcd V 2 V 3 Data","level":"1.5.1.1.7","depth":4,"path":"calico/_includes/content/deleting-etcd-v2-v3-data.md","ref":"calico/_includes/content/deleting-etcd-v2-v3-data.md","articles":[]},{"title":"Determine Ipam","level":"1.5.1.1.8","depth":4,"path":"calico/_includes/content/determine-ipam.md","ref":"calico/_includes/content/determine-ipam.md","articles":[]},{"title":"Docker Container Service","level":"1.5.1.1.9","depth":4,"path":"calico/_includes/content/docker-container-service.md","ref":"calico/_includes/content/docker-container-service.md","articles":[]},{"title":"Ebpf Value","level":"1.5.1.1.10","depth":4,"path":"calico/_includes/content/ebpf-value.md","ref":"calico/_includes/content/ebpf-value.md","articles":[]},{"title":"Endpointport","level":"1.5.1.1.11","depth":4,"path":"calico/_includes/content/endpointport.md","ref":"calico/_includes/content/endpointport.md","articles":[]},{"title":"Entityrule","level":"1.5.1.1.12","depth":4,"path":"calico/_includes/content/entityrule.md","ref":"calico/_includes/content/entityrule.md","articles":[]},{"title":"Environment File","level":"1.5.1.1.13","depth":4,"path":"calico/_includes/content/environment-file.md","ref":"calico/_includes/content/environment-file.md","articles":[]},{"title":"Felix Init Datastore","level":"1.5.1.1.14","depth":4,"path":"calico/_includes/content/felix-init-datastore.md","ref":"calico/_includes/content/felix-init-datastore.md","articles":[]},{"title":"Hostendpoints Upgrade","level":"1.5.1.1.15","depth":4,"path":"calico/_includes/content/hostendpoints-upgrade.md","ref":"calico/_includes/content/hostendpoints-upgrade.md","articles":[]},{"title":"Httpmatch","level":"1.5.1.1.16","depth":4,"path":"calico/_includes/content/httpmatch.md","ref":"calico/_includes/content/httpmatch.md","articles":[]},{"title":"Icmp","level":"1.5.1.1.17","depth":4,"path":"calico/_includes/content/icmp.md","ref":"calico/_includes/content/icmp.md","articles":[]},{"title":"Install Calico Upgrade","level":"1.5.1.1.18","depth":4,"path":"calico/_includes/content/install-calico-upgrade.md","ref":"calico/_includes/content/install-calico-upgrade.md","articles":[]},{"title":"Install Openshift Manifests","level":"1.5.1.1.19","depth":4,"path":"calico/_includes/content/install-openshift-manifests.md","ref":"calico/_includes/content/install-openshift-manifests.md","articles":[]},{"title":"Ipnat","level":"1.5.1.1.20","depth":4,"path":"calico/_includes/content/ipnat.md","ref":"calico/_includes/content/ipnat.md","articles":[]},{"title":"Kube Apiserver Host Port","level":"1.5.1.1.21","depth":4,"path":"calico/_includes/content/kube-apiserver-host-port.md","ref":"calico/_includes/content/kube-apiserver-host-port.md","articles":[]},{"title":"Openstack Etcd Auth","level":"1.5.1.1.22","depth":4,"path":"calico/_includes/content/openstack-etcd-auth.md","ref":"calico/_includes/content/openstack-etcd-auth.md","articles":[]},{"title":"Pod Cidr Sed","level":"1.5.1.1.23","depth":4,"path":"calico/_includes/content/pod-cidr-sed.md","ref":"calico/_includes/content/pod-cidr-sed.md","articles":[]},{"title":"Ports","level":"1.5.1.1.24","depth":4,"path":"calico/_includes/content/ports.md","ref":"calico/_includes/content/ports.md","articles":[]},{"title":"Reqs Kernel","level":"1.5.1.1.25","depth":4,"path":"calico/_includes/content/reqs-kernel.md","ref":"calico/_includes/content/reqs-kernel.md","articles":[]},{"title":"Reqs Sys","level":"1.5.1.1.26","depth":4,"path":"calico/_includes/content/reqs-sys.md","ref":"calico/_includes/content/reqs-sys.md","articles":[]},{"title":"Rule","level":"1.5.1.1.27","depth":4,"path":"calico/_includes/content/rule.md","ref":"calico/_includes/content/rule.md","articles":[]},{"title":"Selector Scopes","level":"1.5.1.1.28","depth":4,"path":"calico/_includes/content/selector-scopes.md","ref":"calico/_includes/content/selector-scopes.md","articles":[]},{"title":"Selectors","level":"1.5.1.1.29","depth":4,"path":"calico/_includes/content/selectors.md","ref":"calico/_includes/content/selectors.md","articles":[]},{"title":"Serviceaccountmatch","level":"1.5.1.1.30","depth":4,"path":"calico/_includes/content/serviceaccountmatch.md","ref":"calico/_includes/content/serviceaccountmatch.md","articles":[]},{"title":"Servicematch","level":"1.5.1.1.31","depth":4,"path":"calico/_includes/content/servicematch.md","ref":"calico/_includes/content/servicematch.md","articles":[]},{"title":"Testing Data Migration","level":"1.5.1.1.32","depth":4,"path":"calico/_includes/content/testing-data-migration.md","ref":"calico/_includes/content/testing-data-migration.md","articles":[]}]},"dir":"ltr"},"config":{"plugins":["-sharing","-highlight","-livereload","prism"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"prism":{"css":["prismjs/themes/prism-solarizedlight.css"]},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Calico 英文文档","language":"us-en","links":{"sidebar":{"Home":"https://docs.khs1994.com"}},"gitbook":"*"},"file":{"path":"calico/_includes/content/auto-hostendpoints-migrate.md","mtime":"2022-07-23T01:04:56.000Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2022-07-23T01:06:52.438Z"},"basePath":"../../..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../../../gitbook/gitbook.js"></script>
+    <script src="../../../gitbook/theme.js"></script>
+    
+        
+        <script src="../../../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../../../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../../../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../../../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../../../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
