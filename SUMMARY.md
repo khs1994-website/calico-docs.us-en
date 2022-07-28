@@ -352,6 +352,7 @@
       * [Global Network Set](calico/reference/resources/globalnetworkset.md)
       * [Host Endpoint](calico/reference/resources/hostendpoint.md)
       * [Index](calico/reference/resources/index.md)
+      * [IPAM Configuration](calico/reference/resources/ipamconfig.md)
       * [IP Pool](calico/reference/resources/ippool.md)
       * [IP Reservation](calico/reference/resources/ipreservation.md)
       * [Kubernetes Controllers Configuration](calico/reference/resources/kubecontrollersconfig.md)
