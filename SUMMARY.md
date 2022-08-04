@@ -346,6 +346,7 @@
     - Resources
       * [BGP Configuration](calico/reference/resources/bgpconfig.md)
       * [BGP Peer](calico/reference/resources/bgppeer.md)
+      * [Block Affinity](calico/reference/resources/blockaffinity.md)
       * [Calico Node Status](calico/reference/resources/caliconodestatus.md)
       * [Felix Configuration](calico/reference/resources/felixconfig.md)
       * [Global Network Policy](calico/reference/resources/globalnetworkpolicy.md)
