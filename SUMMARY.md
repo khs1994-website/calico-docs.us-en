@@ -278,6 +278,7 @@
         * [Calicoctl Ipam Check](calico/reference/calicoctl/ipam/check.md)
         * [Calicoctl Ipam](calico/reference/calicoctl/ipam/show.md)
         * [Index](calico/reference/calicoctl/ipam/index.md)
+        * [Calicoctl Ipam Split](calico/reference/calicoctl/ipam/split.md)
       - Node
         * [Calicoctl Node Checksystem](calico/reference/calicoctl/node/checksystem.md)
         * [Calicoctl Node Diags](calico/reference/calicoctl/node/diags.md)
