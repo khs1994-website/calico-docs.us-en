@@ -108,6 +108,9 @@ func (r *ReleaseBuilder) BuildRelease() error {
 		return err
 	}
 
+	// Build the helm charts
+	r.runner.Run("make", []string{"chart"}, []string{})
+
 	// TODO: Assert the produced images are OK. e.g., have correct
 	// commit and version information compiled in.
 
@@ -366,7 +369,6 @@ func (r *ReleaseBuilder) buildContainerImages(ver string) error {
 		"app-policy",
 		"typha",
 		"felix",
-		"calico", // Technically not a container image, but a helm chart.
 	}
 
 	// Build env.
