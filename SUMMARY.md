@@ -83,13 +83,6 @@
       * [About Non Cluster Hosts](calico/getting-started/bare-metal/about.md)
       * [Non Cluster Hosts](calico/getting-started/bare-metal/index.md)
       * [System Requirements](calico/getting-started/bare-metal/requirements.md)
-    - Clis
-      - [Calicoctl](calico/getting-started/clis/calicoctl/index.md)
-        - Configure
-          * [Configure Calicoctl To Connect To An Etcd Datastore](calico/getting-started/clis/calicoctl/configure/etcd.md)
-          * [Index](calico/getting-started/clis/calicoctl/configure/index.md)
-          * [Configure Calicoctl To Connect To The Kubernetes API Datastore](calico/getting-started/clis/calicoctl/configure/kdd.md)
-          * [Configure Calicoctl](calico/getting-started/clis/calicoctl/configure/overview.md)
     - Kubernetes
       - Flannel
         * [Install Calico For Policy And Flannel Aka Canal For Networking](calico/getting-started/kubernetes/flannel/flannel.md)
@@ -237,7 +230,6 @@
     * [Change IP Pool Block Size](calico/networking/change-block-size.md)
     * [Configure Networking](calico/networking/configuring.md)
     * [Determine Best Networking Option](calico/networking/determine-best-networking.md)
-    * [Enable IPVS In Kubernetes](calico/networking/enabling-ipvs.md)
     * [External Connectivity](calico/networking/external-connectivity.md)
     * [Get Started With IP Address Management](calico/networking/get-started-ip-addresses.md)
     * [Networking](calico/networking/index.md)
