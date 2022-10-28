@@ -411,6 +411,8 @@
     * [Get Started With Kubernetes Network Policy](calico/security/kubernetes-network-policy.md)
     * [Apply Calico Policy To Kubernetes Node Ports](calico/security/kubernetes-node-ports.md)
     * [Protect Kubernetes Nodes](calico/security/kubernetes-nodes.md)
+  - Training
+    * [Training And Resources](calico/training/index.md)
   * [DOC STYLE GUIDE](calico/DOC_STYLE_GUIDE.md)
   * [Project Calico Documentation Archives](calico/releases.md)
 - [Calicoctl](calicoctl/README.md)
