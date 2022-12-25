@@ -18,6 +18,7 @@ struct cali_tc_globals {
 	__be16 wg_port;
 	__u32 natin_idx;
 	__u32 natout_idx;
+	__u8 iface_name[16];
 };
 
 enum cali_globals_flags {
@@ -32,6 +33,10 @@ enum cali_globals_flags {
 struct cali_ctlb_globals {
 	__be32 udp_not_seen_timeo;
 	bool exclude_udp;
+};
+
+struct cali_xdp_globals {
+	__u8 iface_name[16];
 };
 
 #endif /* __CALI_GLOBALS_H__ */
