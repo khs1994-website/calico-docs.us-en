@@ -129,6 +129,7 @@
         * [Details Of VPP Implementation Known Issues](calico/getting-started/kubernetes/vpp/specifics.md)
       * [Install Using Helm](calico/getting-started/kubernetes/helm.md)
       * [Kubernetes](calico/getting-started/kubernetes/index.md)
+      * [Kind Multi Node Install](calico/getting-started/kubernetes/kind.md)
       * [Quickstart For Calico On Micro K 8 S](calico/getting-started/kubernetes/microk8s.md)
       * [Quickstart For Calico On Minikube](calico/getting-started/kubernetes/minikube.md)
       * [Quickstart For Calico On Kubernetes](calico/getting-started/kubernetes/quickstart.md)
