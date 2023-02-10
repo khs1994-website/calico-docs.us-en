@@ -335,6 +335,7 @@
       * [Configuration On Public Clouds](calico/reference/public-cloud/index.md)
     - Resources
       * [BGP Configuration](calico/reference/resources/bgpconfig.md)
+      * [BGP Filter](calico/reference/resources/bgpfilter.md)
       * [BGP Peer](calico/reference/resources/bgppeer.md)
       * [Block Affinity](calico/reference/resources/blockaffinity.md)
       * [Calico Node Status](calico/reference/resources/caliconodestatus.md)
@@ -478,6 +479,9 @@
   * [CONTRIBUTING](networking-calico/CONTRIBUTING.md)
 - [Node](node/README.md)
 - [Pod 2 Daemon](pod2daemon/README.md)
+- Process
+  - Testing
+    - [Winfv](process/testing/winfv/README.md)
 - [Typha](typha/README.md)
   * [CONTRIBUTING](typha/CONTRIBUTING.md)
 * [AUTHORS](AUTHORS.md)
