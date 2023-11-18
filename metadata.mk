@@ -17,7 +17,7 @@ ETCD_VERSION=v3.5.1
 # tests to timeout or fail.
 KINDEST_NODE_VERSION=v1.24.7
 PROTOC_VER=v0.1
-UBI_VERSION=8.8
+UBI_VERSION=8.9
 
 # Configuration for Semaphore integration.
 ORGANIZATION = projectcalico
@@ -33,7 +33,7 @@ BIRD_VERSION=v0.3.3-206-g0f4d6086
 # as both CI/CD and the release tooling will override this to build publishable images.
 DEV_REGISTRIES ?= calico
 
-# RELEASE_REGISTIRES configures the container images registries which are published to
+# RELEASE_REGISTRIES configures the container images registries which are published to
 # as part of an official release.
 # This variable is unused. Registries for releases are defined in hack/release/pkg/builder/builder.go
 # RELEASE_REGISTRIES = quay.io/calico docker.io/calico gcr.io/projectcalico-org eu.gcr.io/projectcalico-org asia.gcr.io/projectcalico-org us.gcr.io/projectcalico-org

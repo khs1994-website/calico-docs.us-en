@@ -498,7 +498,7 @@ commit-and-push-pr:
 	$(GIT) push $(GIT_REMOTE) $(GIT_PR_BRANCH_HEAD)
 
 ###############################################################################
-# Github API helpers
+# GitHub API helpers
 #   Helper macros and targets to help with communicating with the github API
 ###############################################################################
 GIT_COMMIT_MESSAGE?="Automatic Pin Updates"
@@ -948,7 +948,7 @@ cd-common: var-require-one-of-CONFIRM-DRYRUN var-require-all-BRANCH_NAME
 # - 'release' tag: A git tag of the form of `v3.8.0`. The commit that a release
 #   is cut from will have this tag, i.e. you can find the commit that release
 #   3.8 uses by finding the commit with the tag v3.8.0.
-# - 'dev' image: The image that is created for evey commit that is merged to
+# - 'dev' image: The image that is created for every commit that is merged to
 #   master or a release branch. This image is tagged with the dev tag, i.e.
 #   if commit 3a618e61c2d3 is on master or a release branch, there will be
 #   an image for that commit in the dev registry with the tag
@@ -1185,7 +1185,7 @@ check-dirty:
 bin/yq:
 	mkdir -p bin
 	$(eval TMP := $(shell mktemp -d))
-	wget https://github.com/mikefarah/yq/releases/download/v4.34.2/yq_linux_$(BUILDARCH).tar.gz -O $(TMP)/yq4.tar.gz
+	curl -sSf -L --retry 5 -o $(TMP)/yq4.tar.gz https://github.com/mikefarah/yq/releases/download/v4.34.2/yq_linux_$(BUILDARCH).tar.gz
 	tar -zxvf $(TMP)/yq4.tar.gz -C $(TMP)
 	mv $(TMP)/yq_linux_$(BUILDARCH) bin/yq
 
@@ -1305,7 +1305,7 @@ kubectl $(KUBECTL):
 bin/helm:
 	mkdir -p bin
 	$(eval TMP := $(shell mktemp -d))
-	wget -q https://get.helm.sh/helm-v3.11.0-linux-$(ARCH).tar.gz -O $(TMP)/helm3.tar.gz
+	curl -sSf -L --retry 5 -o $(TMP)/helm3.tar.gz https://get.helm.sh/helm-v3.11.0-linux-$(ARCH).tar.gz
 	tar -zxvf $(TMP)/helm3.tar.gz -C $(TMP)
 	mv $(TMP)/linux-$(ARCH)/helm bin/helm
 
