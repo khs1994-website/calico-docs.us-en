@@ -52,6 +52,8 @@
     * [RELEASING](hack/release/RELEASING.md)
   - Test
     - [Certs](hack/test/certs/README.md)
+- [Key Cert Provisioner](key-cert-provisioner/README.md)
+  - [Test Signer](key-cert-provisioner/test-signer/README.md)
 - [Kube Controllers](kube-controllers/README.md)
 - [Libcalico Go](libcalico-go/README.md)
   - Docs
