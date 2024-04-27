@@ -15,6 +15,8 @@
 package resources
 
 import (
+	"strings"
+
 	log "github.com/sirupsen/logrus"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -177,7 +179,24 @@ func ConvertCalicoResourceToK8sResource(resIn Resource) (Resource, error) {
 	meta.ResourceVersion = rom.GetResourceVersion()
 
 	// Explicitly nil out the labels on the underlying object so that they are not duplicated.
-	meta.Labels = nil
+	// We make an exception for projectcalico.org/ labels, which we own and may use on the v1 API.
+	var v1Labels map[string]string
+	for k, v := range rom.GetLabels() {
+		if isOurs(k) {
+			if v1Labels == nil {
+				v1Labels = map[string]string{}
+			}
+			v1Labels[k] = v
+		}
+	}
+	meta.Labels = v1Labels
+
+	// Also maintain any annotations that we own.
+	for k, v := range rom.GetAnnotations() {
+		if isOurs(k) {
+			annotations[k] = v
+		}
+	}
 
 	if rom.GetUID() != "" {
 		uid, err := conversion.ConvertUID(rom.GetUID())
@@ -192,6 +211,10 @@ func ConvertCalicoResourceToK8sResource(resIn Resource) (Resource, error) {
 	romOut.SetAnnotations(annotations)
 
 	return resOut, nil
+}
+
+func isOurs(k string) bool {
+	return strings.Contains(k, "projectcalico.org/") || strings.Contains(k, "operator.tigera.io/")
 }
 
 // Retrieve all of the Calico Metadata from the k8s resource annotations for CRD backed
@@ -261,6 +284,12 @@ func ConvertK8sResourceToCalicoResource(res Resource) error {
 		}
 		labels[k] = v
 	}
+	for k, v := range meta.GetAnnotations() {
+		if annotations == nil {
+			annotations = make(map[string]string)
+		}
+		annotations[k] = v
+	}
 
 	// Manually write in the data not stored in the annotations: Name, Namespace, ResourceVersion,
 	// so that they do not get overwritten.
@@ -269,6 +298,7 @@ func ConvertK8sResourceToCalicoResource(res Resource) error {
 	meta.ResourceVersion = rom.GetResourceVersion()
 	meta.UID = rom.GetUID()
 	meta.Labels = labels
+	meta.Annotations = annotations
 
 	// If no creation timestamp was stored in the metadata annotation, use the one from the CR.
 	// The timestamp is normally set in the clientv3 code. However, for objects that bypass
