@@ -71,6 +71,8 @@
 - Process
   - Testing
     - [Winfv](process/testing/winfv/README.md)
+    - Winfv Cni Plugin
+      - [Aso](process/testing/winfv-cni-plugin/aso/README.md)
 - [Typha](typha/README.md)
   * [CONTRIBUTING](typha/CONTRIBUTING.md)
 * [AUTHORS](AUTHORS.md)
