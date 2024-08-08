@@ -74,6 +74,7 @@
       - [Capz](process/testing/winfv/capz/README.md)
     - Winfv Cni Plugin
       - [Aso](process/testing/winfv-cni-plugin/aso/README.md)
+- [Release](release/README.md)
 - [Typha](typha/README.md)
   * [CONTRIBUTING](typha/CONTRIBUTING.md)
 * [AUTHORS](AUTHORS.md)
