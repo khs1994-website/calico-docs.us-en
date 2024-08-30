@@ -70,10 +70,10 @@
 - [Pod 2 Daemon](pod2daemon/README.md)
 - Process
   - Testing
-    - [Winfv](process/testing/winfv/README.md)
-      - [Capz](process/testing/winfv/capz/README.md)
     - Winfv Cni Plugin
       - [Aso](process/testing/winfv-cni-plugin/aso/README.md)
+    - [Winfv Felix](process/testing/winfv-felix/README.md)
+      - [Capz](process/testing/winfv-felix/capz/README.md)
 - [Release](release/README.md)
 - [Typha](typha/README.md)
   * [CONTRIBUTING](typha/CONTRIBUTING.md)
