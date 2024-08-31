@@ -602,7 +602,7 @@ func describeBPFTests(opts ...bpfTestOpt) bool {
 				Describe("with custom IptablesMarkMask", func() {
 					BeforeEach(func() {
 						// Disable core dumps, we know we're about to cause a panic.
-						options.ExtraEnvVars["GOTRACEBACK"] = ""
+						options.FelixCoreDumpsEnabled = false
 						felixPanicExpected = true
 					})
 
@@ -1252,12 +1252,11 @@ func describeBPFTests(opts ...bpfTestOpt) bool {
 			Expect(err).NotTo(HaveOccurred())
 			if !options.TestManagesBPF {
 				ensureAllNodesBPFProgramsAttached(tc.Felixes)
-				felixReady := func(f *infrastructure.Felix) int {
-					return healthStatus(containerIP(f.Container), "9099", "readiness")
-				}
-
 				for _, f := range tc.Felixes {
-					Eventually(felixReady(f), "10s", "500ms").Should(BeGood())
+					felixReady := func() int {
+						return healthStatus(containerIP(f.Container), "9099", "readiness")
+					}
+					Eventually(felixReady, "10s", "500ms").Should(BeGood())
 				}
 			}
 		}
