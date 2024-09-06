@@ -47,6 +47,8 @@
 - Hack
   - Docs
     * [Adding An Api](hack/docs/adding-an-api.md)
+  - Postrelease
+    - [Golang](hack/postrelease/golang/README.md)
   - Release
     - [Packaging](hack/release/packaging/README.md)
     * [RELEASING](hack/release/RELEASING.md)
