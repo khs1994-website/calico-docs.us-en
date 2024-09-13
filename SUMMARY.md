@@ -49,9 +49,6 @@
     * [Adding An Api](hack/docs/adding-an-api.md)
   - Postrelease
     - [Golang](hack/postrelease/golang/README.md)
-  - Release
-    - [Packaging](hack/release/packaging/README.md)
-    * [RELEASING](hack/release/RELEASING.md)
   - Test
     - [Certs](hack/test/certs/README.md)
 - [Key Cert Provisioner](key-cert-provisioner/README.md)
@@ -77,6 +74,8 @@
     - [Winfv Felix](process/testing/winfv-felix/README.md)
       - [Capz](process/testing/winfv-felix/capz/README.md)
 - [Release](release/README.md)
+  - [Packaging](release/packaging/README.md)
+  * [RELEASING](release/RELEASING.md)
 - [Typha](typha/README.md)
   * [CONTRIBUTING](typha/CONTRIBUTING.md)
 * [AUTHORS](AUTHORS.md)
