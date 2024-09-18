@@ -27,6 +27,7 @@ import (
 	"github.com/projectcalico/calico/felix/hashutils"
 	"github.com/projectcalico/calico/felix/iptables"
 	"github.com/projectcalico/calico/felix/proto"
+	"github.com/projectcalico/calico/libcalico-go/lib/names"
 )
 
 const (
@@ -340,7 +341,7 @@ func (r *DefaultRuleRenderer) PolicyGroupToIptablesChains(group *PolicyGroup) []
 			// is handled differently in the per-endpoint chain because we need
 			// to continue processing in the same chain on a pass rule.
 			rules = append(rules, generictables.Rule{
-				Match:   r.NewMatch().MarkNotClear(r.IptablesMarkPass | r.IptablesMarkAccept),
+				Match:   r.NewMatch().MarkNotClear(r.MarkPass | r.MarkAccept),
 				Action:  r.Return(),
 				Comment: []string{"Return on verdict"},
 			})
@@ -354,7 +355,7 @@ func (r *DefaultRuleRenderer) PolicyGroupToIptablesChains(group *PolicyGroup) []
 		} else {
 			// We're not the first rule in a block, only jump to this policy if
 			// the previous policy didn't set a mark bit.
-			match = r.NewMatch().MarkClear(r.IptablesMarkPass | r.IptablesMarkAccept)
+			match = r.NewMatch().MarkClear(r.MarkPass | r.MarkAccept)
 		}
 
 		chainToJumpTo := PolicyChainName(
@@ -424,7 +425,7 @@ func (r *DefaultRuleRenderer) endpointIptablesChain(
 	// there's no match).
 	rules = append(rules, generictables.Rule{
 		Match:  r.NewMatch(),
-		Action: r.ClearMark(r.IptablesMarkAccept | r.IptablesMarkPass),
+		Action: r.ClearMark(r.MarkAccept | r.MarkPass),
 	})
 
 	if !allowVXLANEncap {
@@ -459,9 +460,16 @@ func (r *DefaultRuleRenderer) endpointIptablesChain(
 			// continue processing the profiles, if there are any.
 			rules = append(rules, generictables.Rule{
 				Match:   r.NewMatch(),
-				Action:  r.ClearMark(r.IptablesMarkPass),
+				Action:  r.ClearMark(r.MarkPass),
 				Comment: []string{"Start of tier " + tier.Name},
 			})
+
+			// This changes will be replaces by changes in https://github.com/projectcalico/calico/pull/9232
+			endOfTierDrop := true
+			// For AdminNetworkPolicy Tier the endOfTier action is pass.
+			if tier.Name == names.AdminNetworkPolicyTierName {
+				endOfTierDrop = false
+			}
 
 			for _, polGroup := range policyGroups {
 				var chainsToJumpTo []string
@@ -481,7 +489,7 @@ func (r *DefaultRuleRenderer) endpointIptablesChain(
 				for _, chainToJumpTo := range chainsToJumpTo {
 					// If a previous policy/group didn't set the "pass" mark, jump to the policy.
 					rules = append(rules, generictables.Rule{
-						Match:  r.NewMatch().MarkClear(r.IptablesMarkPass),
+						Match:  r.NewMatch().MarkClear(r.MarkPass),
 						Action: r.Jump(chainToJumpTo),
 					})
 
@@ -490,14 +498,14 @@ func (r *DefaultRuleRenderer) endpointIptablesChain(
 					if chainType == chainTypeUntracked {
 						// For an untracked policy, map allow to "NOTRACK and ALLOW".
 						rules = append(rules, generictables.Rule{
-							Match:  r.NewMatch().MarkSingleBitSet(r.IptablesMarkAccept),
+							Match:  r.NewMatch().MarkSingleBitSet(r.MarkAccept),
 							Action: r.NoTrack(),
 						})
 					}
 					// If accept bit is set, return from this chain.  We don't immediately
 					// accept because there may be other policy still to apply.
 					rules = append(rules, generictables.Rule{
-						Match:   r.NewMatch().MarkSingleBitSet(r.IptablesMarkAccept),
+						Match:   r.NewMatch().MarkSingleBitSet(r.MarkAccept),
 						Action:  r.Return(),
 						Comment: []string{"Return if policy accepted"},
 					})
@@ -505,16 +513,18 @@ func (r *DefaultRuleRenderer) endpointIptablesChain(
 			}
 
 			if chainType == chainTypeNormal || chainType == chainTypeForward {
-				// When rendering normal and forward rules, if no policy marked the packet as "pass", drop the
-				// packet.
-				//
-				// For untracked and pre-DNAT rules, we don't do that because there may be
-				// normal rules still to be applied to the packet in the filter table.
-				rules = append(rules, generictables.Rule{
-					Match:   r.NewMatch().MarkClear(r.IptablesMarkPass),
-					Action:  r.IptablesFilterDenyAction(),
-					Comment: []string{fmt.Sprintf("%s if no policies passed packet", r.IptablesFilterDenyAction())},
-				})
+				if endOfTierDrop {
+					// When rendering normal and forward rules, if no policy marked the packet as "pass", drop the
+					// packet.
+					//
+					// For untracked and pre-DNAT rules, we don't do that because there may be
+					// normal rules still to be applied to the packet in the filter table.
+					rules = append(rules, generictables.Rule{
+						Match:   r.NewMatch().MarkClear(r.MarkPass),
+						Action:  r.IptablesFilterDenyAction(),
+						Comment: []string{fmt.Sprintf("%s if no policies passed packet", r.IptablesFilterDenyAction())},
+					})
+				}
 			}
 		}
 	}
@@ -524,7 +534,7 @@ func (r *DefaultRuleRenderer) endpointIptablesChain(
 		// applyOnForward that apply to this endpoint (and in this direction).
 		rules = append(rules, generictables.Rule{
 			Match:   r.NewMatch(),
-			Action:  r.SetMark(r.IptablesMarkAccept),
+			Action:  r.SetMark(r.MarkAccept),
 			Comment: []string{"Allow forwarded traffic by default"},
 		})
 		rules = append(rules, generictables.Rule{
@@ -543,7 +553,7 @@ func (r *DefaultRuleRenderer) endpointIptablesChain(
 				// If policy marked packet as accepted, it returns, setting the
 				// accept mark bit.  If that is set, return from this chain.
 				generictables.Rule{
-					Match:   r.NewMatch().MarkSingleBitSet(r.IptablesMarkAccept),
+					Match:   r.NewMatch().MarkSingleBitSet(r.MarkAccept),
 					Action:  r.Return(),
 					Comment: []string{"Return if profile accepted"},
 				})
@@ -576,7 +586,7 @@ func (r *DefaultRuleRenderer) appendConntrackRules(rules []generictables.Rule, a
 		rules = append(rules,
 			generictables.Rule{
 				Match:  r.NewMatch().ConntrackState("RELATED,ESTABLISHED"),
-				Action: r.SetMark(r.IptablesMarkAccept),
+				Action: r.SetMark(r.MarkAccept),
 			},
 		)
 	}
