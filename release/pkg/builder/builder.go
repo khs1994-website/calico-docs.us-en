@@ -48,8 +48,12 @@ var (
 func NewReleaseBuilder(opts ...Option) *ReleaseBuilder {
 	// Configure defaults here.
 	b := &ReleaseBuilder{
-		runner:   &command.RealCommandRunner{},
-		validate: true,
+		runner:        &command.RealCommandRunner{},
+		validate:      true,
+		publishImages: true,
+		publishTag:    true,
+		publishGithub: true,
+		buildImages:   true,
 	}
 
 	// Run through provided options.
@@ -87,6 +91,9 @@ type ReleaseBuilder struct {
 	// isHashRelease is a flag to indicate that we should build a hashrelease.
 	isHashRelease bool
 
+	// buildImages controls whether we should build container images, or use ones already built by CI.
+	buildImages bool
+
 	// validate is a flag to indicate that we should skip pre-release validation.
 	validate bool
 
@@ -99,6 +106,11 @@ type ReleaseBuilder struct {
 	// outputDir is the directory to which we should write release artifacts, and from
 	// which we should read them for publishing.
 	outputDir string
+
+	// Fine-tuning configuration for publishing.
+	publishImages bool
+	publishTag    bool
+	publishGithub bool
 }
 
 // releaseImages returns the set of images that should be expected for a release.
@@ -153,11 +165,13 @@ func (r *ReleaseBuilder) Build() error {
 				}
 			}
 		}()
+	}
 
-		// Build the container images for the release.
+	if r.buildImages {
+		// Build the container images for the release if configured to do so.
 		//
-		// Note: hashreleases don't currently build container images - instead, they use the images
-		// already published as part of CI.
+		// If skipped, we expect that the images for this version have already
+		// been published as part of CI.
 		if err = r.BuildContainerImages(ver); err != nil {
 			return err
 		}
@@ -348,9 +362,11 @@ func (r *ReleaseBuilder) PublishRelease() error {
 		return fmt.Errorf("failed to publish container images: %s", err)
 	}
 
-	// If all else is successful, push the git tag.
-	if _, err = r.git("push", origin, ver); err != nil {
-		return fmt.Errorf("failed to push git tag: %s", err)
+	if r.publishTag {
+		// If all else is successful, push the git tag.
+		if _, err = r.git("push", origin, ver); err != nil {
+			return fmt.Errorf("failed to push git tag: %s", err)
+		}
 	}
 
 	// Publish the release to github.
@@ -556,16 +572,16 @@ func (r *ReleaseBuilder) buildReleaseTar(ver string, targetDir string) error {
 	if err != nil {
 		return fmt.Errorf("Failed to create images dir: %s", err)
 	}
-	outFmt := r.repoRoot + "/_output/release-%s/images/%s"
+	imgDir := filepath.Join(releaseBase, "images")
 	registry := registries[0]
 	images := map[string]string{
-		fmt.Sprintf("%s/node:%s", registry, ver):                         fmt.Sprintf(outFmt, ver, "calico-node.tar"),
-		fmt.Sprintf("%s/typha:%s", registry, ver):                        fmt.Sprintf(outFmt, ver, "calico-typha.tar"),
-		fmt.Sprintf("%s/cni:%s", registry, ver):                          fmt.Sprintf(outFmt, ver, "calico-cni.tar"),
-		fmt.Sprintf("%s/kube-controllers:%s", registry, ver):             fmt.Sprintf(outFmt, ver, "calico-kube-controllers.tar"),
-		fmt.Sprintf("%s/pod2daemon-flexvol:%s", registry, ver):           fmt.Sprintf(outFmt, ver, "calico-pod2daemon.tar"),
-		fmt.Sprintf("%s/dikastes:%s", registry, ver):                     fmt.Sprintf(outFmt, ver, "calico-dikastes.tar"),
-		fmt.Sprintf("%s/flannel-migration-controller:%s", registry, ver): fmt.Sprintf(outFmt, ver, "calico-flannel-migration-controller.tar"),
+		fmt.Sprintf("%s/node:%s", registry, ver):                         filepath.Join(imgDir, "calico-node.tar"),
+		fmt.Sprintf("%s/typha:%s", registry, ver):                        filepath.Join(imgDir, "calico-typha.tar"),
+		fmt.Sprintf("%s/cni:%s", registry, ver):                          filepath.Join(imgDir, "calico-cni.tar"),
+		fmt.Sprintf("%s/kube-controllers:%s", registry, ver):             filepath.Join(imgDir, "calico-kube-controllers.tar"),
+		fmt.Sprintf("%s/pod2daemon-flexvol:%s", registry, ver):           filepath.Join(imgDir, "calico-pod2daemon.tar"),
+		fmt.Sprintf("%s/dikastes:%s", registry, ver):                     filepath.Join(imgDir, "calico-dikastes.tar"),
+		fmt.Sprintf("%s/flannel-migration-controller:%s", registry, ver): filepath.Join(imgDir, "calico-flannel-migration-controller.tar"),
 	}
 	for img, out := range images {
 		err = r.archiveContainerImage(out, img)
@@ -575,7 +591,7 @@ func (r *ReleaseBuilder) buildReleaseTar(ver string, targetDir string) error {
 	}
 
 	// Add in release binaries that we ship.
-	binDir := fmt.Sprintf("%s/bin", releaseBase)
+	binDir := filepath.Join(releaseBase, "bin")
 	err = os.MkdirAll(binDir, os.ModePerm)
 	if err != nil {
 		return fmt.Errorf("Failed to create images dir: %s", err)
@@ -583,10 +599,10 @@ func (r *ReleaseBuilder) buildReleaseTar(ver string, targetDir string) error {
 
 	binaries := map[string]string{
 		// CNI plugin binaries are all placed in github dir.
-		"cni-plugin/bin/": binDir + "/cni",
+		"cni-plugin/bin/": filepath.Join(binDir, "cni"),
 
 		// Calicoctl binaries.
-		"calicoctl/bin/": binDir + "/calicoctl",
+		"calicoctl/bin/": filepath.Join(binDir, "calicoctl"),
 
 		// Felix binaries.
 		"felix/bin/calico-bpf": binDir,
@@ -659,6 +675,11 @@ func (r *ReleaseBuilder) buildContainerImages(ver string) error {
 }
 
 func (r *ReleaseBuilder) publishGithubRelease(ver string) error {
+	if !r.publishGithub {
+		logrus.Info("Skipping github release")
+		return nil
+	}
+
 	releaseNoteTemplate := `
 Release notes can be found [on GitHub](https://github.com/projectcalico/calico/blob/{version}/release-notes/{version}-release-notes.md)
 
@@ -704,6 +725,11 @@ Additional links:
 }
 
 func (r *ReleaseBuilder) publishContainerImages(ver string) error {
+	if !r.publishImages {
+		logrus.Info("Skipping image publish")
+		return nil
+	}
+
 	releaseDirs := []string{
 		"pod2daemon",
 		"cni-plugin",
