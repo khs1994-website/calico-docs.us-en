@@ -32,6 +32,7 @@ clean:
 	$(MAKE) -C node clean
 	$(MAKE) -C pod2daemon clean
 	$(MAKE) -C typha clean
+	$(MAKE) -C release clean
 	rm -rf ./bin
 
 ci-preflight-checks:
@@ -51,7 +52,6 @@ generate:
 	$(MAKE) -C api gen-files
 	$(MAKE) -C libcalico-go gen-files
 	$(MAKE) -C felix gen-files
-	$(MAKE) -C calicoctl gen-crds
 	$(MAKE) -C app-policy protobuf
 	$(MAKE) gen-manifests
 
