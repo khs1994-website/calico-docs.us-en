@@ -40,6 +40,8 @@
     - Include
       - [Libbpf](felix/bpf-gpl/include/libbpf/README.md)
         * [SYNC](felix/bpf-gpl/include/libbpf/SYNC.md)
+  - Docs
+    * [Config Params](felix/docs/config-params.md)
   - [K 8 Sfv](felix/k8sfv/README.md)
     * [Monitoring](felix/k8sfv/monitoring.md)
   * [CHANGES](felix/CHANGES.md)
