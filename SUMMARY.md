@@ -36,10 +36,6 @@
   - [Tests](confd/tests/README.md)
   * [CONTRIBUTING](confd/CONTRIBUTING.md)
 - [Felix](felix/README.md)
-  - Bpf Gpl
-    - Include
-      - [Libbpf](felix/bpf-gpl/include/libbpf/README.md)
-        * [SYNC](felix/bpf-gpl/include/libbpf/SYNC.md)
   - Docs
     * [Config Params](felix/docs/config-params.md)
   - [K 8 Sfv](felix/k8sfv/README.md)
