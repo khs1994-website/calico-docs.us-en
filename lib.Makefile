@@ -262,7 +262,11 @@ REPO_ROOT := $(shell git rev-parse --show-toplevel)
 CERTS_PATH := $(REPO_ROOT)/hack/test/certs
 
 # The image to use for building calico/base-dependent modules (e.g. apiserver, typha).
+ifdef USE_UBI_AS_CALICO_BASE
+CALICO_BASE ?= $(UBI_IMAGE)
+else
 CALICO_BASE ?= calico/base
+endif
 
 QEMU_IMAGE ?= calico/qemu-user-static:latest
 
@@ -487,6 +491,7 @@ commit-and-push-pr:
 #   Helper macros and targets to help with communicating with the github API
 ###############################################################################
 GIT_COMMIT_MESSAGE?="Automatic Pin Updates"
+GIT_COMMIT_TITLE?="Semaphore Auto Pin Update"
 GIT_PR_BRANCH_BASE?=$(SEMAPHORE_GIT_BRANCH)
 PIN_UPDATE_BRANCH?=semaphore-auto-pin-updates-$(GIT_PR_BRANCH_BASE)
 GIT_PR_BRANCH_HEAD?=$(PIN_UPDATE_BRANCH)
@@ -563,7 +568,7 @@ endif
 	git checkout -b $(GIT_PR_BRANCH_HEAD)
 
 create-pin-update-pr:
-	$(call github_pr_create,$(GIT_REPO_SLUG),[$(GIT_PR_BRANCH_BASE)] Semaphore Auto Pin Update,$(GIT_PR_BRANCH_HEAD),$(GIT_PR_BRANCH_BASE))
+	$(call github_pr_create,$(GIT_REPO_SLUG),[$(GIT_PR_BRANCH_BASE)] $(GIT_COMMIT_TITLE),$(GIT_PR_BRANCH_HEAD),$(GIT_PR_BRANCH_BASE))
 	echo 'Created pin update pull request $(PR_NUMBER)'
 
 # Add the "/merge-when-ready" comment to enable the "merge when ready" functionality, i.e. when the pull request is passing
