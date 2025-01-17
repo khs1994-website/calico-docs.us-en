@@ -40,6 +40,7 @@
     * [Config Params](felix/docs/config-params.md)
   - [K 8 Sfv](felix/k8sfv/README.md)
     * [Monitoring](felix/k8sfv/monitoring.md)
+  - [Nfnetlink](felix/nfnetlink/README.md)
   * [CHANGES](felix/CHANGES.md)
   * [CONTRIBUTING](felix/CONTRIBUTING.md)
 - Hack
