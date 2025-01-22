@@ -43,6 +43,7 @@
   - [Nfnetlink](felix/nfnetlink/README.md)
   * [CHANGES](felix/CHANGES.md)
   * [CONTRIBUTING](felix/CONTRIBUTING.md)
+- [Goldmane](goldmane/README.md)
 - Hack
   - Docs
     * [Adding An Api](hack/docs/adding-an-api.md)
