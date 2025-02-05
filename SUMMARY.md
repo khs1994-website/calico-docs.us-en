@@ -66,8 +66,6 @@
 - [Networking Calico](networking-calico/README.md)
   * [CONTRIBUTING](networking-calico/CONTRIBUTING.md)
 - [Node](node/README.md)
-- [Oss Ui](oss-ui/README.md)
-  * [Pull Request Template](oss-ui/pull_request_template.md)
 - [Pod 2 Daemon](pod2daemon/README.md)
 - Process
   - Testing
@@ -80,6 +78,8 @@
   * [RELEASING](release/RELEASING.md)
 - [Typha](typha/README.md)
   * [CONTRIBUTING](typha/CONTRIBUTING.md)
+- [Whisker](whisker/README.md)
+  * [Pull Request Template](whisker/pull_request_template.md)
 * [AUTHORS](AUTHORS.md)
 * [CONTRIBUTING DOCS](CONTRIBUTING_DOCS.md)
 * [CONTRIBUTING](CONTRIBUTING.md)
