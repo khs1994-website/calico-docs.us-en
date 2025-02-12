@@ -54,6 +54,7 @@
 - [Key Cert Provisioner](key-cert-provisioner/README.md)
   - [Test Signer](key-cert-provisioner/test-signer/README.md)
 - [Kube Controllers](kube-controllers/README.md)
+- [Lib](lib/README.md)
 - [Libcalico Go](libcalico-go/README.md)
   - Docs
     * [Data Model](libcalico-go/docs/data-model.md)
