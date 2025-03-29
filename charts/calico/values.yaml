@@ -1,0 +1,35 @@
+# The Calico version to use when generating manifests.
+version: master
+
+# Configure the images to use when generating manifests.
+node:
+  image: quay.io/calico/node
+calicoctl:
+  image: quay.io/calico/ctl
+typha:
+  image: quay.io/calico/typha
+cni:
+  image: quay.io/calico/cni
+kubeControllers:
+  image: quay.io/calico/kube-controllers
+flannel:
+  image: quay.io/flannel/flannel
+  tag: v0.24.4
+flannelMigration:
+  image: quay.io/calico/flannel-migration
+dikastes:
+  image: quay.io/calico/dikastes
+csi-driver:
+  image: quay.io/calico/csi-driver
+
+# Some defaults used in the templates.
+includeCRDs: true
+imagePullPolicy: IfNotPresent
+mtu: "1440"
+ipam: "calico-ipam"
+etcd:
+  endpoints: "http://<ETCD_IP>:<ETCD_PORT>"
+  tls:
+    crt: null
+    ca: null
+    key: null
