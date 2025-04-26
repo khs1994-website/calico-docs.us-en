@@ -10,7 +10,6 @@
       - Input
         - V 1
           - [Migration](calicoctl/test-data/convert/input/v1/migration/README.md)
-  * [CONTRIBUTING](calicoctl/CONTRIBUTING.md)
 - Charts
   - [Calico](charts/calico/README.md)
   - [Tigera Operator](charts/tigera-operator/README.md)
@@ -34,7 +33,6 @@
       - Confd
         - [Templates](confd/etc/calico/confd/templates/README.md)
   - [Tests](confd/tests/README.md)
-  * [CONTRIBUTING](confd/CONTRIBUTING.md)
 - [Felix](felix/README.md)
   - Docs
     * [Config Params](felix/docs/config-params.md)
@@ -42,7 +40,6 @@
     * [Monitoring](felix/k8sfv/monitoring.md)
   - [Nfnetlink](felix/nfnetlink/README.md)
   * [CHANGES](felix/CHANGES.md)
-  * [CONTRIBUTING](felix/CONTRIBUTING.md)
 - [Goldmane](goldmane/README.md)
 - Hack
   - Docs
@@ -65,7 +62,6 @@
   - [Test](libcalico-go/test/README.md)
 - [Manifests](manifests/README.md)
 - [Networking Calico](networking-calico/README.md)
-  * [CONTRIBUTING](networking-calico/CONTRIBUTING.md)
 - [Node](node/README.md)
 - [Pod 2 Daemon](pod2daemon/README.md)
 - Process
@@ -78,7 +74,6 @@
   - [Packaging](release/packaging/README.md)
   * [RELEASING](release/RELEASING.md)
 - [Typha](typha/README.md)
-  * [CONTRIBUTING](typha/CONTRIBUTING.md)
 - [Whisker](whisker/README.md)
   * [Pull Request Template](whisker/pull_request_template.md)
 * [AUTHORS](AUTHORS.md)
