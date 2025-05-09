@@ -42,6 +42,8 @@
   * [CHANGES](felix/CHANGES.md)
 - [Goldmane](goldmane/README.md)
 - Hack
+  - Cmd
+    - [Ipam Hammer](hack/cmd/ipam-hammer/README.md)
   - Docs
     * [Adding An Api](hack/docs/adding-an-api.md)
   - Postrelease
