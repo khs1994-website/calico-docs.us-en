@@ -46,8 +46,6 @@
     - [Ipam Hammer](hack/cmd/ipam-hammer/README.md)
   - Docs
     * [Adding An Api](hack/docs/adding-an-api.md)
-  - Postrelease
-    - [Golang](hack/postrelease/golang/README.md)
   - Test
     - [Certs](hack/test/certs/README.md)
 - [Key Cert Provisioner](key-cert-provisioner/README.md)
