@@ -1,0 +1,13 @@
+- name: kube-controllers
+  run:
+    when: "${FORCE_RUN} or change_in(['/*', '/api/', '/libcalico-go/', '/kube-controllers/', '/hack/test/certs/'], {exclude: ['/**/.gitignore', '/**/README.md', '/**/LICENSE']})"
+  dependencies:
+    - Prerequisites
+  task:
+    prologue:
+      commands:
+        - cd kube-controllers
+    jobs:
+      - name: "kube-controllers: tests"
+        commands:
+          - ../.semaphore/run-and-monitor ci.log make ci
