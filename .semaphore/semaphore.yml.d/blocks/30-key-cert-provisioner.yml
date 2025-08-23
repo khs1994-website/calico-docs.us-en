@@ -1,0 +1,13 @@
+- name: key-cert-provisioner
+  run:
+    when: "${FORCE_RUN} or change_in(['/*', '/key-cert-provisioner/'], {exclude: ['/**/.gitignore', '/**/README.md', '/**/LICENSE']})"
+  dependencies:
+    - Prerequisites
+  task:
+    prologue:
+      commands:
+        - cd key-cert-provisioner
+    jobs:
+      - name: key-cert-provisioner tests
+        commands:
+          - ../.semaphore/run-and-monitor ci.log make ci
