@@ -33,6 +33,7 @@
       - Confd
         - [Templates](confd/etc/calico/confd/templates/README.md)
   - [Tests](confd/tests/README.md)
+- [E 2 E](e2e/README.md)
 - [Felix](felix/README.md)
   - Docs
     * [Config Params](felix/docs/config-params.md)
