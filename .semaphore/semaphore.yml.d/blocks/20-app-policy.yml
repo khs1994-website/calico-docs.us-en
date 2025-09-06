@@ -1,0 +1,13 @@
+- name: app-policy
+  run:
+    when: "${CHANGE_IN(app-policy)}"
+  dependencies:
+    - Prerequisites
+  task:
+    prologue:
+      commands:
+        - cd app-policy
+    jobs:
+      - name: app-policy tests
+        commands:
+          - ../.semaphore/run-and-monitor ci.log make ci

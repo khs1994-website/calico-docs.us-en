@@ -1,0 +1,13 @@
+- name: kube-controllers
+  run:
+    when: "${CHANGE_IN(kube-controllers)}"
+  dependencies:
+    - Prerequisites
+  task:
+    prologue:
+      commands:
+        - cd kube-controllers
+    jobs:
+      - name: "kube-controllers: tests"
+        commands:
+          - ../.semaphore/run-and-monitor ci.log make ci
