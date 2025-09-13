@@ -1,0 +1,13 @@
+- name: calicoctl
+  run:
+    when: "${CHANGE_IN(calicoctl)}"
+  dependencies:
+    - Prerequisites
+  task:
+    prologue:
+      commands:
+        - cd calicoctl
+    jobs:
+      - name: calicoctl tests
+        commands:
+          - ../.semaphore/run-and-monitor ci.log make ci
