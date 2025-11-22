@@ -1,0 +1,13 @@
+- name: key-cert-provisioner
+  run:
+    when: "${CHANGE_IN(key-cert-provisioner)}"
+  dependencies:
+    - Prerequisites
+  task:
+    prologue:
+      commands:
+        - cd key-cert-provisioner
+    jobs:
+      - name: "key-cert-provisioner: CI"
+        commands:
+          - ../.semaphore/run-and-monitor ci.log make ci
