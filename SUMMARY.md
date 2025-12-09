@@ -64,8 +64,8 @@
 - [Pod 2 Daemon](pod2daemon/README.md)
 - Process
   - Testing
-    - Winfv Cni Plugin
-      - [Aso](process/testing/winfv-cni-plugin/aso/README.md)
+    - [Aso](process/testing/aso/README.md)
+    - [Win Connections](process/testing/win-connections/README.md)
     - [Winfv Felix](process/testing/winfv-felix/README.md)
       - [Capz](process/testing/winfv-felix/capz/README.md)
 - [Release](release/README.md)
