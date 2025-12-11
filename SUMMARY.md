@@ -66,8 +66,6 @@
   - Testing
     - [Aso](process/testing/aso/README.md)
     - [Win Connections](process/testing/win-connections/README.md)
-    - [Winfv Felix](process/testing/winfv-felix/README.md)
-      - [Capz](process/testing/winfv-felix/capz/README.md)
 - [Release](release/README.md)
   - [Packaging](release/packaging/README.md)
   * [RELEASING](release/RELEASING.md)
