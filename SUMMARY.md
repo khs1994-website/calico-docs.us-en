@@ -8,6 +8,7 @@
 - Charts
   - [Calico](charts/calico/README.md)
   - [crd.projectcalico.org.v1](charts/crd.projectcalico.org.v1/README.md)
+  - [projectcalico.org.v3](charts/projectcalico.org.v3/README.md)
   - [Tigera Operator](charts/tigera-operator/README.md)
 - [Cni Plugin](cni-plugin/README.md)
   * [Configuration](cni-plugin/configuration.md)
