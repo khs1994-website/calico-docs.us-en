@@ -1,0 +1,11 @@
+# The order of packages is significant, because pip processes them in the order
+# of appearance. Changing the order has an impact on the overall integration
+# process, which may cause wedges in the gate later.
+
+Babel>=2.9.1 # BSD
+eventlet>=0.31.0  # MIT
+
+# Don't specify the etcd3gw version here, because since the Yoga release we want to use the same
+# version as specified in OpenStack's constraints.  For Yoga that is etcd3gw 1.0.1.  For Caracal it
+# is etcd3gw 2.4.0.
+etcd3gw

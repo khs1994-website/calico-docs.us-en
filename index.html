@@ -1,0 +1,1492 @@
+
+<!DOCTYPE HTML>
+<html lang="us-en" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Introduction · Calico 英文文档</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-prism/prism-solarizedlight.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="api/" />
+    
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+    
+        
+        <li>
+            <a href="https://docs.khs1994.com" target="_blank" class="custom-link">Home</a>
+        </li>
+    
+    
+
+    
+    <li class="divider"></li>
+    
+
+    
+        
+        
+    
+        <li class="chapter active" data-level="1.1" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="api/">
+            
+                <a href="api/">
+            
+                    
+                    Api
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="apiserver/">
+            
+                <a href="apiserver/">
+            
+                    
+                    Apiserver
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="app-policy/">
+            
+                <a href="app-policy/">
+            
+                    
+                    App Policy
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="calico/">
+            
+                <a href="calico/">
+            
+                    
+                    Calico
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="calicoctl/">
+            
+                <a href="calicoctl/">
+            
+                    
+                    Calicoctl
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" >
+            
+                <span>
+            
+                    
+                    Charts
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.7.1" data-path="charts/calico/">
+            
+                <a href="charts/calico/">
+            
+                    
+                    Calico
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.2" data-path="charts/crd.projectcalico.org.v1/">
+            
+                <a href="charts/crd.projectcalico.org.v1/">
+            
+                    
+                    crd.projectcalico.org.v1
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.3" data-path="charts/projectcalico.org.v3/">
+            
+                <a href="charts/projectcalico.org.v3/">
+            
+                    
+                    projectcalico.org.v3
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.4" data-path="charts/tigera-operator/">
+            
+                <a href="charts/tigera-operator/">
+            
+                    
+                    Tigera Operator
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="cni-plugin/">
+            
+                <a href="cni-plugin/">
+            
+                    
+                    Cni Plugin
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.8.1" data-path="cni-plugin/configuration.html">
+            
+                <a href="cni-plugin/configuration.html">
+            
+                    
+                    Configuration
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="confd/">
+            
+                <a href="confd/">
+            
+                    
+                    Confd
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.9.1" >
+            
+                <span>
+            
+                    
+                    Docs
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.9.1.1" data-path="confd/docs/command-line-flags.html">
+            
+                <a href="confd/docs/command-line-flags.html">
+            
+                    
+                    Command Line Flags
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.1.2" data-path="confd/docs/configuration-guide.html">
+            
+                <a href="confd/docs/configuration-guide.html">
+            
+                    
+                    Configuration Guide
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.1.3" data-path="confd/docs/dns-srv-records.html">
+            
+                <a href="confd/docs/dns-srv-records.html">
+            
+                    
+                    Dns Srv Records
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.1.4" data-path="confd/docs/installation.html">
+            
+                <a href="confd/docs/installation.html">
+            
+                    
+                    Installation
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.1.5" data-path="confd/docs/logging.html">
+            
+                <a href="confd/docs/logging.html">
+            
+                    
+                    Logging
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.1.6" data-path="confd/docs/noop-mode.html">
+            
+                <a href="confd/docs/noop-mode.html">
+            
+                    
+                    Noop Mode
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.1.7" data-path="confd/docs/quick-start-guide.html">
+            
+                <a href="confd/docs/quick-start-guide.html">
+            
+                    
+                    Quick Start Guide
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.1.8" data-path="confd/docs/release-checklist.html">
+            
+                <a href="confd/docs/release-checklist.html">
+            
+                    
+                    Release Checklist
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.1.9" data-path="confd/docs/template-resources.html">
+            
+                <a href="confd/docs/template-resources.html">
+            
+                    
+                    Template Resources
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.1.10" data-path="confd/docs/templates.html">
+            
+                <a href="confd/docs/templates.html">
+            
+                    
+                    Templates
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.1.11" data-path="confd/docs/tomcat-sample.html">
+            
+                <a href="confd/docs/tomcat-sample.html">
+            
+                    
+                    Tomcat Sample
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.2" >
+            
+                <span>
+            
+                    
+                    Etc
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.9.2.1" >
+            
+                <span>
+            
+                    
+                    Calico
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.9.2.1.1" >
+            
+                <span>
+            
+                    
+                    Confd
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.9.2.1.1.1" data-path="confd/etc/calico/confd/templates/">
+            
+                <a href="confd/etc/calico/confd/templates/">
+            
+                    
+                    Templates
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.3" data-path="confd/tests/">
+            
+                <a href="confd/tests/">
+            
+                    
+                    Tests
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="e2e/">
+            
+                <a href="e2e/">
+            
+                    
+                    E 2 E
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.10.1" >
+            
+                <span>
+            
+                    
+                    Images
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.10.1.1" data-path="e2e/images/rapidclient/">
+            
+                <a href="e2e/images/rapidclient/">
+            
+                    
+                    Rapidclient
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11" data-path="felix/">
+            
+                <a href="felix/">
+            
+                    
+                    Felix
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.11.1" >
+            
+                <span>
+            
+                    
+                    Docs
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.11.1.1" data-path="felix/docs/config-params.html">
+            
+                <a href="felix/docs/config-params.html">
+            
+                    
+                    Config Params
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11.2" data-path="felix/k8sfv/">
+            
+                <a href="felix/k8sfv/">
+            
+                    
+                    K 8 Sfv
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.11.2.1" data-path="felix/k8sfv/monitoring.html">
+            
+                <a href="felix/k8sfv/monitoring.html">
+            
+                    
+                    Monitoring
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11.3" data-path="felix/nfnetlink/">
+            
+                <a href="felix/nfnetlink/">
+            
+                    
+                    Nfnetlink
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11.4" data-path="felix/CHANGES.html">
+            
+                <a href="felix/CHANGES.html">
+            
+                    
+                    CHANGES
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.12" data-path="goldmane/">
+            
+                <a href="goldmane/">
+            
+                    
+                    Goldmane
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13" >
+            
+                <span>
+            
+                    
+                    Hack
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.13.1" >
+            
+                <span>
+            
+                    
+                    Cmd
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.13.1.1" data-path="hack/cmd/ipam-hammer/">
+            
+                <a href="hack/cmd/ipam-hammer/">
+            
+                    
+                    Ipam Hammer
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13.2" >
+            
+                <span>
+            
+                    
+                    Docs
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.13.2.1" data-path="hack/docs/adding-an-api.html">
+            
+                <a href="hack/docs/adding-an-api.html">
+            
+                    
+                    Adding An Api
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13.3" >
+            
+                <span>
+            
+                    
+                    Test
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.13.3.1" data-path="hack/test/certs/">
+            
+                <a href="hack/test/certs/">
+            
+                    
+                    Certs
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.14" data-path="key-cert-provisioner/">
+            
+                <a href="key-cert-provisioner/">
+            
+                    
+                    Key Cert Provisioner
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.14.1" data-path="key-cert-provisioner/test-signer/">
+            
+                <a href="key-cert-provisioner/test-signer/">
+            
+                    
+                    Test Signer
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.15" data-path="kube-controllers/">
+            
+                <a href="kube-controllers/">
+            
+                    
+                    Kube Controllers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.16" data-path="lib/">
+            
+                <a href="lib/">
+            
+                    
+                    Lib
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.17" data-path="libcalico-go/">
+            
+                <a href="libcalico-go/">
+            
+                    
+                    Libcalico Go
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.17.1" >
+            
+                <span>
+            
+                    
+                    Docs
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.17.1.1" data-path="libcalico-go/docs/data-model.html">
+            
+                <a href="libcalico-go/docs/data-model.html">
+            
+                    
+                    Data Model
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.17.2" >
+            
+                <span>
+            
+                    
+                    Lib
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.17.2.1" >
+            
+                <span>
+            
+                    
+                    Apis
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.17.2.1.1" >
+            
+                <span>
+            
+                    
+                    crd.projectcalico.org
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.17.2.1.1.1" data-path="libcalico-go/lib/apis/crd.projectcalico.org/v1/">
+            
+                <a href="libcalico-go/lib/apis/crd.projectcalico.org/v1/">
+            
+                    
+                    V 1
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.17.3" data-path="libcalico-go/test/">
+            
+                <a href="libcalico-go/test/">
+            
+                    
+                    Test
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.18" data-path="manifests/">
+            
+                <a href="manifests/">
+            
+                    
+                    Manifests
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.19" data-path="networking-calico/">
+            
+                <a href="networking-calico/">
+            
+                    
+                    Networking Calico
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.20" data-path="node/">
+            
+                <a href="node/">
+            
+                    
+                    Node
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.21" data-path="pod2daemon/">
+            
+                <a href="pod2daemon/">
+            
+                    
+                    Pod 2 Daemon
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.22" >
+            
+                <span>
+            
+                    
+                    Process
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.22.1" >
+            
+                <span>
+            
+                    
+                    Testing
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.22.1.1" data-path="process/testing/aso/">
+            
+                <a href="process/testing/aso/">
+            
+                    
+                    Aso
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.22.1.2" data-path="process/testing/win-connections/">
+            
+                <a href="process/testing/win-connections/">
+            
+                    
+                    Win Connections
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.23" data-path="release/">
+            
+                <a href="release/">
+            
+                    
+                    Release
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.23.1" data-path="release/packaging/">
+            
+                <a href="release/packaging/">
+            
+                    
+                    Packaging
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.23.2" data-path="release/RELEASING.html">
+            
+                <a href="release/RELEASING.html">
+            
+                    
+                    RELEASING
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.24" data-path="typha/">
+            
+                <a href="typha/">
+            
+                    
+                    Typha
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.25" data-path="whisker/">
+            
+                <a href="whisker/">
+            
+                    
+                    Whisker
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.25.1" data-path="whisker/pull_request_template.html">
+            
+                <a href="whisker/pull_request_template.html">
+            
+                    
+                    Pull Request Template
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.26" data-path="AUTHORS.html">
+            
+                <a href="AUTHORS.html">
+            
+                    
+                    AUTHORS
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.27" data-path="CONTRIBUTING_DOCS.html">
+            
+                <a href="CONTRIBUTING_DOCS.html">
+            
+                    
+                    CONTRIBUTING DOCS
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.28" data-path="CONTRIBUTING.html">
+            
+                <a href="CONTRIBUTING.html">
+            
+                    
+                    CONTRIBUTING
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.29" data-path="DEVELOPER_GUIDE.html">
+            
+                <a href="DEVELOPER_GUIDE.html">
+            
+                    
+                    DEVELOPER GUIDE
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.30" data-path="LICENSE.html">
+            
+                <a href="LICENSE.html">
+            
+                    
+                    LICENSE
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.31" data-path="SECURITY.html">
+            
+                <a href="SECURITY.html">
+            
+                    
+                    SECURITY
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="." >Introduction</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <p><a href="https://goreportcard.com/report/github.com/projectcalico/calico" target="_blank"><img src="https://goreportcard.com/badge/github.com/projectcalico/calico" alt="Go Report Card"></a>
+<a href="https://artifacthub.io/packages/helm/projectcalico/tigera-operator" target="_blank"><img src="https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/tigera-operator" alt="ArtifactHub"></a>
+<a href="calico/LICENSE"><img src="https://img.shields.io/badge/license-Apache-blue.svg" alt="License"></a>
+<a href="https://pkg.go.dev/github.com/projectcalico/api" target="_blank"><img src="https://pkg.go.dev/badge/k8s.io/kubernetes.svg" alt="GoPkg"></a>
+<a href="https://bestpractices.coreinfrastructure.org/projects/6064" target="_blank"><img src="https://bestpractices.coreinfrastructure.org/projects/6064/badge" alt="CII Best Practices"></a></p>
+<div align="center">
+<h1 id="calico">Calico</h1>
+<h2 id="
+quickstart-
+docs-
+contribute-
+slack-
+releases
+">
+<a href="https://projectcalico.docs.tigera.io/getting-started/kubernetes/quickstart" target="_blank">Quickstart</a> |
+<a href="https://projectcalico.docs.tigera.io" target="_blank">Docs</a> |
+<a href="CONTRIBUTING.html">Contribute</a> |
+<a href="https://slack.projectcalico.org" target="_blank">Slack</a> |
+<a href="https://github.com/projectcalico/calico/releases" target="_blank">Releases</a>
+</h2>
+</div>
+
+<h2 id="&#x1F43E;-welcome-to-project-calico">&#x1F43E; Welcome to Project Calico!</h2>
+<p>Project Calico, created and maintained by <a href="https://www.tigera.io/" target="_blank">Tigera</a>, is an open-source project with an active development and user community. Calico Open Source has grown to be the most widely adopted solution for container networking and security, powering 8M+ nodes daily across 166 countries.</p>
+<h2 id="&#x1F31F;-why-use-calico">&#x1F31F; Why use Calico?</h2>
+<ul>
+<li><strong>Data Plane Choice</strong>: eBPF, standard Linux, Windows, and VPP &#x2014; versatility in network solutions.</li>
+<li><strong>Interoperability</strong>: Works across multiple distros, multiple clouds, bare metal, and VMs.</li>
+<li><strong>Optimized Performance</strong>: Engineered for high speed and low CPU usage, maximizing your cluster investments.</li>
+<li><strong>Scalable Architecture</strong>: Grows seamlessly with your Kubernetes clusters without sacrificing performance.</li>
+<li><strong>Advanced Security</strong>: Get granular access controls and WireGuard encryption.</li>
+<li><strong>Kubernetes Networking Policy Support</strong>: Continually defining excellence in Kubernetes network policy standards and support.</li>
+<li><strong>Vibrant Contributor Community</strong>: Over 200 contributors from a wide array of global companies.</li>
+<li><strong>Flexible networking</strong>: An array of networking tools at your disposal, including BGP, VXLAN, service advertisement, and more.</li>
+</ul>
+<div align="center">
+<img src="https://www.tigera.io/app/uploads/2026/01/Ecosystem_2026.svg">
+</div>
+
+<h2 id="&#x1F91D;-join-the-calico-community">&#x1F91D; Join the Calico Community</h2>
+<ul>
+<li><a href="https://www.tigera.io/project-calico/calico-big-cats-ambassador-program/#meet-calico-big-cats" target="_blank">Calico Big Cats</a>: Become an ambassador and share your journey</li>
+<li><a href="https://calendar.google.com/calendar/u/0/embed?src=tigera.io_uunmavdev5ndovf0hc4frtl0i0@group.calendar.google.com" target="_blank">Community Meetings</a>: Engage and contribute</li>
+<li><a href="https://github.com/projectcalico/calico/labels/good%20first%20issue" target="_blank">Contribute on GitHub</a>: Start with &apos;good first issues&apos;</li>
+<li><a href="https://slack.projectcalico.org/" target="_blank">Connect on Slack</a>: Join the conversation with fellow contributors and our developers</li>
+</ul>
+<h2 id="&#x1F4A1;-contributing-to-project-calico">&#x1F4A1; Contributing to Project Calico</h2>
+<ul>
+<li><a href="https://docs.tigera.io/calico/latest/about" target="_blank">Get Started with Project Calico</a></li>
+<li><a href="https://github.com/orgs/projectcalico/repositories" target="_blank">Repositories</a></li>
+<li><a href="https://github.com/projectcalico/calico/blob/master/CONTRIBUTING_DOCS.md" target="_blank">Contribute to our docs</a></li>
+<li>Documentation: <a href="https://docs.tigera.io/calico/latest/about/training-resources" target="_blank">Dive into our training and resources</a></li>
+<li><a href="https://github.com/projectcalico/calico/issues" target="_blank">Make Calico better</a></li>
+</ul>
+<h2 id="&#x1F6E0;&#xFE0F;-projects-we-maintain">&#x1F6E0;&#xFE0F; Projects We Maintain</h2>
+<ul>
+<li><a href="https://github.com/projectcalico/api" target="_blank">Calico Golang API</a></li>
+<li><a href="https://github.com/tigera/operator" target="_blank">Calico operator</a></li>
+<li><a href="https://github.com/projectcalico/vpp-dataplane" target="_blank">VPP dataplane</a></li>
+<li><a href="https://github.com/projectcalico/bird" target="_blank">Calico BIRD</a></li>
+</ul>
+<h2 id="&#x1F4E2;-stay-connected">&#x1F4E2; Stay Connected</h2>
+<ul>
+<li>Subscribe: <a href="https://www.tigera.io/project-calico/#:~:text=Join%20Calico%20Open%20Source%20community%20newsletter" target="_blank">Join our newsletter</a></li>
+<li><a href="https://www.youtube.com/channel/UCFpTnXDNcBoXI4gqCDmegFA" target="_blank">YouTube channel for updates &amp; tutorials</a></li>
+<li><a href="https://www.tigera.io/blog/?_sft_category=technical-blog" target="_blank">Technical Blog</a></li>
+<li><a href="https://www.tigera.io/careers/" target="_blank">Careers</a>: Passionate about open source? Join our team.</li>
+</ul>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                
+                <a href="api/" class="navigation navigation-next navigation-unique" aria-label="Next page: Api">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Introduction","level":"1.1","depth":1,"next":{"title":"Api","level":"1.2","depth":1,"path":"api/README.md","ref":"api/README.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-sharing","-highlight","-livereload","prism"],"styles":{"pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css","website":"styles/website.css"},"pluginsConfig":{"prism":{"css":["prismjs/themes/prism-solarizedlight.css"]},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css","website":"styles/website.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Calico 英文文档","language":"us-en","links":{"sidebar":{"Home":"https://docs.khs1994.com"}},"gitbook":"*"},"file":{"path":"README.md","mtime":"2026-02-14T01:28:24.000Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2026-02-14T01:29:21.703Z"},"basePath":".","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="gitbook/gitbook.js"></script>
+    <script src="gitbook/theme.js"></script>
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

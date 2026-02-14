@@ -1,0 +1,16 @@
+inpackage: False
+dir: "{{.InterfaceDir}}/mocks"
+filename: "{{.InterfaceName}}.go"
+packages:
+  github.com/projectcalico/calico/goldmane/pkg/client:
+    config:
+      pkgname: "mocks"
+      structname: "{{.InterfaceName}}"
+    interfaces:
+      FlowsClient:
+  github.com/projectcalico/calico/goldmane/proto:
+    config:
+      pkgname: "mocks"
+      structname: "{{.InterfaceName}}"
+    interfaces:
+      Flows_StreamClient:

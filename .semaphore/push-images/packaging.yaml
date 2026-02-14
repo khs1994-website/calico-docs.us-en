@@ -1,0 +1,56 @@
+version: v1.0
+name: Publish openstack packages
+agent:
+  machine:
+    type: f1-standard-2
+    os_image: ubuntu2404
+
+execution_time_limit:
+  minutes: 60
+
+global_job_config:
+  secrets:
+    - name: google-service-account-for-tigera-infra
+    - name: launchpad-secret-key
+  prologue:
+    commands:
+      - checkout
+      # Semaphore is doing shallow clone on a commit without tags.
+      # unshallow it because we need a reliable git describe.
+      - retry git fetch --unshallow
+      - git config --global user.email marvin@tigera.io
+      - git config --global user.name Marvin
+      - export GOOGLE_APPLICATION_CREDENTIALS=$HOME/secrets/tigera-infra-access.json
+      - gcloud config set project tigera-wp-tcp-redirect
+      - gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
+      - export SECRET_KEY=$HOME/secrets/marvin.txt
+      - export GCLOUD_ARGS='--zone us-east1-c --project tigera-wp-tcp-redirect'
+      - export HOST=ubuntu@binaries-projectcalico-org
+      # Note that this override is for the docker containers we're building,
+      # and not the VM that we're running on right now
+      - export UBUNTU_REPO_OVERRIDE=ftp.uni-stuttgart.de
+      # install-package is a Semaphore-specific script that has a few benefits,
+      # notably being much faster because it uses Semaphore's cache to fetch
+      # files from.
+      - install-package --no-install-recommends devscripts moreutils patchelf jq
+
+blocks:
+  # This promotion is only _automatic_ for the master branch.  For other
+  # branches, and PRs, it is available but not automatic.  This means a
+  # developer can trigger the building and publishing of release branch and
+  # pre-merge packages by clicking the "Publish openstack packages" button in
+  # the Semaphore UI.  When building from the master branch, packages are
+  # published to the "master" PPA.  When building from any other branch,
+  # packages are published to the "testing" PPA.  When building from a PR,
+  # packages are published to the "pr-${SEMAPHORE_GIT_PR_NUMBER}" PPA, and that
+  # PPA must have been created manually first.  PRs requiring packaging must
+  # use a branch on github.com/projectcalico/calico, instead of on a fork repo,
+  # because packaging requires secrets that we do not (and should not!) expose
+  # to fork PRs.
+  - name: "Publish openstack packages"
+    task:
+      jobs:
+        - name: "packages"
+          commands:
+            - if [ -z "${SEMAPHORE_GIT_PR_NUMBER}" ]; then make -C release/packaging release-publish VERSION=$SEMAPHORE_GIT_BRANCH; fi
+            - if [ -n "${SEMAPHORE_GIT_PR_NUMBER}" ]; then make -C release/packaging release-publish VERSION=pr-$SEMAPHORE_GIT_PR_NUMBER; fi
