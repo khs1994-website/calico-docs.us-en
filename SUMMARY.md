@@ -59,6 +59,8 @@
     - Apis
       - crd.projectcalico.org
         - [V 1](libcalico-go/lib/apis/crd.projectcalico.org/v1/README.md)
+      - [Internalapi](libcalico-go/lib/apis/internalapi/README.md)
+      - [V 1](libcalico-go/lib/apis/v1/README.md)
   - [Test](libcalico-go/test/README.md)
 - [Manifests](manifests/README.md)
 - [Networking Calico](networking-calico/README.md)
