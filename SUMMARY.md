@@ -40,6 +40,7 @@
     * [Monitoring](felix/k8sfv/monitoring.md)
   - [Nfnetlink](felix/nfnetlink/README.md)
   * [CHANGES](felix/CHANGES.md)
+  * [CLAUDE](felix/CLAUDE.md)
 - [Goldmane](goldmane/README.md)
 - Hack
   - Cmd
