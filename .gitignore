@@ -1,0 +1,39 @@
+*.created*
+*.pyc
+.go-pkg-cache/
+.idea
+.vscode
+artifacts/
+bin/
+coverprofile.out
+crypto/tmp
+postrelease-checks.xml
+report/
+vendor/
+venv/
+
+/* Produced as part of release */
+release/release
+node/windows-packaging/CalicoWindows/confd/config-bgp.ps1
+node/windows-packaging/CalicoWindows/confd/config-bgp.psm1
+node/windows-packaging/nssm.zip
+node/windows-packaging/nssm.exe
+_output
+builder.coverprofile
+*.log
+*.pprof
+.release-*.*
+
+/* Created by local kind cluster */
+hack/test/kind/kind
+hack/test/kind/kind-v*
+hack/test/kind/.*updated*
+hack/test/kind/kubectl
+hack/test/kind/kubectl-v*
+hack/test/kind/*kubeconfig.yaml
+pod2daemon/node-driver-registrar/
+
+/networking-calico/upper-constraints*.txt
+
+/* Created by libcalico-go UTs */
+ut-tmp-dir
