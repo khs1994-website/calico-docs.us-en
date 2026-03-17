@@ -14,6 +14,7 @@
   * [Configuration](cni-plugin/configuration.md)
 - [Confd](confd/README.md)
   - Docs
+    * [Bgpfilter Bird Config Examples](confd/docs/bgpfilter-bird-config-examples.md)
     * [Command Line Flags](confd/docs/command-line-flags.md)
     * [Configuration Guide](confd/docs/configuration-guide.md)
     * [Dns Srv Records](confd/docs/dns-srv-records.md)
