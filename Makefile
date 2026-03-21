@@ -69,6 +69,9 @@ check-images-availability: bin/crane bin/yq
 check-language:
 	./hack/check-language.sh
 
+check-mockery-config:
+	./hack/check-mockery-config.sh
+
 check-ginkgo-v2:
 	./hack/check-ginkgo-v2.sh
 
@@ -183,7 +186,7 @@ image:
 E2E_FOCUS ?= "sig-network.*Conformance|sig-calico.*Conformance|BGP"
 E2E_SKIP ?= ""
 E2E_PROCS ?= 4
-K8S_NETPOL_SUPPORTED_FEATURES ?= "ClusterNetworkPolicy"
+K8S_NETPOL_SUPPORTED_FEATURES ?= "ClusterNetworkPolicy,ClusterNetworkPolicyNamedPorts"
 K8S_NETPOL_UNSUPPORTED_FEATURES ?= ""
 CLUSTER_ROUTING ?= BIRD
 
