@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Tigera, Inc. All rights reserved.
+// Copyright (c) 2026 Tigera, Inc. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,25 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package serviceaccount_test
-
-import (
-	"testing"
-
-	"github.com/onsi/ginkgo/v2"
-	"github.com/onsi/gomega"
-	"github.com/sirupsen/logrus"
-
-	"github.com/projectcalico/calico/libcalico-go/lib/testutils"
-)
-
-func init() {
-	testutils.HookLogrusForGinkgo()
-	logrus.SetLevel(logrus.DebugLevel)
-}
-
-func Test(t *testing.T) {
-	gomega.RegisterFailHandler(ginkgo.Fail)
-	suiteConfig, reporterConfig := ginkgo.GinkgoConfiguration()
-	ginkgo.RunSpecs(t, "ServiceAccount controller suite", suiteConfig, reporterConfig)
-}
+// Package format provides custom
+// formatters for Gomega test output.
+package format

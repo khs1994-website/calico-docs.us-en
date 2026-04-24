@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Tigera, Inc. All rights reserved.
+// Copyright (c) 2026 Tigera, Inc. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,25 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package namespace_test
+//go:build !cgo
+
+package utils
 
 import (
-	"testing"
+	"fmt"
 
 	"github.com/onsi/ginkgo/v2"
-	"github.com/onsi/gomega"
-	"github.com/sirupsen/logrus"
+	corev1 "k8s.io/api/core/v1"
+	"k8s.io/client-go/kubernetes"
 
-	"github.com/projectcalico/calico/libcalico-go/lib/testutils"
+	"github.com/projectcalico/calico/libcalico-go/lib/set"
 )
 
-func init() {
-	testutils.HookLogrusForGinkgo()
-	logrus.SetLevel(logrus.DebugLevel)
-}
-
-func Test(t *testing.T) {
-	gomega.RegisterFailHandler(ginkgo.Fail)
-	suiteConfig, reporterConfig := ginkgo.GinkgoConfiguration()
-	ginkgo.RunSpecs(t, "Namespace controller suite", suiteConfig, reporterConfig)
+func DumpBPFNATServiceBackends(cs kubernetes.Interface, nodeName string, serviceIP string, servicePort int, proto corev1.Protocol) (set.Set[string], error) {
+	ginkgo.Fail("DumpBPFNATServiceBackends requires CGO (libbpf) but it is not enabled")
+	return nil, fmt.Errorf("DumpBPFNATServiceBackends requires CGO (libbpf) but it is not enabled")
 }
