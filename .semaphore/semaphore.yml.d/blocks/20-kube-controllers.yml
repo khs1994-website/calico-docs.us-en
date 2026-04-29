@@ -1,0 +1,30 @@
+- name: kube-controllers
+  run:
+    when: "${CHANGE_IN(kube-controllers)}"
+  dependencies:
+    - Prerequisites
+    - "Build: calico image"
+  task:
+    env_vars:
+      - name: BUILD_CACHE_GROUP
+        value: "calico"
+    prologue:
+      commands:
+        - .semaphore/load-cached-images
+        - cd kube-controllers
+    jobs:
+      - name: "kube-controllers: CI"
+        commands:
+          - ../.semaphore/run-and-monitor ci.log make ci
+
+      # Run a subset of the kube-controllers CI tests that use the projectcalico.org/v3 API group for CRDs.
+      - name: "kube-controllers: CI (projectcalico.org/v3)"
+        commands:
+          - ../.semaphore/run-and-monitor ut.log make ut
+        env_vars:
+          - name: CALICO_API_GROUP
+            value: "projectcalico.org/v3"
+    epilogue:
+      always:
+        commands:
+          - 'test-results publish --name "${SEMAPHORE_JOB_NAME}" ./report/*.xml || true'

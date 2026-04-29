@@ -1,0 +1,179 @@
+// Copyright (c) 2024 Tigera, Inc. All rights reserved.
+
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+package utils
+
+import (
+	"fmt"
+	"os"
+	"path/filepath"
+	"slices"
+	"strings"
+	"sync"
+
+	"github.com/sirupsen/logrus"
+
+	"github.com/projectcalico/calico/release/internal/command"
+)
+
+const (
+	// ProductName is used in the release process to identify the product.
+	ProductName = CalicoProductName
+
+	// Calico is the product name for projectcalico.
+	Calico = "calico"
+
+	// CalicoRepoName is the name of the projectcalico repo.
+	CalicoRepoName = Calico
+
+	// BirdRepoName is the name of the bird repo.
+	BirdRepoName = "bird"
+
+	// CalicoProductCode is the code for projectcalico.
+	CalicoProductCode = "os"
+
+	// CalicoProductName is the name of the projectcalico product.
+	CalicoProductName = "Calico"
+
+	// ProjectCalicoOrg is the name of the Project Calico organization.
+	ProjectCalicoOrg = "projectcalico"
+
+	// TigeraOrg is the name of the Tigera organization.
+	TigeraOrg = "tigera"
+
+	// TigeraCompany is the short-form human-facing name of the company, for freeform text fields or branding
+	TigeraCompany = "Tigera"
+
+	// TigeraOperatorChart is the name of the Tigera Operator Helm chart.
+	TigeraOperatorChart = "tigera-operator"
+
+	// ProjectCalicoV1CRDsChart is the name of the crd.projectcalico.org/v1 CRD helm chart.
+	ProjectCalicoV1CRDsChart = "crd.projectcalico.org.v1"
+
+	// ProjectCalicoV3CRDsChart is the name of the projectcalico.org/v3 CRD helm chart.
+	ProjectCalicoV3CRDsChart = "projectcalico.org.v3"
+
+	// CalicoHelmRepoURL is the URL for the Calico Helm charts.
+	CalicoHelmRepoURL = "https://docs.tigera.io/calico/charts"
+)
+
+// AllReleaseCharts returns a list of all Helm charts to be released.
+func AllReleaseCharts() []string {
+	return []string{
+		TigeraOperatorChart,
+		ProjectCalicoV1CRDsChart,
+		ProjectCalicoV3CRDsChart,
+	}
+}
+
+var once sync.Once
+
+var (
+	// ImageReleaseDirs enumerates the component directories whose Makefiles
+	// publish standalone images via release-build/release-publish.
+	// Components bundled into the combined calico image (kube-controllers,
+	// apiserver, dikastes, webhooks, typha, goldmane, guardian,
+	// whisker-backend, key-cert-provisioner, CSI, flexvol, Linux CNI) live
+	// under cmd/calico and are not listed here.
+	ImageReleaseDirs = []string{
+		"cmd/calico",
+		"istio",
+		"node",
+		"third_party/envoy-gateway",
+		"third_party/envoy-proxy",
+		"third_party/envoy-ratelimit",
+		"whisker",
+	}
+
+	// WindowsReleaseDirs enumerates component directories that ship a
+	// Windows image. Some of these (node) also have a Linux release-build
+	// and appear in ImageReleaseDirs; others (cni-plugin) ship only a
+	// Windows image — their Linux counterparts are bundled into the
+	// combined calico image.
+	WindowsReleaseDirs = []string{
+		"cni-plugin",
+		"node",
+	}
+
+	releaseImages = []string{}
+)
+
+// imageDiscoveryDirs returns the union of ImageReleaseDirs and
+// WindowsReleaseDirs, preserving order and de-duplicating. Used to discover
+// every image the release produces, regardless of which target builds it.
+func imageDiscoveryDirs() []string {
+	seen := map[string]struct{}{}
+	out := make([]string, 0, len(ImageReleaseDirs)+len(WindowsReleaseDirs))
+	for _, dirs := range [][]string{ImageReleaseDirs, WindowsReleaseDirs} {
+		for _, d := range dirs {
+			if _, ok := seen[d]; ok {
+				continue
+			}
+			seen[d] = struct{}{}
+			out = append(out, d)
+		}
+	}
+	return out
+}
+
+func initReleaseImages() {
+	rootDir, err := command.GitDir()
+	if err != nil {
+		logrus.Panicf("Cannot determine root git dir: %v", err)
+	}
+	dirs := imageDiscoveryDirs()
+	images, err := BuildReleaseImageList(rootDir, dirs...)
+	if err != nil {
+		logrus.Panicf("Cannot build release images list for release dirs[%s]: %v", strings.Join(dirs, ","), err)
+	}
+	releaseImages = images
+}
+
+func ReleaseImages() []string {
+	once.Do(initReleaseImages)
+	return slices.Clone(releaseImages)
+}
+
+// buildImages returns the list of images built by the given directory.
+// It does this by calling a make target that returns the values of BUILD_IMAGES and WINDOWS_IMAGE (if set).
+func buildImages(dir string, release bool) ([]string, error) {
+	env := os.Environ()
+	if release {
+		env = append(env, "RELEASE=true")
+	}
+	out, err := command.MakeInDir(dir, []string{"-s", "build-images"}, env)
+	if err != nil {
+		logrus.Error(out)
+		return nil, fmt.Errorf("failed to get images for release dir %s: %w", dir, err)
+	}
+	return strings.Fields(out), nil
+}
+
+// BuildReleaseImageList builds a list of images to be released from the given directories.
+func BuildReleaseImageList(rootDir string, dirs ...string) ([]string, error) {
+	if len(dirs) == 0 {
+		logrus.WithField("root_dir", rootDir).Warnf("No image release dirs specified, will get images from root dir instead")
+		return buildImages(rootDir, true)
+	}
+	combinedImages := []string{}
+	for _, d := range dirs {
+		dir := filepath.Join(rootDir, d)
+		images, err := buildImages(dir, true)
+		if err != nil {
+			return nil, err
+		}
+		combinedImages = append(combinedImages, images...)
+	}
+	return combinedImages, nil
+}

@@ -1,0 +1,25 @@
+template: testify
+inpackage: false
+dir: "{{.InterfaceDir}}/mocks"
+structname: "{{.InterfaceName}}"
+pkgname: "mocks"
+filename: "{{.InterfaceName}}.go"
+packages:
+  github.com/projectcalico/calico/guardian/pkg/tunnel:
+    interfaces:
+      SessionDialer:
+      Session:
+  net:
+    config:
+      pkgname: "{{.SrcPackageName}}"
+      dir: "pkg/thirdpartymocks/{{.SrcPackagePath}}"
+    interfaces:
+      Conn:
+  github.com/projectcalico/calico/lib/std/time:
+    config:
+      pkgname: "{{.SrcPackageName}}"
+      dir: "pkg/thirdpartymocks/std/time"
+    interfaces:
+      Clock:
+      Ticker:
+      Timer:

@@ -1,0 +1,241 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`JsonPrettier should render 1`] = `
+<DocumentFragment>
+  <div
+    aria-label="JSON view"
+    class="containerStylesDark"
+    role="tree"
+  >
+    <div
+      aria-expanded="true"
+      class="_2bkNM"
+      role="treeitem"
+    >
+      <span
+        aria-controls="_r_0_"
+        aria-expanded="true"
+        aria-label="collapse JSON"
+        class="_3QHg2 _f10Tu _1MFti _1LId0"
+        role="button"
+        tabindex="0"
+      />
+      <span
+        class="_gsbQL _3eOF8"
+      >
+        {
+      </span>
+      <ul
+        class="_1BXBN"
+        id="_r_0_"
+        role="group"
+      >
+        <div
+          class="_2bkNM"
+          role="treeitem"
+        >
+          <span
+            class="labelStylesDark"
+          >
+            a:
+          </span>
+          <span
+            class="stringStylesDark"
+          >
+            "one"
+          </span>
+          <span
+            class="_gsbQL _3eOF8"
+          >
+            ,
+          </span>
+        </div>
+        <div
+          class="_2bkNM"
+          role="treeitem"
+        >
+          <span
+            class="labelStylesDark"
+          >
+            b:
+          </span>
+          <span
+            class="valueStylesDark"
+          >
+            2
+          </span>
+          <span
+            class="_gsbQL _3eOF8"
+          >
+            ,
+          </span>
+        </div>
+        <div
+          class="_2bkNM"
+          role="treeitem"
+        >
+          <span
+            class="labelStylesDark"
+          >
+            c:
+          </span>
+          <span
+            class="valueStylesDark"
+          >
+            null
+          </span>
+          <span
+            class="_gsbQL _3eOF8"
+          >
+            ,
+          </span>
+        </div>
+        <div
+          class="_2bkNM"
+          role="treeitem"
+        >
+          <span
+            class="labelStylesDark"
+          >
+            d:
+          </span>
+          <span
+            class="valueStylesDark"
+          >
+            undefined
+          </span>
+          <span
+            class="_gsbQL _3eOF8"
+          >
+            ,
+          </span>
+        </div>
+        <div
+          aria-expanded="true"
+          class="_2bkNM"
+          role="treeitem"
+        >
+          <span
+            aria-controls="_r_1_"
+            aria-expanded="true"
+            aria-label="collapse JSON"
+            class="_3QHg2 _f10Tu _1MFti _1LId0"
+            role="button"
+            tabindex="-1"
+          />
+          <span
+            class="labelStylesDark"
+          >
+            e:
+          </span>
+          <span
+            class="_gsbQL _3eOF8"
+          >
+            {
+          </span>
+          <ul
+            class="_1BXBN"
+            id="_r_1_"
+            role="group"
+          >
+            <div
+              class="_2bkNM"
+              role="treeitem"
+            >
+              <span
+                class="labelStylesDark"
+              >
+                f:
+              </span>
+              <span
+                class="stringStylesDark"
+              >
+                "g"
+              </span>
+            </div>
+          </ul>
+          <span
+            class="_gsbQL _3eOF8"
+          >
+            }
+          </span>
+          <span
+            class="_gsbQL _3eOF8"
+          >
+            ,
+          </span>
+        </div>
+        <div
+          aria-expanded="true"
+          class="_2bkNM"
+          role="treeitem"
+        >
+          <span
+            aria-controls="_r_2_"
+            aria-expanded="true"
+            aria-label="collapse JSON"
+            class="_3QHg2 _f10Tu _1MFti _1LId0"
+            role="button"
+            tabindex="-1"
+          />
+          <span
+            class="labelStylesDark"
+          >
+            x:
+          </span>
+          <span
+            class="_gsbQL _3eOF8"
+          >
+            [
+          </span>
+          <ul
+            class="_1BXBN"
+            id="_r_2_"
+            role="group"
+          >
+            <div
+              class="_2bkNM"
+              role="treeitem"
+            >
+              <span
+                class="stringStylesDark"
+              >
+                "y"
+              </span>
+              <span
+                class="_gsbQL _3eOF8"
+              >
+                ,
+              </span>
+            </div>
+            <div
+              class="_2bkNM"
+              role="treeitem"
+            >
+              <span
+                class="stringStylesDark"
+              >
+                "z"
+              </span>
+            </div>
+          </ul>
+          <span
+            class="_gsbQL _3eOF8"
+          >
+            ]
+          </span>
+        </div>
+      </ul>
+      <span
+        class="_gsbQL _3eOF8"
+      >
+        }
+      </span>
+    </div>
+  </div>
+  <span
+    hidden=""
+    id="__chakra_env"
+  />
+</DocumentFragment>
+`;

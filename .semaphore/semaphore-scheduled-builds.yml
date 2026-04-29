@@ -1,0 +1,1674 @@
+# !! WARNING, DO NOT EDIT !! This file is generated from the templates
+# in /.semaphore/semaphore.yml.d. To update, modify the relevant
+# template and then run 'make gen-semaphore-yaml'.
+version: v1.0
+name: Calico
+execution_time_limit:
+  hours: 4
+agent:
+  machine:
+    type: f1-standard-2
+    os_image: ubuntu2204
+auto_cancel:
+  running:
+    when: "branch != 'master'"
+  queued:
+    when: "branch != 'master'"
+global_job_config:
+  secrets:
+    - name: docker-hub
+    - name: google-service-account-for-gce
+  env_vars:
+    - name: GOOGLE_PROJECT
+      value: unique-caldron-775
+    - name: GCS_BUILD_CACHE_BUCKET
+      value: calico-transient-build-artifacts-europe-west3
+    - name: BUILDKIT_PROGRESS
+      value: plain
+    - name: SEMAPHORE_AGENT_UPLOAD_JOB_LOGS
+      value: when-trimmed
+  prologue:
+    commands:
+      - export CALICO_DIR_NAME=${SEMAPHORE_GIT_DIR}
+      - export GCS_CACHE_DIR=gs://$GCS_BUILD_CACHE_BUCKET/cache/${CALICO_DIR_NAME}
+      - export GCS_WORKFLOW_DIR=gs://$GCS_BUILD_CACHE_BUCKET/workflow/${SEMAPHORE_WORKFLOW_ID}
+      - export GOOGLE_APPLICATION_CREDENTIALS=$HOME/secrets/secret.google-service-account-key.json
+      - |-
+        if [[ $(uname -m) != "x86_64" || -n "$ARCH" ]]; then
+          echo "Non-x86_64 build: $(uname -m) / $ARCH";
+          export BUILD_CACHE_GROUP=$BUILD_CACHE_GROUP-$(uname -m)-$ARCH;
+        fi
+      - gcloud auth activate-service-account --key-file="$GOOGLE_APPLICATION_CREDENTIALS" || true
+      - gcloud config set project ${GOOGLE_PROJECT} || true
+      # Try to restore the working copy from the cache, if available. Then,
+      # for PRs, also try to restore the build cache.  (We skip this on branch
+      # builds to ensure branches build cleanly.)
+      - sudo apt-get install -y zstd || true
+      - restored_wc_cache=false
+      - |-
+        if [[ -n "${SEMAPHORE_GIT_BRANCH}" && -z "$SKIP_CACHE_RESTORE" ]]; then
+          echo "Looking for cached working copy for branch ${SEMAPHORE_GIT_BRANCH}"
+          gcs_branch_cache_dir="${GCS_CACHE_DIR}/${SEMAPHORE_GIT_BRANCH}"
+          if gcloud storage cp "$gcs_branch_cache_dir/working-copy.tar.zstd" /tmp/working-copy.tar.zstd; then
+            echo "Restoring cache for branch ${SEMAPHORE_GIT_BRANCH}"
+            tar --use-compress-program=zstd -xf /tmp/working-copy.tar.zstd & tar_pid=$!
+            downloaded_build_cache=false
+            if [[ -n "$BUILD_CACHE_GROUP" && -n "${SEMAPHORE_GIT_PR_NUMBER}" ]]; then
+              if gcloud storage cp "$gcs_branch_cache_dir/build-cache-${BUILD_CACHE_GROUP}.tar.zstd" /tmp/build-cache.tar.zstd; then
+                echo "Found build cache for group ${BUILD_CACHE_GROUP}"
+                downloaded_build_cache=true
+              fi
+            fi
+            if wait $tar_pid; then
+              restored_wc_cache=true
+            else
+              echo "ERROR: Failed to extract working copy"
+              restored_wc_cache=false
+            fi
+            if ${downloaded_build_cache}; then
+              echo "Extracting build cache"
+              tar --use-compress-program=zstd -xf /tmp/build-cache.tar.zstd -C .
+              rm /tmp/build-cache.tar.zstd
+            fi
+            cd "${CALICO_DIR_NAME}"
+          fi
+        fi || true
+      - |-
+        if [[ ${restored_wc_cache} != true && -z "$SKIP_CHECKOUT" ]]; then
+          echo "No cache restored, doing a fresh checkout..."
+          cd $HOME
+          rm -rf "${CALICO_DIR_NAME}"
+          git clone --filter=blob:none $SEMAPHORE_GIT_URL $CALICO_DIR_NAME
+          cd "${CALICO_DIR_NAME}" || exit 1
+        fi
+      - |-
+        if [[ -z "$SKIP_CHECKOUT" ]]; then
+          git fetch origin --tags --prune-tags ${SEMAPHORE_GIT_SHA}
+          if [ "$SEMAPHORE_GIT_REF_TYPE" = "branch" ]; then
+            git checkout ${SEMAPHORE_GIT_SHA} -B "${SEMAPHORE_GIT_BRANCH}"
+          else
+            git checkout ${SEMAPHORE_GIT_SHA}
+          fi
+          CALICO_DIR="$(pwd)"
+          export CALICO_DIR
+          mkdir -p artifacts
+        fi
+      - echo $DOCKERHUB_PASSWORD | docker login --username "$DOCKERHUB_USERNAME" --password-stdin
+      # Best-effort: load calico/go-build from the GCS cache populated by the
+      # "Pull: go-build image" prerequisite job. Falls back to a Docker Hub pull
+      # on cache miss. Skipped on non-x86_64 / cross-compile agents since the
+      # cache is amd64-only.
+      - |-
+        if [[ $(uname -m) == "x86_64" && -z "$ARCH" ]]; then
+          GO_BUILD_VER=$(grep -E '^GO_BUILD_VER[[:space:]]*=' metadata.mk | cut -d'=' -f2 | tr -d '[:space:]')
+          image="calico/go-build:${GO_BUILD_VER}"
+          if ! docker image inspect "$image" >/dev/null 2>&1; then
+            cache_path="gs://${GCS_BUILD_CACHE_BUCKET}/images/calico-go-build-${GO_BUILD_VER}.tar.zst"
+            if gcloud storage cp "$cache_path" /tmp/go-build.tar.zst 2>/dev/null; then
+              echo "Loading ${image} from GCS cache"
+              zstd -d --rm -o /tmp/go-build.tar /tmp/go-build.tar.zst
+              docker load -i /tmp/go-build.tar
+              rm -f /tmp/go-build.tar
+            else
+              echo "No GCS cache for ${image}, docker will pull from Docker Hub if needed"
+            fi
+          fi
+        fi
+  epilogue:
+    commands:
+      - cd $HOME
+      - |-
+        if [[ -z "${SEMAPHORE_GIT_PR_NUMBER}" && -n "$BUILD_CACHE_GROUP" && "$STORE_BUILD_CACHE" = "true" ]]; then
+          echo "On branch, storing build cache group ${BUILD_CACHE_GROUP}"
+          tar --use-compress-program="zstd -3" -cf /tmp/build-cache.tar.zstd go ${CALICO_DIR_NAME}/.go-pkg-cache
+          gcs_branch_cache_dir="${GCS_CACHE_DIR}/${SEMAPHORE_GIT_BRANCH}"
+          gcloud storage cp /tmp/build-cache.tar.zstd "$gcs_branch_cache_dir/build-cache-${BUILD_CACHE_GROUP}.tar.zstd"
+        fi
+      - cd "$CALICO_DIR"
+      - .semaphore/publish-artifacts
+promotions:
+  # Manual promotion for publishing a hashrelease.
+  - name: Publish hashrelease
+    pipeline_file: release/hashrelease.yml
+    parameters:
+      env_vars:
+        - required: true
+          options:
+            - "true"
+            - "false"
+          default_value: "false"
+          description: "Build container images. If 'true', container images will be built as part of the hashrelease process."
+          name: BUILD_CONTAINER_IMAGES
+        - required: true
+          options:
+            - "true"
+            - "false"
+          default_value: "false"
+          description: "create tarball of images. If 'true', a tarball of images will be added to the release.tgz. Requires BUILD_CONTAINER_IMAGES to also be 'true'."
+          name: ARCHIVE_IMAGES
+        - required: true
+          options:
+            - "true"
+            - "false"
+          default_value: "false"
+          description: "publish images. If 'true', images will be pushed to the container registry/registries as part of the hashrelease process. Requires BUILD_CONTAINER_IMAGES to also be 'true'."
+          name: PUBLISH_IMAGES
+  # Manual promotion for publishing a release.
+  - name: Publish official release
+    pipeline_file: release/release.yml
+  # Cleanup after ourselves if we are stopped-short.
+  - name: Cleanup
+    pipeline_file: cleanup.yml
+    auto_promote:
+      when: "result = 'stopped'"
+  # Have separate promotions for publishing images so we can re-run
+  # them individually if they fail, and so we can run them in parallel.
+  - name: Push calico images
+    pipeline_file: push-images/calico.yml
+    auto_promote:
+      when: "branch =~ 'master|release-.*'"
+  - name: Push calico-node images
+    pipeline_file: push-images/node.yml
+    auto_promote:
+      when: "branch =~ 'master|release-.*'"
+  - name: Push mock calico-node images
+    pipeline_file: push-images/mock-node.yml
+    auto_promote:
+      when: "branch =~ 'master|release-'"
+  - name: Push Whisker images
+    pipeline_file: push-images/whisker.yml
+    auto_promote:
+      when: "branch =~ 'master|release-.*'"
+  - name: Push Envoy images
+    pipeline_file: push-images/envoy.yml
+    auto_promote:
+      when: "branch =~ 'master|release-.*'"
+  - name: Publish openstack packages
+    pipeline_file: push-images/packaging.yaml
+    auto_promote:
+      when: "branch =~ 'master'"
+  - name: Run Fossa scans
+    pipeline_file: license-scanning/fossa-scan.yml
+    auto_promote:
+      when: "branch =~ 'master|release-.*'"
+  - name: Push E2E images
+    pipeline_file: push-images/e2e-test.yml
+    auto_promote:
+      when: "branch =~ 'master|release-.*'"
+  - name: Push istio images
+    pipeline_file: push-images/istio.yml
+    auto_promote:
+      when: "branch =~ 'master|release-.*'"
+blocks:
+  - name: Check images availability
+    run:
+      when: >-
+        true or (branch !~ 'build-v.*' and change_in(['/charts/', '/manifests/'],
+        {pipeline_file: 'ignore'}))
+    dependencies: []
+    task:
+      jobs:
+        - name: Check images availability
+          commands:
+            - make check-images-availability
+  - name: Check SemaphoreCI files
+    run:
+      when: >-
+        true or
+        change_in(['/.semaphore', '/hack', '/Makefile', '/lib.Makefile', '/metadata.mk'], {pipeline_file: 'track'})
+    dependencies: []
+    task:
+      jobs:
+        - name: Check semaphore files
+          commands:
+            - make gen-semaphore-yaml
+            - make check-dirty
+  - name: Check YAML files
+    run:
+      when: >-
+        true or
+        change_in(['/**/*.yml', '/**/*.yaml', '/Makefile', '/lib.Makefile', '/metadata.mk'], {pipeline_file: 'track'})
+    dependencies: []
+    task:
+      jobs:
+        - name: Check YAML files
+          commands:
+            - make yaml-lint
+  - name: Check Go
+    run:
+      when: >-
+        true or
+        change_in(['/go.mod', '/go.sum', '/**/*.go', '/**/deps.txt', '/Makefile', '/lib.Makefile', '/metadata.mk'], {pipeline_file: 'ignore'})
+    dependencies: []
+    task:
+      env_vars:
+        - name: BUILD_CACHE_GROUP
+          value: "preflight-go-checks"
+      agent:
+        machine:
+          type: f1-standard-4
+          os_image: ubuntu2204
+      jobs:
+        - name: Check Go files
+          env_vars:
+            - name: STORE_BUILD_CACHE
+              value: "true"
+          commands:
+            - make check-ginkgo-v2
+            - make check-go-mod
+            - make verify-go-mods
+            - make gen-deps-files
+            - make go-vet
+            - >-
+              if [ -n "$SEMAPHORE_GIT_PR_NUMBER" ]; then
+                make fix-changed
+              else
+                make fix-all
+              fi
+            - make check-dirty
+  - name: Check Python
+    run:
+      when: >-
+        true or
+        change_in(['/networking-calico', '/lib.Makefile', '/metadata.mk'], {pipeline_file: 'ignore'})
+    dependencies: []
+    task:
+      jobs:
+        - name: Check Python files
+          commands:
+            - make -C networking-calico fmtpy
+            - make -C networking-calico flake8
+            - make check-dirty
+  - name: Check language/Dockerfiles
+    run:
+      when: >-
+        true or
+        change_in(['/**/*'], {pipeline_file: 'track', exclude: ['libbpf', '.[a-z]*']})
+    dependencies: []
+    task:
+      jobs:
+        - name: Check language/Dockerfiles
+          commands:
+            # These are very quick grep checks so we combine them into one job.
+            - make check-language
+            - make check-dockerfiles
+            - make check-mockery-config
+  - name: Check protobufs
+    run:
+      when: >-
+        true or
+        change_in(['/**/*.pb.go', '/**/*.proto', '/Makefile', '/lib.Makefile', '/metadata.mk'], {pipeline_file: 'ignore'})
+    dependencies: []
+    task:
+      jobs:
+        - name: Check protobufs
+          commands:
+            - make protobuf fix-changed
+            - make check-dirty
+  - name: Manifests and API docs
+    run:
+      when: >-
+        true or
+        change_in(['/api', '/manifests', '/charts', '/libcalico-go/lib/apis', '/libcalico-go/config', '/libcalico-go/Makefile', '/felix/config', '/felix/docs', '/felix/Makefile', '/goldmane', '/Makefile', '/lib.Makefile', '/metadata.mk'], {pipeline_file: 'ignore'})
+    dependencies: []
+    task:
+      jobs:
+        - name: Check manifests and API docs
+          commands:
+            - make -C lib gen-files
+            - make -C api gen-files
+            - make -C libcalico-go gen-files
+            - make -C felix gen-files
+            - make -C goldmane gen-files
+            - make gen-manifests
+            - make fix-changed
+            - make check-ocp-no-crds
+            - make check-dirty
+  - name: Store working copy
+    run:
+      when: "branch =~ '.*'"
+    dependencies: []
+    task:
+      env_vars:
+        - name: SKIP_CACHE_RESTORE
+          value: "true"
+      jobs:
+        - name: Save working copy to cache
+          commands:
+            - cd ..
+            - tar --use-compress-program="zstd -3" -cf /tmp/working-copy.tar.zstd $CALICO_DIR_NAME
+            - gcs_branch_cache_dir="${GCS_CACHE_DIR}/${SEMAPHORE_GIT_BRANCH}"
+            - gcloud storage cp /tmp/working-copy.tar.zstd "$gcs_branch_cache_dir/working-copy.tar.zstd"
+  - name: "Pull: go-build image"
+    # Populate the GCS cache of calico/go-build so that every downstream job can
+    # docker-load it from GCS (faster, and avoids Docker Hub rate limits) rather
+    # than pulling cold from Docker Hub. The cache is keyed by GO_BUILD_VER so
+    # the tarball survives across workflows — the common case is a no-op
+    # `gcloud storage ls` on a cache hit.
+    run:
+      when: "true"
+    dependencies: []
+    task:
+      env_vars:
+        - name: SKIP_CACHE_RESTORE
+          value: "true"
+      jobs:
+        - name: "Cache calico/go-build to GCS"
+          commands:
+            - GO_BUILD_VER=$(grep -E '^GO_BUILD_VER[[:space:]]*=' metadata.mk | cut -d'=' -f2 | tr -d '[:space:]')
+            - cache_path="gs://${GCS_BUILD_CACHE_BUCKET}/images/calico-go-build-${GO_BUILD_VER}.tar.zst"
+            - |-
+              if gcloud storage ls "$cache_path" >/dev/null 2>&1; then
+                echo "Cache hit for calico/go-build:${GO_BUILD_VER}"
+              else
+                echo "Cache miss for calico/go-build:${GO_BUILD_VER}, pulling and uploading"
+                docker pull "calico/go-build:${GO_BUILD_VER}"
+                docker save "calico/go-build:${GO_BUILD_VER}" -o /tmp/go-build.tar
+                zstd -3 --rm /tmp/go-build.tar
+                gcloud storage cp /tmp/go-build.tar.zst "$cache_path"
+              fi
+  - name: "Build: calico image"
+    # Always build and cache the calico image so that downstream CI blocks can
+    # load it from GCS instead of rebuilding per component. This block is the
+    # sole producer for the "calico" build-cache group — every Go component
+    # block on master restores the module + build cache populated here.
+    run:
+      when: "true"
+    dependencies: []
+    task:
+      env_vars:
+        - name: BUILD_CACHE_GROUP
+          value: "calico"
+      agent:
+        machine:
+          type: f1-standard-4
+          os_image: ubuntu2204
+      jobs:
+        - name: "Build and cache calico image"
+          env_vars:
+            - name: STORE_BUILD_CACHE
+              value: "true"
+          commands:
+            - make -C cmd/calico image
+            # Also build the cgo and race variants so their GOCACHE fingerprints
+            # land in the shared build cache. Felix FV consumes calico-cgo (for
+            # BPF) or calico-race (when FV_RACE_DETECTOR_ENABLED=true).
+            - make -C cmd/calico build-cgo build-race
+            - docker save calico/calico:latest-amd64 -o /tmp/calico-image.tar
+            - zstd -3 --rm /tmp/calico-image.tar
+            - gcloud storage cp /tmp/calico-image.tar.zst "${GCS_WORKFLOW_DIR}/calico-image.tar.zst"
+            # Upload the cgo + race binaries so Felix FV can consume them
+            # directly instead of rebuilding. Felix Build downloads these into
+            # cmd/calico/bin/ so the working-copy tarball carries them through
+            # to the test VMs.
+            - gcloud storage cp cmd/calico/bin/calico-cgo-amd64 "${GCS_WORKFLOW_DIR}/calico-cgo-amd64"
+            - gcloud storage cp cmd/calico/bin/calico-race-amd64 "${GCS_WORKFLOW_DIR}/calico-race-amd64"
+            # Upload the libbpf clone + compiled static lib. `make -C
+            # cmd/calico build-cgo` above transitively built it via the Felix
+            # CGO dependency chain; the test-or-build below keeps this a
+            # no-op on a warm tree but still produces the artifact if the
+            # dependency chain is ever severed. Consumers (Felix: Build,
+            # Felix: UT) extract this into felix/bpf-gpl/ to skip the clone,
+            # avoiding the known github.com/libbpf/libbpf HTTP 500 flake
+            # and saving the ~30s build step across all Felix jobs.
+            - test -f felix/bpf-gpl/libbpf/src/amd64/libbpf.a || make -C felix libbpf
+            - LIBBPF_VERSION=$(grep -E '^LIBBPF_VERSION[[:space:]]*=' metadata.mk | cut -d'=' -f2 | tr -d '[:space:]')
+            # Fail loudly if either path is missing. Without this guard, tar would
+            # warn and still exit 0 on a missing path, and every downstream Felix
+            # job would silently regress to cold libbpf builds.
+            - test -d felix/bpf-gpl/libbpf || (echo "ERROR libbpf clone missing at felix/bpf-gpl/libbpf" >&2; exit 1)
+            - test -f "felix/bpf-gpl/.libbpf-${LIBBPF_VERSION}" || (echo "ERROR libbpf version marker felix/bpf-gpl/.libbpf-${LIBBPF_VERSION} missing" >&2; exit 1)
+            - tar --use-compress-program="zstd -3" -cf /tmp/libbpf-amd64.tar.zst -C felix/bpf-gpl libbpf ".libbpf-${LIBBPF_VERSION}"
+            - gcloud storage cp /tmp/libbpf-amd64.tar.zst "${GCS_WORKFLOW_DIR}/libbpf-amd64.tar.zst"
+  - name: "Build: node image"
+    # Builds the node image on top of the combined calico binary. calico/node is
+    # still the canonical DaemonSet image for OSS users, so it continues to ship
+    # alongside the unified calico image. The underlying Go state lives in the
+    # "calico" build cache populated by "Build: calico image" — only the Docker
+    # stage assembly (copying binaries onto the base image) runs here, not the Go
+    # compile. Kept in prerequisites (rather than 20-node.yml) so consumer blocks
+    # can depend on the shared producer→GCS→consumer upload pattern.
+    run:
+      when: "true"
+    dependencies: []
+    task:
+      agent:
+        machine:
+          type: f1-standard-4
+          os_image: ubuntu2204
+      jobs:
+        - name: "Build and cache node image"
+          commands:
+            - make -C node image
+            - docker save calico/node:latest-amd64 -o /tmp/node-image.tar
+            - zstd -3 --rm /tmp/node-image.tar
+            - gcloud storage cp /tmp/node-image.tar.zst "${GCS_WORKFLOW_DIR}/node-image.tar.zst"
+  - name: "Build: whisker image"
+    # Whisker is a TypeScript/React frontend that won't consolidate into the
+    # calico binary — it ships as its own image indefinitely. No Go build cache
+    # to populate; only produces the image tarball for consumer blocks.
+    run:
+      when: >-
+        true or
+        change_in(['/metadata.mk', '/lib.Makefile', '/whisker/'], {pipeline_file: 'ignore', exclude: ['/**/.gitignore', '/**/README.md', '/**/LICENSE']})
+    dependencies: []
+    task:
+      jobs:
+        - name: "Build and cache whisker image"
+          commands:
+            - make -C whisker image
+            - docker save calico/whisker:latest-amd64 -o /tmp/whisker-image.tar
+            - zstd -3 --rm /tmp/whisker-image.tar
+            - gcloud storage cp /tmp/whisker-image.tar.zst "${GCS_WORKFLOW_DIR}/whisker-image.tar.zst"
+  - name: Prerequisites
+    skip:
+      # Always skip, this is a dummy job used to group prerequisite checks.
+      # Only the pre-flight checks gate on this; the per-image build blocks are
+      # wired in directly as dependencies on the consumer blocks that actually
+      # load those cached images, so unrelated component blocks don't serialize
+      # behind them.
+      when: "true"
+    dependencies:
+      - Check SemaphoreCI files
+      - Check YAML files
+      - Check Go
+      - Check Python
+      - Check language/Dockerfiles
+      - Check protobufs
+      - Manifests and API docs
+      - Store working copy
+      - "Pull: go-build image"
+    task:
+      jobs:
+        - name: Pre-flight checks
+          commands:
+            - "true"
+  - name: API
+    run:
+      when: >-
+        true or change_in(['/metadata.mk', '/lib.Makefile', '/api/', '/test/'],
+        {pipeline_file: 'ignore', exclude: ['/**/.gitignore', '/**/README.md', '/**/LICENSE']})
+    execution_time_limit:
+      minutes: 30
+    dependencies:
+      - Prerequisites
+    task:
+      jobs:
+        - name: "API: CI"
+          commands:
+            - cd api && ../.semaphore/run-and-monitor make-ci.log make ci
+        - name: "API: Validation"
+          commands:
+            - cd test && ../.semaphore/run-and-monitor make-validation.log make ci
+      epilogue:
+        always:
+          commands:
+            - 'test-results publish --name "${SEMAPHORE_JOB_NAME}" ./report/*.xml || true'
+  - name: API Server
+    run:
+      when: "true"
+    execution_time_limit:
+      minutes: 30
+    dependencies:
+      - Prerequisites
+    task:
+      env_vars:
+        - name: BUILD_CACHE_GROUP
+          value: "calico"
+      prologue:
+        commands:
+          - cd apiserver
+      jobs:
+        - name: "API Server: CI"
+          commands:
+            - ../.semaphore/run-and-monitor make-ci.log make ci
+      epilogue:
+        always:
+          commands:
+            - 'test-results publish --name "${SEMAPHORE_JOB_NAME}" ./report/*.xml || true'
+  - name: Application Layer Policy
+    run:
+      when: "true"
+    dependencies:
+      - Prerequisites
+    task:
+      env_vars:
+        - name: BUILD_CACHE_GROUP
+          value: "calico"
+      prologue:
+        commands:
+          - cd app-policy
+      jobs:
+        - name: "Application Layer Policy: CI"
+          commands:
+            - ../.semaphore/run-and-monitor ci.log make ci
+      epilogue:
+        always:
+          commands:
+            - 'test-results publish --name "${SEMAPHORE_JOB_NAME}" ./report/*.xml || true'
+  - name: calicoctl
+    run:
+      when: "true"
+    dependencies:
+      - Prerequisites
+    task:
+      env_vars:
+        - name: BUILD_CACHE_GROUP
+          value: "calico"
+      prologue:
+        commands:
+          - cd calicoctl
+      jobs:
+        - name: "calicoctl: CI"
+          commands:
+            - ../.semaphore/run-and-monitor ci.log make ci
+      epilogue:
+        always:
+          commands:
+            - 'test-results publish --name "${SEMAPHORE_JOB_NAME}" ./report/*.xml || true'
+  - name: cmd/calico
+    run:
+      when: "true"
+    dependencies:
+      - Prerequisites
+    task:
+      env_vars:
+        - name: BUILD_CACHE_GROUP
+          value: "calico"
+      prologue:
+        commands:
+          - cd cmd/calico
+      jobs:
+        - name: "cmd/calico: UT"
+          commands:
+            - ../../.semaphore/run-and-monitor ut.log make ut
+  - name: CNI Plugin
+    run:
+      when: "true"
+    dependencies:
+      - Prerequisites
+      - "Build: calico image"
+    task:
+      env_vars:
+        - name: BUILD_CACHE_GROUP
+          value: "calico"
+      prologue:
+        commands:
+          - .semaphore/load-cached-images
+          - cd cni-plugin
+      jobs:
+        - name: "CNI Plugin: CI"
+          commands:
+            - ../.semaphore/run-and-monitor ci.log make ci
+      epilogue:
+        always:
+          commands:
+            - 'python3 ../hack/strip-skipped-tests.py ./report/*.xml 2>/dev/null || true'
+            - 'test-results publish --name "${SEMAPHORE_JOB_NAME}" ./report/*.xml || true'
+  - name: "CNI Plugin: Windows"
+    run:
+      when: "false or true"
+    dependencies:
+      - Prerequisites
+    task:
+      secrets:
+        - name: banzai-secrets
+      prologue:
+        commands:
+          # Prepare azure configuration.
+          - az login --service-principal -u "${AZ_SP_ID}" -p "${AZ_SP_PASSWORD}" --tenant "${AZ_TENANT_ID}" --output none
+          - export AZURE_SUBSCRIPTION_ID=$AZ_SUBSCRIPTION_ID
+          - export AZURE_TENANT_ID=$AZ_TENANT_ID
+          - export AZURE_CLIENT_ID=$AZ_SP_ID
+          - export AZURE_CLIENT_SECRET=$AZ_SP_PASSWORD
+          - export REPORT_DIR=/home/semaphore/calico/process/testing/winfv-cni-plugin/report
+          - export LOGS_DIR=~/fv.log
+          - export RG_PREFIX=${USER}-win-cni-${SEMAPHORE_GIT_SHA:0:4}-pr${SEMAPHORE_GIT_PR_NUMBER}
+          - cd cni-plugin
+          - ../.semaphore/run-and-monitor build.log make bin/windows/calico.exe bin/windows/win-fv.exe
+      epilogue:
+        always:
+          commands:
+            - artifact push job ${REPORT_DIR} --destination semaphore/test-results || true
+            - artifact push job ${LOGS_DIR} --destination semaphore/logs || true
+            - cd ~/calico/process/testing/aso && make dist-clean
+      env_vars:
+        - name: BUILD_CACHE_GROUP
+          value: "calico"
+        - name: SEMAPHORE_ARTIFACT_EXPIRY
+          value: 2w
+        - name: AZURE_LOCATION
+          value: eastus2
+        - name: KUBE_VERSION
+          value: v1.33.7
+      jobs:
+        - name: "CNI Plugin: Windows Containerd FV - overlay"
+          execution_time_limit:
+            minutes: 60
+          commands:
+            - export BACKEND=overlay
+            - export AZURE_RESOURCE_GROUP=${RG_PREFIX}-${BACKEND}-rg
+            - echo AZURE_RESOURCE_GROUP=${AZURE_RESOURCE_GROUP}
+            - ../.semaphore/run-and-monitor win-fv-containerd.log ~/calico/process/testing/winfv-cni-plugin/run-win-fv.sh
+        - name: "CNI Plugin: Windows Containerd FV - l2bridge"
+          execution_time_limit:
+            minutes: 60
+          commands:
+            - export BACKEND=l2bridge
+            - export AZURE_RESOURCE_GROUP=${RG_PREFIX}-${BACKEND}-rg
+            - echo AZURE_RESOURCE_GROUP=${AZURE_RESOURCE_GROUP}
+            - ../.semaphore/run-and-monitor win-fv-containerd.log ~/calico/process/testing/winfv-cni-plugin/run-win-fv.sh
+  - name: confd
+    run:
+      when: "true"
+    dependencies:
+      - Prerequisites
+    task:
+      env_vars:
+        - name: BUILD_CACHE_GROUP
+          value: "calico"
+      prologue:
+        commands:
+          - cd confd
+      jobs:
+        - name: "confd: CI"
+          execution_time_limit:
+            minutes: 60
+          commands:
+            - ../.semaphore/run-and-monitor ci.log make ci
+      epilogue:
+        always:
+          commands:
+            - 'test-results publish --name "${SEMAPHORE_JOB_NAME}" ./report/*.xml || true'
+  - name: "E2E tests on GCP kubeadm (local binary)"
+    run:
+      when: >-
+        true or change_in(['/e2e/**'],
+        {pipeline_file: 'ignore', exclude: ['/**/.gitignore', '/**/README.md', '/**/LICENSE']})
+    dependencies:
+      - Prerequisites
+    task:
+      secrets:
+        - name: marvin-github-ssh-private-key
+        - name: banzai-secrets
+      prologue:
+        commands:
+          - checkout
+          - source .semaphore/end-to-end/scripts/global_prologue.sh
+      epilogue:
+        always:
+          commands:
+            - ~/calico/.semaphore/end-to-end/scripts/global_epilogue.sh
+      env_vars:
+        - name: TEST_TYPE
+          value: k8s-e2e
+        - name: PRODUCT
+          value: calico
+        - name: FUNCTIONAL_AREA
+          value: "e2e-gcp.yml"
+        - name: USE_PRIVATE_REGISTRY
+          value: "true"
+        - name: PRIVATE_REGISTRY
+          value: "quay.io/"
+        - name: RUN_LOCAL_TESTS
+          value: "true"
+        - name: E2E_TEST_CONFIG
+          # Test selection is driven by the config file; see gcp-bpf.yaml for the
+          # include/exclude rationale.
+          value: "e2e/config/gcp-bpf.yaml"
+        - name: USE_API_SERVER
+          value: "false"
+        - name: ENABLE_EXTERNAL_NODE
+          value: "true"
+      jobs:
+        - name: gcp-kubeadm - e2e local binary
+          execution_time_limit:
+            hours: 3
+          commands:
+            - ~/calico/.semaphore/end-to-end/scripts/body_standard.sh
+          matrix:
+            - env_var: PROVISIONER
+              values: ["gcp-kubeadm"]
+            - env_var: K8S_VERSION
+              values: ["stable"]
+            - env_var: INSTALLER
+              values: ["operator"]
+            - env_var: DATAPLANE
+              values: ["CalicoBPF"]
+  - name: E2E script & pipeline validations
+    run:
+      when: >-
+        true or change_in(['/.semaphore/end-to-end/'],
+        {pipeline_file: 'ignore', exclude: ['/**/.gitignore', '/**/README.md', '/**/LICENSE']})
+    execution_time_limit:
+      minutes: 5
+    dependencies:
+      - Prerequisites
+    task:
+      jobs:
+        - name: "E2E script & pipeline validations: validate yaml"
+          commands:
+            - ./.semaphore/end-to-end/scripts/test_scripts/e2e-validation.sh
+  - name: "E2E tests (KinD)"
+    run:
+      when: "true"
+    dependencies:
+      - Prerequisites
+      - "Build: calico image"
+      - "Build: node image"
+      - "Build: whisker image"
+    task:
+      env_vars:
+        - name: BUILD_CACHE_GROUP
+          value: "calico"
+      agent:
+        machine:
+          type: f1-standard-4
+          os_image: ubuntu2204
+      prologue:
+        commands:
+          # We need to prune the pre-loaded images to ensure we have enough /var/lib/docker disk space.
+          - docker system prune -af
+          - .semaphore/load-cached-images
+      jobs:
+        - name: "E2E tests: Conformance (cluster routing: BIRD)"
+          commands:
+            - .semaphore/run-and-monitor e2e-test.log make e2e-test
+        - name: "E2E tests: Conformance (cluster routing: Felix)"
+          commands:
+            - .semaphore/run-and-monitor e2e-test-felix-routing.log make e2e-test
+          env_vars:
+            - name: EXTRA_VALUES_FILES
+              value: "hack/test/kind/infra/values-felix-routing.yaml"
+            - name: KIND_CALICO_API_GROUP
+              value: "crd.projectcalico.org/v1"
+            - name: E2E_TEST_CONFIG
+              value: "e2e/config/kind-felix-routing.yaml"
+        - name: "E2E tests: ClusterNetworkPolicy (cluster routing: Felix)"
+          commands:
+            - .semaphore/run-and-monitor e2e-test-cnp.log make e2e-test-clusternetworkpolicy
+          env_vars:
+            - name: EXTRA_VALUES_FILES
+              value: "hack/test/kind/infra/values-felix-routing.yaml"
+            - name: KIND_CALICO_API_GROUP
+              value: "projectcalico.org/v3"
+            - name: E2E_TEST_CONFIG
+              value: "e2e/config/kind-felix-routing.yaml"
+      epilogue:
+        always:
+          commands:
+            - 'test-results publish --name "${SEMAPHORE_JOB_NAME}" ./report/*.xml || true'
+  - name: Envoy Gateway
+    run:
+      when: >-
+        true or change_in(['/metadata.mk', '/lib.Makefile', '/third_party/envoy-gateway'],
+        {pipeline_file: 'ignore', exclude: ['/**/.gitignore', '/**/README.md', '/**/LICENSE']})
+    execution_time_limit:
+      minutes: 30
+    dependencies:
+      - Prerequisites
+    task:
+      prologue:
+        commands:
+          - cd third_party/envoy-gateway
+      jobs:
+        - name: "Envoy Gateway: CI"
+          commands:
+            - ../../.semaphore/run-and-monitor make-ci.log make ci
+        - name: "Envoy Gateway: build multi-arch binaries"
+          matrix:
+            - env_var: ARCH
+              values:
+                - arm64
+                - ppc64le
+                - s390x
+          commands:
+            - ../../.semaphore/run-and-monitor image-$ARCH.log make build ARCH=$ARCH
+  - name: Envoy Proxy
+    run:
+      when: >-
+        true or change_in(['/metadata.mk', '/lib.Makefile', '/third_party/envoy-proxy'],
+        {pipeline_file: 'ignore', exclude: ['/**/.gitignore', '/**/README.md', '/**/LICENSE']})
+    execution_time_limit:
+      minutes: 30
+    dependencies:
+      - Prerequisites
+    task:
+      prologue:
+        commands:
+          - cd third_party/envoy-proxy
+      jobs:
+        - name: "Envoy Proxy: CI"
+          commands:
+            - ../../.semaphore/run-and-monitor make-ci.log make ci
+        - name: "Envoy Proxy: build multi-arch binaries"
+          matrix:
+            - env_var: ARCH
+              values:
+                - arm64
+                - ppc64le
+                - s390x
+          commands:
+            - ../../.semaphore/run-and-monitor image-$ARCH.log make build ARCH=$ARCH
+  - name: "Envoy Ratelimit"
+    run:
+      when: >-
+        true or change_in(['/metadata.mk', '/lib.Makefile', '/third_party/envoy-ratelimit'],
+        {pipeline_file: 'ignore', exclude: ['/**/.gitignore', '/**/README.md', '/**/LICENSE']})
+    execution_time_limit:
+      minutes: 30
+    dependencies:
+      - Prerequisites
+    task:
+      prologue:
+        commands:
+          - cd third_party/envoy-ratelimit
+      jobs:
+        - name: "Envoy Ratelimit: CI"
+          commands:
+            - ../../.semaphore/run-and-monitor make-ci.log make ci
+        - name: "Envoy Ratelimit: build multi-arch binaries"
+          matrix:
+            - env_var: ARCH
+              values:
+                - arm64
+                - ppc64le
+                - s390x
+          commands:
+            - ../../.semaphore/run-and-monitor image-$ARCH.log make build ARCH=$ARCH
+  - name: "Felix: Build"
+    run:
+      when: "true"
+    dependencies:
+      - Prerequisites
+      - "Build: calico image"
+    task:
+      env_vars:
+        - name: BUILD_CACHE_GROUP
+          value: "calico"
+        # Fail loud if `make` tries to clone libbpf — the prologue restores
+        # the pre-built tarball from GCS, and a re-clone would negate the
+        # cache and re-expose the github.com/libbpf HTTP 500 flake.
+        - name: NO_LIBBPF_CLONE
+          value: "true"
+      prologue:
+        commands:
+          # Load the pre-built calico image (touches the marker so the nested
+          # `make -C cmd/calico image` invocation inside fv-prereqs is a no-op)
+          # and pull the cgo + race binaries into place so build-calico-cgo /
+          # build-calico-race skip their rebuilds.
+          - .semaphore/load-cached-images
+          - mkdir -p cmd/calico/bin
+          - gcloud storage cp "${GCS_WORKFLOW_DIR}/calico-cgo-amd64" cmd/calico/bin/calico-cgo-amd64
+          - gcloud storage cp "${GCS_WORKFLOW_DIR}/calico-race-amd64" cmd/calico/bin/calico-race-amd64
+          - chmod +x cmd/calico/bin/calico-cgo-amd64 cmd/calico/bin/calico-race-amd64
+          # Extract the pre-built libbpf (clone + compiled amd64/libbpf.a)
+          # produced by "Build: calico image". Verify the compiled static
+          # lib landed so a broken tarball fails fast rather than triggering
+          # the NO_LIBBPF_CLONE guard mid-build.
+          - gcloud storage cp "${GCS_WORKFLOW_DIR}/libbpf-amd64.tar.zst" /tmp/libbpf-amd64.tar.zst
+          - tar --use-compress-program="zstd -d" -xf /tmp/libbpf-amd64.tar.zst -C felix/bpf-gpl
+          - test -f felix/bpf-gpl/libbpf/src/amd64/libbpf.a || (echo "ERROR libbpf tarball missing compiled libbpf.a" >&2; exit 1)
+          - cd felix
+          - gcloud config set project unique-caldron-775
+          - gcloud auth activate-service-account --key-file=$HOME/secrets/secret.google-service-account-key.json
+      secrets:
+        - name: google-service-account-for-gce
+        - name: gemini-api-key
+        - name: fv-tests-guru-github-token
+      jobs:
+        - name: "Felix: Build and cache FV prerequisites"
+          priority:
+          # This job is on the critical path so we increase its priority.
+            - value: 51
+              when: "pull_request =~ '.+'"
+          execution_time_limit:
+            minutes: 20
+          commands:
+            # Skip `make build` (which on amd64 also cross-compiles
+            # bin/calico-felix.exe) since the Windows binary is produced by the
+            # dedicated "Felix: Build Windows binaries" block and nothing in the
+            # Linux FV path consumes it.
+            #
+            # REMOTE_DEPS= overrides the Makefile's default which would invoke
+            # `make -C cmd/calico image` and `make -C cmd/calico build-race`;
+            # the calico-image producer block has already built those and the
+            # prologue preloaded the image and race binary.
+            - make REMOTE_DEPS= bin/calico-felix image ut-bpf-prereqs fv-prereqs
+            - ./.semaphore/cache-test-artifacts
+        - name: "Felix: Static checks"
+          priority:
+            # This job is on the critical path so we increase its priority.
+            - value: 51
+              when: "pull_request =~ '.+'"
+          execution_time_limit:
+            minutes: 15
+          commands:
+            - ../.semaphore/run-and-monitor static-checks.log make static-checks
+      epilogue:
+        always:
+          commands:
+            - ./.semaphore/analyze-test-failures --ut || true
+            - 'test-results publish --name "${SEMAPHORE_JOB_NAME}" ./report/*.xml || true'
+  # Felix UT and k8sfv don't produce artifacts consumed by Felix: FV, so they
+  # run in their own block in parallel with Felix: FV instead of blocking it.
+  # They still need the preloaded calico image + race binary (k8sfv runs the
+  # combined binary as `component typha`), so the prologue mirrors Felix: Build.
+  - name: "Felix: UT"
+    run:
+      when: "true"
+    dependencies:
+      - Prerequisites
+      - "Build: calico image"
+    task:
+      env_vars:
+        - name: BUILD_CACHE_GROUP
+          value: "calico"
+        - name: NO_LIBBPF_CLONE
+          value: "true"
+      prologue:
+        commands:
+          - .semaphore/load-cached-images
+          - mkdir -p cmd/calico/bin
+          - gcloud storage cp "${GCS_WORKFLOW_DIR}/calico-cgo-amd64" cmd/calico/bin/calico-cgo-amd64
+          - gcloud storage cp "${GCS_WORKFLOW_DIR}/calico-race-amd64" cmd/calico/bin/calico-race-amd64
+          - chmod +x cmd/calico/bin/calico-cgo-amd64 cmd/calico/bin/calico-race-amd64
+          - gcloud storage cp "${GCS_WORKFLOW_DIR}/libbpf-amd64.tar.zst" /tmp/libbpf-amd64.tar.zst
+          - tar --use-compress-program="zstd -d" -xf /tmp/libbpf-amd64.tar.zst -C felix/bpf-gpl
+          - test -f felix/bpf-gpl/libbpf/src/amd64/libbpf.a || (echo "ERROR libbpf tarball missing compiled libbpf.a" >&2; exit 1)
+          - cd felix
+          - gcloud config set project unique-caldron-775
+          - gcloud auth activate-service-account --key-file=$HOME/secrets/secret.google-service-account-key.json
+      secrets:
+        - name: google-service-account-for-gce
+        - name: gemini-api-key
+        - name: fv-tests-guru-github-token
+      jobs:
+        - name: "Felix: UT"
+          execution_time_limit:
+            minutes: 30
+          commands:
+            - ../.semaphore/run-and-monitor ut.log make ut
+        - name: "Felix: k8sfv"
+          execution_time_limit:
+            minutes: 15
+          commands:
+            # REMOTE_DEPS= relies on the prologue having preloaded the calico
+            # image + cgo/race binaries (see Felix: Build and cache FV prerequisites
+            # for details).
+            - ../.semaphore/run-and-monitor k8sfv-typha.log make REMOTE_DEPS= k8sfv-test JUST_A_MINUTE=true USE_TYPHA=true
+            - ../.semaphore/run-and-monitor k8sfv-no-typha.log make REMOTE_DEPS= k8sfv-test JUST_A_MINUTE=true USE_TYPHA=false
+      epilogue:
+        always:
+          commands:
+            - ./.semaphore/analyze-test-failures --ut || true
+            - 'test-results publish --name "${SEMAPHORE_JOB_NAME}" ./report/*.xml || true'
+  - name: "Felix: Build Windows binaries"
+    run:
+      when: "true"
+    dependencies:
+      - Prerequisites
+    task:
+      env_vars:
+        - name: BUILD_CACHE_GROUP
+          value: "calico"
+      jobs:
+        - name: "Felix: Build Windows binaries"
+          commands:
+            - cd felix
+            - make bin/calico-felix.exe fv/win-fv.exe
+  - name: "Felix: Windows FV"
+    run:
+      when: "false or true"
+    dependencies: ["Felix: Build Windows binaries"]
+    task:
+      secrets:
+        - name: banzai-secrets
+        - name: private-repo
+      prologue:
+        commands:
+          - az login --service-principal -u "${AZ_SP_ID}" -p "${AZ_SP_PASSWORD}" --tenant "${AZ_TENANT_ID}" --output none
+          - export REPORT_DIR=/home/semaphore/report
+          - export AZURE_SUBSCRIPTION_ID=$AZ_SUBSCRIPTION_ID
+          - export AZURE_TENANT_ID=$AZ_TENANT_ID
+          - export AZURE_CLIENT_ID=$AZ_SP_ID
+          - export AZURE_CLIENT_SECRET=$AZ_SP_PASSWORD
+          - export REPORT_DIR=/home/semaphore/calico/process/testing/winfv-felix/report
+          - export LOGS_DIR=~/fv.log
+          - export RG_PREFIX=${USER}-win-felix-${SEMAPHORE_GIT_SHA:0:4}-pr${SEMAPHORE_GIT_PR_NUMBER}
+          - cd felix
+      epilogue:
+        always:
+          commands:
+            - artifact push job ${REPORT_DIR} --destination semaphore/test-results || true
+            - artifact push job ${LOGS_DIR} --destination semaphore/logs || true
+            - cd ~/calico/process/testing/aso && make dist-clean
+      env_vars:
+        - name: BUILD_CACHE_GROUP
+          value: "calico"
+        - name: FV_TYPE
+          value: "calico-felix"
+        - name: SEMAPHORE_ARTIFACT_EXPIRY
+          value: 2w
+        - name: CONTAINERD_VERSION
+          value: 1.7.28
+      jobs:
+        - name: "Felix: Windows FV"
+          commands:
+            - export AZURE_RESOURCE_GROUP=${RG_PREFIX}-rg
+            - echo AZURE_RESOURCE_GROUP=${AZURE_RESOURCE_GROUP}
+            - ../.semaphore/run-and-monitor win-fv-felix.log ~/calico/process/testing/winfv-felix/run-win-fv.sh
+  - name: "Felix: FV"
+    run:
+      when: "true"
+    dependencies:
+      - "Felix: Build"
+    task:
+      epilogue:
+        always:
+          commands:
+            - source felix/.semaphore/fv-epilogue
+      secrets:
+        - name: google-service-account-for-gce
+        - name: gemini-api-key
+        - name: fv-tests-guru-github-token
+      jobs:
+        - name: "Felix: iptables tests on Ubuntu 22.04"
+          execution_time_limit:
+            minutes: 60
+          env_vars:
+            - name: JOB_TIMEOUT_MINUTES
+              value: "60"
+            - name: FELIX_TEST_GROUP
+              value: "22.04-ipt"
+          commands:
+            - source felix/.semaphore/fv-prologue
+            - export NUM_FV_BATCHES=16
+            - .semaphore/vms/run-tests-on-vms ${VM_PREFIX}
+        - name: "Felix: nftables tests on Ubuntu 22.04"
+          execution_time_limit:
+            minutes: 60
+          env_vars:
+            - name: JOB_TIMEOUT_MINUTES
+              value: "60"
+            - name: FELIX_TEST_GROUP
+              value: "22.04-nft"
+          commands:
+            - source felix/.semaphore/fv-prologue
+            - export NUM_FV_BATCHES=16
+            - .semaphore/vms/run-tests-on-vms ${VM_PREFIX}
+        - name: "Felix: BPF tests on Ubuntu 24.04 (iptables)"
+          execution_time_limit:
+            minutes: 60
+          env_vars:
+            - name: JOB_TIMEOUT_MINUTES
+              value: "60"
+            - name: FELIX_TEST_GROUP
+              value: "bpf-24.04-ipt-with-ut"
+          commands:
+            - source felix/.semaphore/fv-prologue
+            - export NUM_FV_BATCHES=60
+            - .semaphore/vms/run-tests-on-vms ${VM_PREFIX}
+        - name: "Felix: BPF tests on Ubuntu 22.04 (nftables)"
+          execution_time_limit:
+            minutes: 60
+          env_vars:
+            - name: JOB_TIMEOUT_MINUTES
+              value: "60"
+            - name: FELIX_TEST_GROUP
+              value: "bpf-22.04-nft-with-ut"
+            - name: FELIX_FV_BPFATTACHTYPE
+              value: "tc"
+          commands:
+            - source felix/.semaphore/fv-prologue
+            # Limit to BPF conntrack tests to reduce overall runtime.
+            - export FV_FOCUS='_BPF_.*ct=true'
+            - export NUM_FV_BATCHES=10
+            - .semaphore/vms/run-tests-on-vms ${VM_PREFIX}
+        - name: "Felix: BPF tests on Ubuntu 25.10 with netkit (nftables)"
+          execution_time_limit:
+            minutes: 60
+          env_vars:
+            - name: FELIX_TEST_GROUP
+              value: "bpf-25.10-nft-no-fv-with-ut"
+            - name: FELIX_FV_BPFATTACHTYPE
+              value: "tc"
+            - name: JOB_TIMEOUT_MINUTES
+              value: "60"
+            - name: FELIX_FV_NETKIT
+              value: "Enabled"
+          commands:
+            - source felix/.semaphore/fv-prologue
+            - export NUM_FV_BATCHES=60
+            - .semaphore/vms/run-tests-on-vms ${VM_PREFIX}
+        - name: "Felix: BPF tests on Ubuntu 25.10 with jitharden=2 (nftables)"
+          execution_time_limit:
+            minutes: 60
+          env_vars:
+            - name: JOB_TIMEOUT_MINUTES
+              value: "60"
+            - name: FELIX_TEST_GROUP
+              value: "bpf-25.10-nft-with-ut-jitharden"
+            - name: FELIX_FV_BPFATTACHTYPE
+              value: "tc"
+          commands:
+            - source felix/.semaphore/fv-prologue
+            # Limit to BPF TCP+conntrack tests to reduce overall runtime.
+            - export FV_FOCUS='_BPF_.*tcp.*ct=true'
+            - export NUM_FV_BATCHES=16
+            - .semaphore/vms/run-tests-on-vms ${VM_PREFIX}
+  - name: Goldmane
+    run:
+      when: "true"
+    execution_time_limit:
+      minutes: 30
+    dependencies:
+      - Prerequisites
+    task:
+      env_vars:
+        - name: BUILD_CACHE_GROUP
+          value: "calico"
+      prologue:
+        commands:
+          # The Makefile sometimes tries to rebuild the protobuf files on non-amd architectures
+          # even when they don't need to be. Touch the file to update the timestamp. We know
+          # they will be up-to-date due to preflight checks.
+          - touch goldmane/proto/api.pb.go
+          - cd goldmane
+      jobs:
+        - name: "Goldmane: CI"
+          commands:
+            - ../.semaphore/run-and-monitor make-ci.log make ci
+      epilogue:
+        always:
+          commands:
+            - 'test-results publish --name "${SEMAPHORE_JOB_NAME}" ./report/*.xml || true'
+  - name: Guardian
+    run:
+      when: "true"
+    execution_time_limit:
+      minutes: 30
+    dependencies:
+      - Prerequisites
+    task:
+      env_vars:
+        - name: BUILD_CACHE_GROUP
+          value: "calico"
+      prologue:
+        commands:
+          - cd guardian
+      jobs:
+        - name: "Guardian: CI"
+          commands:
+            - ../.semaphore/run-and-monitor make-ci.log make ci
+      epilogue:
+        always:
+          commands:
+            - 'test-results publish --name "${SEMAPHORE_JOB_NAME}" ./report/*.xml || true'
+  - name: Istio
+    run:
+      when: "true"
+    dependencies:
+      - Prerequisites
+    task:
+      prologue:
+        commands:
+          - cd istio
+      jobs:
+        - name: "Istio: CI"
+          commands:
+            # Include the istio ztunnel build in the amd64 CI job.
+            - ../.semaphore/run-and-monitor ci.log make ci
+        - name: "Istio: build arm64"
+          matrix:
+            - env_var: ARCH
+              values:
+                - arm64
+          commands:
+            # Skip istio ztunnel in this arm64 cross-build job.
+            # ztunnel is built separately in the native arm64 runner block below.
+            - ../.semaphore/run-and-monitor build-$ARCH.log make build-istio ARCH=$ARCH
+  - name: Istio Ztunnel - native arm64 runner
+    run:
+      when: "true"
+    dependencies:
+      - Istio
+    task:
+      agent:
+        machine:
+          type: s1-aws-arm64-2
+      prologue:
+        commands:
+          - cd istio
+      jobs:
+        - name: "Linux arm64"
+          commands:
+            - ../.semaphore/run-and-monitor build-arm64.log make build-ztunnel ARCH=arm64
+  - name: kube-controllers
+    run:
+      when: "true"
+    dependencies:
+      - Prerequisites
+      - "Build: calico image"
+    task:
+      env_vars:
+        - name: BUILD_CACHE_GROUP
+          value: "calico"
+      prologue:
+        commands:
+          - .semaphore/load-cached-images
+          - cd kube-controllers
+      jobs:
+        - name: "kube-controllers: CI"
+          commands:
+            - ../.semaphore/run-and-monitor ci.log make ci
+        # Run a subset of the kube-controllers CI tests that use the projectcalico.org/v3 API group for CRDs.
+        - name: "kube-controllers: CI (projectcalico.org/v3)"
+          commands:
+            - ../.semaphore/run-and-monitor ut.log make ut
+          env_vars:
+            - name: CALICO_API_GROUP
+              value: "projectcalico.org/v3"
+      epilogue:
+        always:
+          commands:
+            - 'test-results publish --name "${SEMAPHORE_JOB_NAME}" ./report/*.xml || true'
+  - name: Libraries (lib)
+    run:
+      when: >-
+        true or change_in(['/lib/'],
+        {pipeline_file: 'ignore'})
+    execution_time_limit:
+      minutes: 30
+    dependencies:
+      - Prerequisites
+    task:
+      prologue:
+        commands:
+          - cd lib
+      jobs:
+        - name: "Libraries: CI"
+          commands:
+            - ../.semaphore/run-and-monitor make-ci.log make ci
+      epilogue:
+        always:
+          commands:
+            - 'test-results publish --name "${SEMAPHORE_JOB_NAME}" ./report/*.xml || true'
+  - name: libcalico-go
+    run:
+      when: "true"
+    dependencies:
+      - Prerequisites
+    task:
+      env_vars:
+        - name: BUILD_CACHE_GROUP
+          value: "calico"
+      prologue:
+        commands:
+          - cd libcalico-go
+      jobs:
+        # Run the tests twice, once for each backing API version.
+        - name: "libcalico-go: CI (crd.projectcalico.org/v1)"
+          commands:
+            - ../.semaphore/run-and-monitor make-ci.log make ci
+        - name: "libcalico-go: CI (projectcalico.org/v3)"
+          commands:
+            - ../.semaphore/run-and-monitor make-ci.log make ci
+          env_vars:
+            - name: CALICO_API_GROUP
+              value: projectcalico.org/v3
+            - name: GINKGO_SKIP
+              value: "etcdv3 backend"
+      epilogue:
+        always:
+          commands:
+            - 'python3 ../hack/strip-skipped-tests.py ./report/*.xml 2>/dev/null || true'
+            - 'test-results publish --name "${SEMAPHORE_JOB_NAME}" ./report/*.xml || true'
+  - name: "Node: Static checks and UT"
+    run:
+      when: "true"
+    dependencies:
+      - Prerequisites
+    task:
+      env_vars:
+        - name: BUILD_CACHE_GROUP
+          value: "calico"
+      agent:
+        machine:
+          type: f1-standard-4
+          os_image: ubuntu2204
+      prologue:
+        commands:
+          - cd node
+      # Image builds (image, image-windows) are handled by the Prerequisites
+      # "Build: node image" block and the "Node: multi-arch build" block
+      # respectively, so we only run the unique checks here.
+      jobs:
+        - name: "Node: Static checks"
+          priority:
+            # This job is on the critical path so we increase its priority.
+            - value: 51
+              when: "pull_request =~ '.+'"
+          commands:
+            - ../.semaphore/run-and-monitor static-checks.log make static-checks
+        - name: "Node: UT"
+          priority:
+            # This job is on the critical path so we increase its priority.
+            - value: 51
+              when: "pull_request =~ '.+'"
+          commands:
+            - ../.semaphore/run-and-monitor ut.log make ut
+      epilogue:
+        always:
+          commands:
+            - 'test-results publish --name "${SEMAPHORE_JOB_NAME}" ./report/*.xml || true'
+  - name: "Node: multi-arch build"
+    run:
+      when: "true"
+    dependencies:
+      - Prerequisites
+    task:
+      prologue:
+        commands:
+          - cd node
+      jobs:
+        - name: "Node: build multi-arch images"
+          matrix:
+            - env_var: ARCH
+              values:
+                - arm64
+                - ppc64le
+                - s390x
+          commands:
+            - ../.semaphore/run-and-monitor image-$ARCH.log make image ARCH=$ARCH
+        - name: "Node: build Windows archive"
+          commands:
+            - ../.semaphore/run-and-monitor build-windows-archive.log make build-windows-archive
+        - name: "Node: build Windows image"
+          commands:
+            - ../.semaphore/run-and-monitor build-windows-image.log make image-windows
+  - name: "Node: kind-cluster tests"
+    run:
+      # KinD tests also build and run all the other images.
+      when: "true"
+    dependencies:
+      - "Prerequisites"
+    task:
+      env_vars:
+        - name: BUILD_CACHE_GROUP
+          value: "calico"
+        - name: CI_GROUP_LABEL
+          value: "calico"
+        - name: CI_JOB_LABEL
+          value: "kind-cluster-tests"
+      prologue:
+        commands:
+          # Set up access to GCP buckets.
+          - export GOOGLE_APPLICATION_CREDENTIALS=$HOME/secrets/secret.google-service-account-key.json
+          - gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
+          - gcloud config set project unique-caldron-775
+          - cd node
+          - export SHORT_WORKFLOW_ID=$(echo ${SEMAPHORE_WORKFLOW_ID} | sha256sum | cut -c -8)
+          - export ZONE=europe-west3-c
+          - export VM_PREFIX=sem-${SEMAPHORE_PROJECT_NAME}-${SHORT_WORKFLOW_ID}-kind-
+          - echo VM_PREFIX=${VM_PREFIX}
+          - export COMPONENT=node
+          - export VM_DISK_SIZE=80GB
+          - mkdir artifacts
+          - ./.semaphore/cache-test-artifacts
+      jobs:
+        - name: "Node: kind-cluster tests"
+          execution_time_limit:
+            minutes: 120
+          env_vars:
+            - name: JOB_TIMEOUT_MINUTES
+              value: "120"
+          commands:
+            - ../.semaphore/vms/run-tests-on-vms ${VM_PREFIX}
+      epilogue:
+        always:
+          commands:
+            - '../.semaphore/vms/publish-reports "Node: KinD STs"'
+            - ../.semaphore/vms/clean-up-vms ${VM_PREFIX}
+      secrets:
+        - name: google-service-account-for-gce
+  - name: pod2daemon
+    run:
+      when: "true"
+    dependencies:
+      - Prerequisites
+    task:
+      env_vars:
+        - name: BUILD_CACHE_GROUP
+          value: "calico"
+      prologue:
+        commands:
+          - cd pod2daemon
+      jobs:
+        - name: "pod2daemon: CI"
+          commands:
+            - ../.semaphore/run-and-monitor ci.log make ci
+            - 'test-results publish ./report/*.xml --name "pod2daemon: UT" || true'
+  - name: "Tools (hack directory)"
+    run:
+      when: >-
+        true or change_in(['/metadata.mk', '/lib.Makefile', '/hack/', '/api/', '/libcalico-go/'],
+        {pipeline_file: 'ignore', exclude: ['/**/.gitignore', '/**/README.md', '/**/LICENSE']})
+    dependencies:
+      - Prerequisites
+    task:
+      env_vars:
+        - name: BUILD_CACHE_GROUP
+          value: "calico"
+      prologue:
+        commands:
+          - cd hack
+      jobs:
+        - name: "Tools (hack directory): CI"
+          commands:
+            - ../.semaphore/run-and-monitor make-ci.log make ci
+  - name: Typha
+    run:
+      when: "true"
+    dependencies:
+      - Prerequisites
+      - "Build: calico image"
+    task:
+      env_vars:
+        - name: BUILD_CACHE_GROUP
+          value: "calico"
+      prologue:
+        commands:
+          - .semaphore/load-cached-images
+          - cd typha
+      jobs:
+        - name: "Typha: UT and FV tests"
+          commands:
+            - export TEST_SUITE_PREFIX="calico/base"
+            - ../.semaphore/run-and-monitor make-ci.log make ci
+        - name: "Typha: FV tests on UBI-minimal"
+          commands:
+            - 'export TEST_SUITE_PREFIX="UBI-minimal"'
+            # Rebuild the combined image with UBI-minimal as CALICO_BASE,
+            # then run Typha FV against it.
+            - ../.semaphore/run-and-monitor make-fv-ubi.log bash -c 'make -C ../cmd/calico clean image && make fv'
+          env_vars:
+            - name: USE_UBI_AS_CALICO_BASE
+              value: '1'
+      epilogue:
+        always:
+          commands:
+            - 'test-results publish --ignore-missing ./report/*.xml ../felix/report/*.xml --suite-prefix="$TEST_SUITE_PREFIX" --name "Typha" || true'
+  - name: webhooks
+    run:
+      when: "true"
+    dependencies:
+      - Prerequisites
+    task:
+      env_vars:
+        - name: BUILD_CACHE_GROUP
+          value: "calico"
+      prologue:
+        commands:
+          - cd webhooks
+      jobs:
+        - name: "webhooks: CI"
+          commands:
+            - ../.semaphore/run-and-monitor make-ci.log make ci
+      epilogue:
+        always:
+          commands:
+            - 'test-results publish --name "${SEMAPHORE_JOB_NAME}" ./report/*.xml || true'
+  - name: Whisker backend
+    run:
+      when: "true"
+    execution_time_limit:
+      minutes: 30
+    dependencies:
+      - Prerequisites
+    task:
+      env_vars:
+        - name: BUILD_CACHE_GROUP
+          value: "calico"
+      prologue:
+        commands:
+          - cd whisker-backend
+      jobs:
+        - name: "Whisker backend: CI"
+          commands:
+            - ../.semaphore/run-and-monitor make-ci.log make ci
+      epilogue:
+        always:
+          commands:
+            - 'test-results publish --name "${SEMAPHORE_JOB_NAME}" ./report/*.xml || true'
+  - name: Whisker
+    run:
+      when: >-
+        true or change_in(['/metadata.mk', '/lib.Makefile', '/whisker/'],
+        {pipeline_file: 'ignore', exclude: ['/**/.gitignore', '/**/README.md', '/**/LICENSE']})
+    execution_time_limit:
+      minutes: 30
+    dependencies:
+      - Prerequisites
+    task:
+      prologue:
+        commands:
+          - cd whisker
+      jobs:
+        - name: "Whisker: CI"
+          commands:
+            - ../.semaphore/run-and-monitor make-ci.log make ci
+        - name: "Whisker: build multi-arch images"
+          matrix:
+            - env_var: ARCH
+              values:
+                - arm64
+                - ppc64le
+                - s390x
+          commands:
+            - ../.semaphore/run-and-monitor image-$ARCH.log make build ARCH=$ARCH
+  - name: key-cert-provisioner
+    run:
+      when: "true"
+    dependencies:
+      - Prerequisites
+    task:
+      env_vars:
+        - name: BUILD_CACHE_GROUP
+          value: "calico"
+      prologue:
+        commands:
+          - cd key-cert-provisioner
+      jobs:
+        - name: "key-cert-provisioner: CI"
+          commands:
+            - ../.semaphore/run-and-monitor ci.log make ci
+      epilogue:
+        always:
+          commands:
+            - 'test-results publish --name "${SEMAPHORE_JOB_NAME}" ./report/*.xml || true'
+  - name: "OpenStack integration (Caracal)"
+    run:
+      when: >-
+        true or change_in(['/metadata.mk', '/lib.Makefile', '/networking-calico/', '/.semaphore/semaphore.yml.d/blocks/40-openstack.yml'],
+        {pipeline_file: 'ignore'})
+    dependencies:
+      - Prerequisites
+    task:
+      agent:
+        machine:
+          type: f1-standard-2
+          os_image: ubuntu2204
+      prologue:
+        commands:
+          - cd networking-calico
+      jobs:
+        - name: "OpenStack: Unit and FV tests (tox) on Caracal"
+          commands:
+            - ../.semaphore/run-and-monitor tox.log make tox-caracal
+        - name: "OpenStack: Mainline ST (DevStack + Tempest) on Caracal"
+          commands:
+            # For some reason python3-wrapt is pre-installed on a Semaphore ubuntu2004 node, but with
+            # a version (1.11.2) that is different from the version that OpenStack needs (1.13.3), and
+            # this was causing the DevStack setup to fail, because pip doesn't know how to uninstall
+            # or replace the existing version.  Happily we do know that, so let's do it upfront here.
+            - sudo apt-get remove -y python3-wrapt || true
+            # Set NC_PLUGIN_REPO and NC_PLUGIN_REF so that DevStack will use the networking-calico
+            # code from the current PR or branch.  The following checkout is to make sure of having a
+            # local ref that we can specify.
+            - git checkout -b devstack-test
+            - export NC_PLUGIN_REPO=$(dirname $(pwd))
+            - export NC_PLUGIN_REF=$(git rev-parse --abbrev-ref HEAD)
+            - sudo git config --system --add safe.directory ${NC_PLUGIN_REPO}/.git
+            # The BIRD config in our DevStack setup is thoroughly broken and generates loads of errors
+            # in the log.  But we don't need it for a single node setup anyway, so let's disable it.
+            - export CALICO_BGP_MODE=none
+            - TEMPEST=true OPENSTACK_RELEASE=caracal ./devstack/bootstrap.sh
+      epilogue:
+        always:
+          commands:
+            - mkdir logs
+            - sudo journalctl > logs/journalctl.txt
+            - artifact push job logs
+  - name: Mock node
+    run:
+      when: "true"
+    dependencies:
+      - Prerequisites
+    task:
+      env_vars:
+        - name: BUILD_CACHE_GROUP
+          value: "calico"
+      prologue:
+        commands:
+          - cd test-tools/mocknode
+      jobs:
+        - name: "Mock node: CI"
+          commands:
+            - ../../.semaphore/run-and-monitor make-ci.log make ci
+  - name: Release tooling
+    run:
+      when: "true"
+    execution_time_limit:
+      minutes: 30
+    dependencies:
+      - Prerequisites
+    task:
+      prologue:
+        commands:
+          - cd release
+      jobs:
+        - name: "Release tooling: CI"
+          commands:
+            - ../.semaphore/run-and-monitor release-ci.log make ci
+            - 'test-results publish --name "Release tool: UT" ./report/*.xml || true'
+        - name: "Release tooling: build"
+          commands:
+            - ../.semaphore/run-and-monitor release-build.log make build
+            - cache store release-${SEMAPHORE_GIT_SHA} bin
+after_pipeline:
+  task:
+    jobs:
+      - name: Reports
+        commands:
+          - test-results gen-pipeline-report --force

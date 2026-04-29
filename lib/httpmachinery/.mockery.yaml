@@ -1,0 +1,11 @@
+template: testify
+inpackage: false
+dir: "{{.InterfaceDir}}/mocks"
+filename: "{{.InterfaceName}}.go"
+packages:
+  github.com/projectcalico/calico/lib/httpmachinery/pkg/context:
+    config:
+      pkgname: "mocks"
+      structname: "{{.InterfaceName}}"
+    interfaces:
+      Context:

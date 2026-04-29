@@ -1,0 +1,68 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+	echo "No packages need to be tested"
+	exit 0
+fi
+
+echo WHAT: $@
+echo SKIP: $SKIP
+echo GINKGO_ARGS: $GINKGO_ARGS
+
+# We want to run all the tests even if one suite fails. We'll increment this each
+# time a suite fails.
+RC=0
+
+mkdir -p report
+
+# Go through each package we've been told to test. If there are actually test files present,
+# then run those tests. If the package is included in SKIP, we'll skip them.
+for PKG in "$@"; do
+	# Skip any tests we've been told to skip.
+	if [[ "$SKIP" == *"$PKG"* ]]; then
+	  echo "Skipping tests for package: ${PKG}"
+	  continue
+	fi
+
+	HAS_TESTS=$(find ${PKG} -name "ut.test")
+	if [ ! -z "${HAS_TESTS}" ]; then
+		echo "Running tests for package: ${PKG}";
+		REPORT_NAME=$(echo "${PKG}" | tr '/./' '_' | sed 's/^_//')
+
+		# Detect whether this package is a Ginkgo suite by grepping the source
+		# for a RunSpecs call. We can't probe the binary's --help output because
+		# packages that import Ginkgo indirectly (e.g., via controller-runtime
+		# envtest) expose --ginkgo.* flags even though no specs are registered.
+		# Ginkgo suites keep the native --ginkgo.junit-report; vanilla go test
+		# binaries are wrapped with gotestsum (via go tool test2json) to produce
+		# JUnit XML, mirroring the felix/Makefile pattern.
+		if grep -rq "RunSpecs(" ${PKG}/*_test.go 2>/dev/null; then
+			${PKG}/ut.test --ginkgo.junit-report=report/${REPORT_NAME}.xml ${GINKGO_ARGS} || ((RC++))
+		else
+			set -o pipefail
+			${PKG}/ut.test -test.v |& \
+				"${GOTESTSUM:-gotestsum}" \
+					--junitfile report/${REPORT_NAME}.xml \
+					--format testname \
+					--raw-command -- \
+					go tool test2json -t -p ${PKG} || ((RC++))
+			set +o pipefail
+		fi
+	else
+		echo "WARNING: No tests to run in ${PKG}, skipping"
+	fi
+done
+
+# Defense-in-depth: if a test binary exits 0 but the JUnit XML records a
+# failure or error (e.g. because an os.Exit() call inside the test killed
+# the binary mid-run), the pipe exit code above won't catch it. Scan the
+# published XMLs and fail the run if any failures or errors were recorded.
+for xml in report/*.xml; do
+	[ -f "$xml" ] || continue
+	if grep -qE '<(failure|error)(\s|>|/>)' "$xml"; then
+		echo "FAIL: detected failures/errors in ${xml}"
+		((RC++))
+	fi
+done
+
+exit ${RC}
