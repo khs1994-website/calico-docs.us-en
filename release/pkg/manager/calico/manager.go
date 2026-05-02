@@ -85,9 +85,9 @@ func NewManager(opts ...Option) *CalicoManager {
 		helmRepoURL:       utils.CalicoHelmRepoURL,
 		operatorRegistry:  operator.DefaultRegistry,
 		operatorImage:     operator.DefaultImage,
-		operatorGithubOrg: operator.DefaultOrg,
-		operatorRepo:      operator.DefaultRepoName,
-		operatorBranch:    operator.DefaultBranchName,
+		operatorGithubOrg: operator.Organization(),
+		operatorRepo:      operator.Repo(),
+		operatorBranch:    operator.Branch(),
 	}
 
 	// Run through provided options.
@@ -259,6 +259,11 @@ func (r *CalicoManager) Build() error {
 	var err error
 	if err = os.MkdirAll(r.uploadDir(), os.ModePerm); err != nil {
 		return fmt.Errorf("failed to create output dir: %s", err)
+	}
+
+	// Make sure temp directory exists.
+	if err = os.MkdirAll(r.tmpDir, os.ModePerm); err != nil {
+		return fmt.Errorf("failed to create temp dir: %s", err)
 	}
 
 	if r.validate {
@@ -1705,7 +1710,12 @@ func (r *CalicoManager) updateAndCommitPrep() error {
 	if err := r.modifyHelmChartsValues(); err != nil {
 		return fmt.Errorf("failed to update chart versions: %w", err)
 	}
-	if err := r.makeInDirectoryIgnoreOutput(r.repoRoot, "generate"); err != nil {
+	env := append(os.Environ(),
+		fmt.Sprintf("OPERATOR_ORGANIZATION=%s", r.operatorGithubOrg),
+		fmt.Sprintf("OPERATOR_GIT_REPO=%s", r.operatorRepo),
+		fmt.Sprintf("OPERATOR_BRANCH=%s", r.operatorBranch),
+	)
+	if err := r.makeInDirectoryIgnoreOutput(r.repoRoot, "generate", env...); err != nil {
 		return fmt.Errorf("failed to run make generate: %w", err)
 	}
 
