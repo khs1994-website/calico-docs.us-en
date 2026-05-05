@@ -156,6 +156,7 @@ func hashreleaseSubCommands(cfg *Config) []*cli.Command {
 					calico.WithOperatorGit(c.String(operatorOrgFlag.Name), c.String(operatorRepoFlag.Name), c.String(operatorBranchFlag.Name)),
 					calico.WithOutputDir(hashrel.Source),
 					calico.WithTmpDir(cfg.TmpDir),
+					calico.WithLogsDir(filepath.Join(cfg.LogsDir, data.ProductVersion())),
 					calico.WithGithubOrg(c.String(orgFlag.Name)),
 					calico.WithRepoName(c.String(repoFlag.Name)),
 					calico.WithRepoRemote(c.String(repoRemoteFlag.Name)),
@@ -262,6 +263,7 @@ func hashreleaseSubCommands(cfg *Config) []*cli.Command {
 					calico.WithOperatorVersion(hashrel.Operator.Version),
 					calico.WithOutputDir(hashrel.Source),
 					calico.WithTmpDir(cfg.TmpDir),
+					calico.WithLogsDir(filepath.Join(cfg.LogsDir, hashrel.ProductVersion)),
 					calico.WithGithubOrg(c.String(orgFlag.Name)),
 					calico.WithRepoName(c.String(repoFlag.Name)),
 					calico.WithRepoRemote(c.String(repoRemoteFlag.Name)),
@@ -338,9 +340,9 @@ func validateHashreleaseBuildFlags(c *cli.Command) error {
 	}
 
 	// Hashrelease regenerates manifests before building the OCP bundle.
-	if c.Bool(ocpBundleFlagName) && !c.Bool(manifestsFlagName) {
+	if c.Bool(ocpBundleFlag.Name) && !c.Bool(manifestsFlag.Name) {
 		return fmt.Errorf("--%s requires --%s on hashrelease builds; either drop --%s or also set --%s",
-			ocpBundleFlagName, manifestsFlagName, inverseFlagName(manifestsFlagName), inverseFlagName(ocpBundleFlagName))
+			ocpBundleFlag.Name, manifestsFlag.Name, inverseFlagName(manifestsFlag.Name), inverseFlagName(ocpBundleFlag.Name))
 	}
 
 	// CI conditional checks.
