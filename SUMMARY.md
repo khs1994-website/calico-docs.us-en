@@ -35,6 +35,16 @@
   - Images
     - [Rapidclient](e2e/images/rapidclient/README.md)
 - [Felix](felix/README.md)
+  - Design
+    * [Bpf Conntrack Flowstate](felix/design/bpf-conntrack-flowstate.md)
+    * [Bpf Encap Fragments Icmp](felix/design/bpf-encap-fragments-icmp.md)
+    * [Bpf Host Networking](felix/design/bpf-host-networking.md)
+    * [Bpf Observability](felix/design/bpf-observability.md)
+    * [Bpf Overview](felix/design/bpf-overview.md)
+    * [Bpf Services](felix/design/bpf-services.md)
+    * [Bpf Tc Programs](felix/design/bpf-tc-programs.md)
+    * [Bpf Tests](felix/design/bpf-tests.md)
+    * [Bpf Xdp](felix/design/bpf-xdp.md)
   - Docs
     * [Config Params](felix/docs/config-params.md)
   - [K 8 Sfv](felix/k8sfv/README.md)
@@ -42,7 +52,10 @@
   - [Nfnetlink](felix/nfnetlink/README.md)
   * [CHANGES](felix/CHANGES.md)
   * [CLAUDE](felix/CLAUDE.md)
+  * [DESIGN](felix/DESIGN.md)
 - [Goldmane](goldmane/README.md)
+  * [CLAUDE](goldmane/CLAUDE.md)
+  * [DESIGN](goldmane/DESIGN.md)
 - Hack
   - Cmd
     - [Ipam Hammer](hack/cmd/ipam-hammer/README.md)
