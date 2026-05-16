@@ -1,0 +1,73 @@
+# Copyright (c) 2015 Tigera, Inc. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+#
+### calico/test
+# This image is used by various calico repositories and components to run UTs
+# and STs. It has libcalico, pytest, and other common python libraries
+# already installed
+#
+# For UTs:
+#  - volume mount in python code that uses libcalico
+#  - volume mount in your unit tests for this code
+#  - run 'pytest'
+#
+# This container can also be used for running STs written in python. This
+# eliminates all dependencies besides docker on the host system to enable
+# running of the ST frameworks.
+# To run:
+# - volume mount the docker socket, allowing the STs to launch docker
+#   containers alongside itself.
+# - eliminate most isolation, (--uts=host --pid=host --net=host --privileged)
+# - volume mount your ST source code
+# - run 'pytest'
+
+FROM docker:25
+
+ARG ETCD_VERSION
+ARG TARGETARCH
+
+# Running STs in this container requires that it has all dependencies installed
+# for executing the tests. Install these dependencies:
+# The upgrade ensures base image packages (e.g. libexpat) stay ABI-compatible
+# with newly installed packages (e.g. python3's pyexpat).
+RUN apk upgrade --no-cache && apk add --no-cache \
+    curl \
+    gcc \
+    ip6tables \
+    iproute2 \
+    ipset \
+    iptables \
+    iputils \
+    jq \
+    libffi-dev \
+    musl-dev \
+    netcat-openbsd \
+    openssl-dev \
+    py3-setuptools \
+    py3-pip \
+    python3 \
+    python3-dev \
+    tshark
+
+# Install etcdctl
+RUN curl -sSfL --retry 5 -o /tmp/etcd.tar.gz https://github.com/coreos/etcd/releases/download/${ETCD_VERSION}/etcd-${ETCD_VERSION}-linux-${TARGETARCH}.tar.gz && \
+    tar xz --strip-components 1 -C /usr/local/bin -f /tmp/etcd.tar.gz etcd-${ETCD_VERSION}-linux-${TARGETARCH}/etcdctl && \
+    rm -f /tmp/etcd.tar.gz
+
+COPY requirements.txt /requirements.txt
+RUN pip3 install -r /requirements.txt --break-system-packages
+
+# The container is used by mounting the code-under-test to /code
+WORKDIR /code/

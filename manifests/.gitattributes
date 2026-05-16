@@ -1,0 +1,15 @@
+calico.yaml          linguist-generated=true
+canal.yaml           linguist-generated=true
+calico-bpf.yaml      linguist-generated=true
+calico-policy-only.yaml    linguist-generated=true
+calico-typha.yaml    linguist-generated=true
+calico-vxlan.yaml    linguist-generated=true
+crds.yaml            linguist-generated=true
+operator-crds.yaml   linguist-generated=true
+tigera-operator.yaml linguist-generated=true
+v3_projectcalico_org.yaml     linguist-generated=true
+v1_crd_projectcalico_org.yaml linguist-generated=true
+calico-v3-crds.yaml           linguist-generated=true
+calicoctl.yaml                linguist-generated=true
+flannel-migration/calico.yaml linguist-generated=true
+tigera-operator-ocp-upgrade.yaml linguist-generated=true

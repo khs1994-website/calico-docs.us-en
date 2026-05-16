@@ -1,0 +1,117 @@
+// Copyright (c) 2016-2024 Tigera, Inc. All rights reserved.
+
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+package model
+
+import (
+	"fmt"
+	"net/netip"
+	"reflect"
+	"regexp"
+	"strings"
+
+	v3 "github.com/projectcalico/api/pkg/apis/projectcalico/v3"
+	log "github.com/sirupsen/logrus"
+
+	"github.com/projectcalico/calico/libcalico-go/lib/backend/encap"
+	"github.com/projectcalico/calico/libcalico-go/lib/errors"
+	"github.com/projectcalico/calico/libcalico-go/lib/net"
+)
+
+var (
+	matchIPPool = regexp.MustCompile("^/?calico/v1/ipam/v./pool/([^/]+)$")
+	typeIPPool  = reflect.TypeFor[IPPool]()
+)
+
+type IPPoolKey struct {
+	CIDR netip.Prefix `json:"-" validate:"required,name"`
+}
+
+func (key IPPoolKey) defaultPath() (string, error) {
+	if !key.CIDR.IsValid() {
+		return "", errors.ErrorInsufficientIdentifiers{Name: "cidr"}
+	}
+	cidr := key.CIDR.Masked()
+	c := strings.Replace(cidr.String(), "/", "-", 1)
+	e := fmt.Sprintf("/calico/v1/ipam/v%d/pool/%s", prefixVersion(cidr), c)
+	return e, nil
+}
+
+func (key IPPoolKey) defaultDeletePath() (string, error) {
+	return key.defaultPath()
+}
+
+func (key IPPoolKey) defaultDeleteParentPaths() ([]string, error) {
+	return nil, nil
+}
+
+func (key IPPoolKey) valueType() (reflect.Type, error) {
+	return typeIPPool, nil
+}
+
+func (key IPPoolKey) parseValue(rawData []byte) (any, error) {
+	return parseJSONPointer[IPPool](key, rawData)
+}
+
+func (key IPPoolKey) String() string {
+	return fmt.Sprintf("IPPool(cidr=%s)", key.CIDR)
+}
+
+type IPPoolListOptions struct {
+	CIDR netip.Prefix
+}
+
+func (options IPPoolListOptions) defaultPathRoot() string {
+	k := "/calico/v1/ipam/"
+	if !options.CIDR.IsValid() {
+		return k
+	}
+	cidr := options.CIDR.Masked()
+	c := strings.Replace(cidr.String(), "/", "-", 1)
+	k = k + fmt.Sprintf("v%d/pool/", prefixVersion(cidr)) + c
+	return k
+}
+
+func (options IPPoolListOptions) KeyFromDefaultPath(path string) Key {
+	log.Debugf("Get Pool key from %s", path)
+	r := matchIPPool.FindAllStringSubmatch(path, -1)
+	if len(r) != 1 {
+		log.Debugf("%s didn't match regex", path)
+		return nil
+	}
+	cidrStr := strings.Replace(r[0][1], "-", "/", 1)
+	prefix, err := netip.ParsePrefix(cidrStr)
+	if err != nil {
+		log.WithError(err).Warningf("Failed to parse CIDR %s", cidrStr)
+		return nil
+	}
+	prefix = prefix.Masked()
+	if options.CIDR.IsValid() && prefix != options.CIDR.Masked() {
+		log.Debugf("Didn't match cidr %s != %s", options.CIDR.String(), prefix.String())
+		return nil
+	}
+	return IPPoolKey{CIDR: prefix}
+}
+
+type IPPool struct {
+	CIDR             net.IPNet         `json:"cidr"`
+	IPIPInterface    string            `json:"ipip"`
+	IPIPMode         encap.Mode        `json:"ipip_mode"`
+	VXLANMode        encap.Mode        `json:"vxlan_mode"`
+	Masquerade       bool              `json:"masquerade"`
+	IPAM             bool              `json:"ipam"`
+	Disabled         bool              `json:"disabled"`
+	DisableBGPExport bool              `json:"disableBGPExport"`
+	AssignmentMode   v3.AssignmentMode `json:"assignment_mode"`
+}

@@ -1,0 +1,8 @@
+coverage.out
+output/
+report/
+tmp/
+_logs/
+*.log
+.approval_tests_temp
+*.received.txt

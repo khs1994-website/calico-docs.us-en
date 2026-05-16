@@ -1,0 +1,19 @@
+- name: Libraries (lib)
+  run:
+    when: "${FORCE_RUN} or change_in(['/lib/'], {pipeline_file: 'ignore'})"
+  execution_time_limit:
+    minutes: 30
+  dependencies:
+    - Prerequisites
+  task:
+    prologue:
+      commands:
+        - cd lib
+    jobs:
+      - name: "Libraries: CI"
+        commands:
+          - ../.semaphore/run-and-monitor make-ci.log make ci
+    epilogue:
+      always:
+        commands:
+          - 'test-results publish --name "${SEMAPHORE_JOB_NAME}" ./report/*.xml || true'

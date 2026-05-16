@@ -1,0 +1,124 @@
+// Project Calico BPF dataplane programs.
+// Copyright (c) 2020-2022 Tigera, Inc. All rights reserved.
+// SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+
+#ifndef __CALI_ROUTES_H__
+#define __CALI_ROUTES_H__
+
+#include <linux/in.h>
+#include "bpf.h"
+
+// Map: Routes
+
+struct cali_rt_key {
+	__u32 prefixlen;
+	ipv46_addr_t addr; // NBO
+};
+
+enum cali_rt_flags {
+	CALI_RT_UNKNOWN               = 0x00,
+	CALI_RT_IN_POOL               = 0x01,
+	CALI_RT_NAT_OUT               = 0x02,
+	CALI_RT_WORKLOAD              = 0x04,
+	CALI_RT_LOCAL                 = 0x08,
+	CALI_RT_HOST                  = 0x10,
+	CALI_RT_SAME_SUBNET           = 0x20,
+	CALI_RT_TUNNELED              = 0x40,
+	CALI_RT_NO_DSR                = 0x80,
+	CALI_RT_BLACKHOLE_DROP        = 0x100,
+	CALI_RT_BLACKHOLE_REJECT      = 0x200,
+	CALI_RT_VXLAN                 = 0x400,
+	CALI_RT_SKIP_INGRESS_REDIRECT = 0x800,
+};
+
+struct cali_rt {
+	__u32 flags; /* enum cali_rt_flags */
+	// IP encap next hop for remote workload routes.
+	// or ifindex for local workload routes.
+	ipv46_addr_t next_hop;
+};
+
+#ifdef IPVER6
+CALI_MAP_NAMED(cali_v6_routes, cali_routes,,
+#else
+CALI_MAP_NAMED(cali_v4_routes, cali_routes,,
+#endif
+		BPF_MAP_TYPE_LPM_TRIE,
+		struct cali_rt_key, struct cali_rt,
+		256*1024, BPF_F_NO_PREALLOC)
+
+static CALI_BPF_INLINE struct cali_rt *cali_rt_lookup(ipv46_addr_t *addr)
+{
+	struct cali_rt_key k;
+#ifdef IPVER6
+	k.prefixlen = 128;
+#else
+	k.prefixlen = 32;
+#endif
+	k.addr = *addr;
+	return cali_routes_lookup_elem(&k);
+}
+
+static CALI_BPF_INLINE enum cali_rt_flags cali_rt_lookup_flags(ipv46_addr_t *addr)
+{
+	struct cali_rt *rt = cali_rt_lookup(addr);
+	if (!rt) {
+		return CALI_RT_UNKNOWN;
+	}
+	return rt->flags;
+}
+
+#define CALI_RT_IFINDEX(rt) (*((__u32 *)&(rt)->next_hop))
+#define cali_rt_is_local(rt)	((rt)->flags & CALI_RT_LOCAL)
+#define cali_rt_is_host(rt)	((rt)->flags & CALI_RT_HOST)
+#define cali_rt_is_workload(rt)	((rt)->flags & CALI_RT_WORKLOAD)
+#define cali_rt_is_tunneled(rt)	((rt)->flags & CALI_RT_TUNNELED)
+#define cali_rt_is_vxlan(rt)	((rt)->flags & CALI_RT_VXLAN)
+#define cali_rt_is_same_subnet(rt) ((rt)->flags & CALI_RT_SAME_SUBNET)
+#define cali_rt_is_blackhole_drop(rt) ((rt)->flags & CALI_RT_BLACKHOLE_DROP)
+#define cali_rt_is_blackhole_reject(rt) ((rt)->flags & CALI_RT_BLACKHOLE_REJECT)
+#define cali_rt_is_in_pool(rt) ((rt)->flags & CALI_RT_IN_POOL)
+
+#define cali_rt_flags_local(t) (((t) & CALI_RT_LOCAL) == CALI_RT_LOCAL)
+#define cali_rt_flags_host(t) (((t) & CALI_RT_HOST) == CALI_RT_HOST)
+#define cali_rt_flags_local_host(t) (((t) & (CALI_RT_LOCAL | CALI_RT_HOST)) == (CALI_RT_LOCAL | CALI_RT_HOST))
+#define cali_rt_flags_local_workload(t) (((t) & CALI_RT_LOCAL) && ((t) & CALI_RT_WORKLOAD))
+#define cali_rt_flags_remote_workload(t) (!((t) & CALI_RT_LOCAL) && ((t) & CALI_RT_WORKLOAD))
+#define cali_rt_flags_remote_host(t) (((t) & (CALI_RT_LOCAL | CALI_RT_HOST)) == CALI_RT_HOST)
+#define cali_rt_flags_remote_tunneled_host(t) (((t) & (CALI_RT_LOCAL | CALI_RT_HOST | CALI_RT_TUNNELED)) == (CALI_RT_HOST | CALI_RT_TUNNELED))
+#define cali_rt_flags_local_tunneled_host(t) (((t) & (CALI_RT_LOCAL | CALI_RT_HOST | CALI_RT_TUNNELED)) == (CALI_RT_LOCAL | CALI_RT_HOST | CALI_RT_TUNNELED))
+#define cali_rt_flags_is_in_pool(t) (((t) & CALI_RT_IN_POOL) == CALI_RT_IN_POOL)
+#define cali_rt_flags_skip_ingress_redirect(t) (((t) & CALI_RT_SKIP_INGRESS_REDIRECT))
+
+#define cali_rt_flags_should_set_dscp(t) (!cali_rt_flags_is_in_pool(t) && !cali_rt_flags_local_host(t))
+
+static CALI_BPF_INLINE bool rt_addr_is_local_host(ipv46_addr_t *addr)
+{
+	return  cali_rt_flags_local_host(cali_rt_lookup_flags(addr));
+}
+
+static CALI_BPF_INLINE bool rt_addr_is_remote_host(ipv46_addr_t *addr)
+{
+	return  cali_rt_flags_remote_host(cali_rt_lookup_flags(addr));
+}
+
+static CALI_BPF_INLINE bool rt_addr_is_remote_tunneled_host(ipv46_addr_t *addr)
+{
+	return cali_rt_flags_remote_tunneled_host(cali_rt_lookup_flags(addr));
+}
+
+static CALI_BPF_INLINE bool rt_addr_is_local_tunneled_host(ipv46_addr_t *addr)
+{
+	return cali_rt_flags_local_tunneled_host(cali_rt_lookup_flags(addr));
+}
+
+// Don't perform SNAT if either:
+// - packet is destined to an address in an IP pool;
+// - packet is destined to local host; or
+// - packet is destined to a host and the CALI_GLOBALS_NATOUTGOING_EXCLUDE_HOSTS global flag is set
+static CALI_BPF_INLINE bool cali_rt_flags_should_perform_nat_outgoing(__u32 flags, bool exclude_hosts)
+{
+	return !(cali_rt_flags_is_in_pool(flags) ||
+			(cali_rt_flags_host(flags) && (exclude_hosts || cali_rt_flags_local(flags))));
+}
+#endif /* __CALI_ROUTES_H__ */

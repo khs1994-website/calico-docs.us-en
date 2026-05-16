@@ -1,0 +1,6 @@
+#!/bin/sh
+calico version
+
+echo ""
+bird --version
+echo ""

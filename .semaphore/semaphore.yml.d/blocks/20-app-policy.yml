@@ -1,0 +1,20 @@
+- name: Application Layer Policy
+  run:
+    when: "${CHANGE_IN(app-policy)}"
+  dependencies:
+    - Prerequisites
+  task:
+    env_vars:
+      - name: BUILD_CACHE_GROUP
+        value: "calico"
+    prologue:
+      commands:
+        - cd app-policy
+    jobs:
+      - name: "Application Layer Policy: CI"
+        commands:
+          - ../.semaphore/run-and-monitor ci.log make ci
+    epilogue:
+      always:
+        commands:
+          - 'test-results publish --name "${SEMAPHORE_JOB_NAME}" ./report/*.xml || true'

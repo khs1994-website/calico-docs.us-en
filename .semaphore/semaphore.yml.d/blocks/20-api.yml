@@ -1,0 +1,19 @@
+- name: API
+  run:
+    when: "${FORCE_RUN} or change_in(['/metadata.mk', '/lib.Makefile', '/api/', '/test/'], {pipeline_file: 'ignore', exclude: ['/**/.gitignore', '/**/README.md', '/**/LICENSE']})"
+  execution_time_limit:
+    minutes: 30
+  dependencies:
+    - Prerequisites
+  task:
+    jobs:
+      - name: "API: CI"
+        commands:
+          - cd api && ../.semaphore/run-and-monitor make-ci.log make ci
+      - name: "API: Validation"
+        commands:
+          - cd test && ../.semaphore/run-and-monitor make-validation.log make ci
+    epilogue:
+      always:
+        commands:
+          - 'test-results publish --name "${SEMAPHORE_JOB_NAME}" ./report/*.xml || true'
