@@ -80,6 +80,11 @@
 - [Manifests](manifests/README.md)
 - [Networking Calico](networking-calico/README.md)
 - [Node](node/README.md)
+  - Filesystem
+    - Etc
+      - Calico
+        - Confd
+          - [Templates](node/filesystem/etc/calico/confd/templates/README.md)
 - [Pod 2 Daemon](pod2daemon/README.md)
 - Process
   - Testing
