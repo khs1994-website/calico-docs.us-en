@@ -61,6 +61,7 @@
     - [Ipam Hammer](hack/cmd/ipam-hammer/README.md)
   - Docs
     * [Adding An Api](hack/docs/adding-an-api.md)
+  - [Perf](hack/perf/README.md)
   - Test
     - [Certs](hack/test/certs/README.md)
 - [Key Cert Provisioner](key-cert-provisioner/README.md)
