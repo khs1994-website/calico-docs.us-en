@@ -11,6 +11,9 @@
   - [projectcalico.org.v3](charts/projectcalico.org.v3/README.md)
   - [Tigera Operator](charts/tigera-operator/README.md)
 - [Cni Plugin](cni-plugin/README.md)
+  - Pkg
+    - Ipamplugin
+      * [DESIGN](cni-plugin/pkg/ipamplugin/DESIGN.md)
   * [Configuration](cni-plugin/configuration.md)
 - [Confd](confd/README.md)
   - Docs
@@ -31,6 +34,14 @@
       - Confd
         - [Templates](confd/etc/calico/confd/templates/README.md)
   - [Tests](confd/tests/README.md)
+- Design
+  - Ipam
+    * [DESIGN](design/ipam/DESIGN.md)
+    * [Ipam Cni](design/ipam/ipam-cni.md)
+    * [Ipam Core Library](design/ipam/ipam-core-library.md)
+    * [Ipam Datastore](design/ipam/ipam-datastore.md)
+    * [Ipam Gc](design/ipam/ipam-gc.md)
+    * [Ipam Other Callers](design/ipam/ipam-other-callers.md)
 - [E 2 E](e2e/README.md)
   - Images
     - [Rapidclient](e2e/images/rapidclient/README.md)
@@ -67,6 +78,10 @@
 - [Key Cert Provisioner](key-cert-provisioner/README.md)
   - [Test Signer](key-cert-provisioner/test-signer/README.md)
 - [Kube Controllers](kube-controllers/README.md)
+  - Pkg
+    - Controllers
+      - Node
+        * [DESIGN](kube-controllers/pkg/controllers/node/DESIGN.md)
 - [Lib](lib/README.md)
 - [Libcalico Go](libcalico-go/README.md)
   - Docs
@@ -77,6 +92,8 @@
         - [V 1](libcalico-go/lib/apis/crd.projectcalico.org/v1/README.md)
       - [Internalapi](libcalico-go/lib/apis/internalapi/README.md)
       - [V 1](libcalico-go/lib/apis/v1/README.md)
+    - Ipam
+      * [DESIGN](libcalico-go/lib/ipam/DESIGN.md)
   - [Test](libcalico-go/test/README.md)
 - [Manifests](manifests/README.md)
 - [Networking Calico](networking-calico/README.md)
