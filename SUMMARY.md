@@ -73,6 +73,8 @@
   - Docs
     * [Adding An Api](hack/docs/adding-an-api.md)
   - [Perf](hack/perf/README.md)
+  - Rpms
+    - [Nftables](hack/rpms/nftables/README.md)
   - Test
     - [Certs](hack/test/certs/README.md)
 - [Key Cert Provisioner](key-cert-provisioner/README.md)
