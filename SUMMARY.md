@@ -105,6 +105,7 @@
       - Calico
         - Confd
           - [Templates](node/filesystem/etc/calico/confd/templates/README.md)
+  * [DESIGN](node/DESIGN.md)
 - [Pod 2 Daemon](pod2daemon/README.md)
 - Process
   - Testing
@@ -116,11 +117,13 @@
 - Third Party
   - [Cni Plugins](third_party/cni-plugins/README.md)
 - [Typha](typha/README.md)
+  * [DESIGN](typha/DESIGN.md)
 - [Whisker](whisker/README.md)
   * [Pull Request Template](whisker/pull_request_template.md)
 * [AUTHORS](AUTHORS.md)
 * [CONTRIBUTING DOCS](CONTRIBUTING_DOCS.md)
 * [CONTRIBUTING](CONTRIBUTING.md)
+* [DESIGN](DESIGN.md)
 * [DEVELOPER GUIDE](DEVELOPER_GUIDE.md)
 * [LICENSE](LICENSE.md)
 * [SECURITY](SECURITY.md)
