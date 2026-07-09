@@ -56,7 +56,10 @@
     * [Bpf Tc Programs](felix/design/bpf-tc-programs.md)
     * [Bpf Tests](felix/design/bpf-tests.md)
     * [Bpf Xdp](felix/design/bpf-xdp.md)
+    * [Calc Graph](felix/design/calc-graph.md)
+    * [Dataplane](felix/design/dataplane.md)
   - Docs
+    * [Calc Graph Diagram](felix/docs/calc-graph-diagram.md)
     * [Config Params](felix/docs/config-params.md)
   - [K 8 Sfv](felix/k8sfv/README.md)
     * [Monitoring](felix/k8sfv/monitoring.md)
