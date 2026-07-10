@@ -293,6 +293,9 @@ blocks:
             - make check-go-mod
             - make verify-go-mods
             - make gen-deps-files
+            # semaphore.yml is generated from the live Go import graph (same tool
+            # as deps.txt), so regenerate it here too.
+            - make gen-semaphore-yaml
             - make go-vet
             - >-
               if [ -n "$SEMAPHORE_GIT_PR_NUMBER" ]; then
@@ -3165,6 +3168,9 @@ blocks:
               value: "projectcalico.org/v3"
             - name: E2E_TEST_CONFIG
               value: "e2e/config/kind-felix-routing.yaml"
+        - name: "E2E tests: sig-calico (dataplane: BPF)"
+          commands:
+            - .semaphore/run-and-monitor e2e-test-bpf.log make e2e-test-bpf
       epilogue:
         always:
           commands:
@@ -3286,6 +3292,7 @@ blocks:
         '/lib.Makefile',
         '/lib/datastructures/hashring/*.go',
         '/lib/std/chanutil/*.go',
+        '/lib/std/log/*.go',
         '/lib/std/time/*.go',
         '/lib/std/uniquelabels/*.go',
         '/lib/std/uniquestr/*.go',
@@ -3472,6 +3479,7 @@ blocks:
         '/lib.Makefile',
         '/lib/datastructures/hashring/*.go',
         '/lib/std/chanutil/*.go',
+        '/lib/std/log/*.go',
         '/lib/std/time/*.go',
         '/lib/std/uniquelabels/*.go',
         '/lib/std/uniquestr/*.go',
@@ -3642,6 +3650,7 @@ blocks:
         '/lib.Makefile',
         '/lib/datastructures/hashring/*.go',
         '/lib/std/chanutil/*.go',
+        '/lib/std/log/*.go',
         '/lib/std/time/*.go',
         '/lib/std/uniquelabels/*.go',
         '/lib/std/uniquestr/*.go',
@@ -3759,6 +3768,7 @@ blocks:
         '/lib.Makefile',
         '/lib/datastructures/hashring/*.go',
         '/lib/std/chanutil/*.go',
+        '/lib/std/log/*.go',
         '/lib/std/time/*.go',
         '/lib/std/uniquelabels/*.go',
         '/lib/std/uniquestr/*.go',
@@ -3924,6 +3934,7 @@ blocks:
         '/lib.Makefile',
         '/lib/datastructures/hashring/*.go',
         '/lib/std/chanutil/*.go',
+        '/lib/std/log/*.go',
         '/lib/std/time/*.go',
         '/lib/std/uniquelabels/*.go',
         '/lib/std/uniquestr/*.go',
@@ -4164,6 +4175,7 @@ blocks:
         '/hack/test/certs/',
         '/lib.Makefile',
         '/lib/std/chanutil/*.go',
+        '/lib/std/log/*.go',
         '/lib/std/time/*.go',
         '/lib/std/uniquelabels/*.go',
         '/lib/std/uniquestr/*.go',
@@ -4233,6 +4245,7 @@ blocks:
         '/lib.Makefile',
         '/lib/std/chanutil/*.go',
         '/lib/std/cryptoutils/*.go',
+        '/lib/std/log/*.go',
         '/lib/std/time/*.go',
         '/libcalico-go/lib/health/*.go',
         '/libcalico-go/lib/logutils/*.go',
@@ -4380,6 +4393,7 @@ blocks:
         '/kube-controllers/**',
         '/lib.Makefile',
         '/lib/std/chanutil/*.go',
+        '/lib/std/log/*.go',
         '/lib/std/time/*.go',
         '/lib/std/uniquelabels/*.go',
         '/lib/std/uniquestr/*.go',
@@ -4533,6 +4547,7 @@ blocks:
         '/lib.Makefile',
         '/lib/datastructures/hashring/*.go',
         '/lib/std/chanutil/*.go',
+        '/lib/std/log/*.go',
         '/lib/std/time/*.go',
         '/lib/std/uniquelabels/*.go',
         '/lib/std/uniquestr/*.go',
@@ -4920,6 +4935,7 @@ blocks:
         '/lib.Makefile',
         '/lib/datastructures/hashring/*.go',
         '/lib/std/chanutil/*.go',
+        '/lib/std/log/*.go',
         '/lib/std/time/*.go',
         '/lib/std/uniquelabels/*.go',
         '/lib/std/uniquestr/*.go',
@@ -5199,6 +5215,7 @@ blocks:
         '/lib.Makefile',
         '/lib/datastructures/hashring/*.go',
         '/lib/std/chanutil/*.go',
+        '/lib/std/log/*.go',
         '/lib/std/time/*.go',
         '/lib/std/uniquelabels/*.go',
         '/lib/std/uniquestr/*.go',
