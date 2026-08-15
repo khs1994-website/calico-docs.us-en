@@ -35,7 +35,10 @@
       - Confd
         - [Templates](confd/etc/calico/confd/templates/README.md)
   - [Tests](confd/tests/README.md)
+  * [DESIGN](confd/DESIGN.md)
 - Design
+  - Cluster Route Programming
+    * [DESIGN](design/cluster-route-programming/DESIGN.md)
   - Ipam
     * [DESIGN](design/ipam/DESIGN.md)
     * [Ipam Cni](design/ipam/ipam-cni.md)
