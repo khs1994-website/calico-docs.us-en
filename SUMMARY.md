@@ -121,6 +121,9 @@
     - [Win Connections](process/testing/win-connections/README.md)
 - [Release](release/README.md)
   - [Packaging](release/packaging/README.md)
+  - Skills
+    - Branch Cut
+      * [SKILL](release/skills/branch-cut/SKILL.md)
   * [RELEASING](release/RELEASING.md)
 - Third Party
   - [Cni Plugins](third_party/cni-plugins/README.md)
