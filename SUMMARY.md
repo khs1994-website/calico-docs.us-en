@@ -50,6 +50,7 @@
   - Images
     - [Rapidclient](e2e/images/rapidclient/README.md)
       * [DESIGN](e2e/images/rapidclient/DESIGN.md)
+  - [Testsets](e2e/testsets/README.md)
 - [Felix](felix/README.md)
   - Design
     * [Bpf Conntrack Flowstate](felix/design/bpf-conntrack-flowstate.md)
