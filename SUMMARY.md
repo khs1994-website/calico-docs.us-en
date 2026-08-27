@@ -132,6 +132,7 @@
   * [DESIGN](typha/DESIGN.md)
 - [Whisker](whisker/README.md)
   * [Pull Request Template](whisker/pull_request_template.md)
+* [AI POLICY](AI_POLICY.md)
 * [AUTHORS](AUTHORS.md)
 * [CONTRIBUTING DOCS](CONTRIBUTING_DOCS.md)
 * [CONTRIBUTING](CONTRIBUTING.md)
