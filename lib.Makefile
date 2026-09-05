@@ -408,6 +408,10 @@ DOCKER_BUILD=docker buildx build --load --platform=linux/$(ARCH) $(DOCKER_PULL) 
 	--build-arg GIT_VERSION=$(GIT_VERSION) \
 	--build-arg UBI_IMAGE=$(UBI_IMAGE)
 
+# Fail a clone that needs credentials instead of blocking on git's terminal
+# prompt, which hangs a CI job until the pipeline timeout.
+export GIT_TERMINAL_PROMPT ?= 0
+
 DOCKER_RUN_PRIV_NET := mkdir -p $(REPO_ROOT)/.go-pkg-cache bin $(GOMOD_CACHE) && \
 	docker run --rm \
 		--init \
@@ -415,6 +419,7 @@ DOCKER_RUN_PRIV_NET := mkdir -p $(REPO_ROOT)/.go-pkg-cache bin $(GOMOD_CACHE) &&
 		$(DOCKER_GIT_WORKTREE_ARGS) \
 		-e LOCAL_USER_ID=$(LOCAL_USER_ID) \
 		-e GOCACHE=/go-cache \
+		-e GIT_TERMINAL_PROMPT=$(GIT_TERMINAL_PROMPT) \
 		$(GOARCH_FLAGS) \
 		-e GOPATH=/go \
 		-e OS=$(BUILDOS) \
@@ -1287,6 +1292,11 @@ var-require-one-of-%:
 # still needs BUILD_IMAGES set so the retag/push machinery iterates over it).
 build-images: var-require-all-BUILD_IMAGES
 	@echo $(sort $(BUILD_IMAGES) $(WINDOWS_IMAGE))
+
+# image-tag-prefix echoes the prefix this component's published tags carry, which
+# a variant selects through its own environment. Empty for an unprefixed build.
+image-tag-prefix:
+	@echo $(IMAGETAG_PREFIX)
 
 # sem-cut-release triggers the cut-release pipeline (or test-cut-release if CONFIRM is not specified) in semaphore to
 # cut the release. The pipeline is triggered for the current commit, and the branch it's triggered on is calculated
