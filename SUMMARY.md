@@ -122,12 +122,6 @@
     * [Common Tasks](operator/docs/common_tasks.md)
   - Hack
     - [Release](operator/hack/release/README.md)
-  - Pkg
-    - Enterprise
-      - Render
-        - Logcollector
-          - Testdata
-            - [Rendered Configs](operator/pkg/enterprise/render/logcollector/testdata/rendered-configs/README.md)
   * [CLAUDE](operator/CLAUDE.md)
   * [DESIGN](operator/DESIGN.md)
   * [RELEASING](operator/RELEASING.md)
