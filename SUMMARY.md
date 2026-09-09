@@ -120,11 +120,8 @@
   - Docs
     * [Api Design](operator/docs/api_design.md)
     * [Common Tasks](operator/docs/common_tasks.md)
-  - Hack
-    - [Release](operator/hack/release/README.md)
   * [CLAUDE](operator/CLAUDE.md)
   * [DESIGN](operator/DESIGN.md)
-  * [RELEASING](operator/RELEASING.md)
 - [Pod 2 Daemon](pod2daemon/README.md)
 - Process
   - Testing

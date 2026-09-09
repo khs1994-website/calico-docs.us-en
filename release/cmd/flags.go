@@ -314,7 +314,7 @@ var (
 		Category: operatorCategory,
 		Usage:    "The registry to use for Tigera operator release",
 		Sources:  cli.EnvVars("OPERATOR_REGISTRY"),
-		Value:    operator.DefaultRegistry,
+		Value:    operator.DefaultRegistries[0],
 	}
 	operatorImageFlag = &cli.StringFlag{
 		Name:     "operator-image",
@@ -478,6 +478,12 @@ var (
 
 // Hashrelease specific flags.
 var (
+	hashreleaseFlag = &cli.BoolFlag{
+		Name:     "hashrelease",
+		Category: stepControlCategory,
+		Usage:    "Indicates that the release is a hashrelease",
+		Sources:  cli.EnvVars("HASHRELEASE"),
+	}
 
 	// Hashrelease server configuration flags.
 	hashreleaseServerFlags = []cli.Flag{hashreleaseServerBucketFlag}
