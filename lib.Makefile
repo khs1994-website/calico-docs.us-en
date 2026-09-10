@@ -2042,15 +2042,20 @@ else
 DOCKER_MANIFEST = echo [DRY RUN] $(DOCKER_MANIFEST_CMD)
 endif
 
+# Named per component so two components' Windows builds do not remove each other's.
+WINDOWS_BUILDER = calico-windows-builder-$(notdir $(CURDIR))
+
 # Clean up the docker builder used to create Windows image tarballs.
 .PHONY: clean-windows-builder
 clean-windows-builder:
+	-docker buildx rm $(WINDOWS_BUILDER)
+	# Drain the shared builder earlier releases left selected on the host with --use.
 	-docker buildx rm calico-windows-builder
 
 # Set up the docker builder used to create Windows image tarballs.
 .PHONY: setup-windows-builder
 setup-windows-builder: clean-windows-builder
-	docker buildx create --name=calico-windows-builder --use --platform windows/amd64
+	docker buildx create --name=$(WINDOWS_BUILDER) --platform windows/amd64
 
 # FIXME: Use WINDOWS_HPC_VERSION and image instead of nanoserver and WINDOWS_VERSIONS when containerd v1.6 is EOL'd
 # .PHONY: image-windows release-windows
@@ -2113,6 +2118,7 @@ windows-sub-image-%: var-require-all-GIT_VERSION-WINDOWS_IMAGE-WINDOWS_DIST-WIND
 	# ensure dir for windows image tars exits
 	-mkdir -p $(WINDOWS_DIST)
 	docker buildx build \
+		--builder $(WINDOWS_BUILDER) \
 		--platform windows/amd64 \
 		--output=type=docker,dest=$(CURDIR)/$(WINDOWS_DIST)/$(WINDOWS_IMAGE)-$(GIT_VERSION)-$*.tar \
 		$(DOCKER_PULL) \
@@ -2121,7 +2127,7 @@ windows-sub-image-%: var-require-all-GIT_VERSION-WINDOWS_IMAGE-WINDOWS_DIST-WIND
 		--build-arg=WINDOWS_VERSION=$* \
 		-f Dockerfile.windows .
 
-.PHONY: image-windows release-windows release-windows-with-tag
+.PHONY: image-windows release-windows release-windows-with-tag retag-windows-image-with-registries
 image-windows: setup-windows-builder var-require-all-WINDOWS_VERSIONS
 	for version in $(WINDOWS_VERSIONS); do \
 		$(MAKE) windows-sub-image-$${version}; \
@@ -2148,6 +2154,14 @@ release-windows-with-tag: var-require-one-of-CONFIRM-DRYRUN var-require-all-IMAG
 		done; \
 		$(DOCKER_MANIFEST) push --purge $${manifest_image}; \
 		$(RELEASE_PY3) $(QUAY_SET_EXPIRY_SCRIPT) add --expiry-days=$(QUAY_EXPIRE_DAYS) $${manifest_image} $${all_images} || true; \
+	done;
+
+# retag-windows-image-with-registries copies the Windows image from DEV_TAG to
+# IMAGETAG in each registry. Windows images are single-arch manifests built by
+# buildx, so they have no local per-arch images to retag.
+retag-windows-image-with-registries: var-require-one-of-CONFIRM-DRYRUN var-require-all-DEV_REGISTRIES-WINDOWS_IMAGE-DEV_TAG-IMAGETAG bin/crane
+	for registry in $(DEV_REGISTRIES); do \
+		$(CRANE) cp $${registry}/$(WINDOWS_IMAGE):$(DEV_TAG) $${registry}/$(WINDOWS_IMAGE):$(IMAGETAG); \
 	done;
 
 release-windows: var-require-one-of-CONFIRM-DRYRUN var-require-all-DEV_REGISTRIES-WINDOWS_IMAGE var-require-one-of-VERSION-BRANCH_NAME bin/crane

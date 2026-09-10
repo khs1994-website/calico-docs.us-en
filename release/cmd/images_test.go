@@ -23,7 +23,10 @@ import (
 	"sync"
 	"testing"
 
+	cli "github.com/urfave/cli/v3"
+
 	"github.com/projectcalico/calico/release/internal/command"
+	"github.com/projectcalico/calico/release/internal/images"
 	"github.com/projectcalico/calico/release/internal/utils"
 )
 
@@ -176,13 +179,16 @@ func TestImagesPublishLatchesConfirm(t *testing.T) {
 	}
 }
 
-// felix is built but never published, and a build must not latch either
-// publish flag.
-func TestImagesBuildRunsFelixAndDoesNotPublish(t *testing.T) {
+// felix ships binaries and no image, so the image build leaves it alone. A
+// build must also not latch either publish flag.
+func TestImagesBuildSkipsFelixAndDoesNotPublish(t *testing.T) {
 	r := runImages(t, fakeRepo(t, "v3.30.0"), "build", "--registry", "quay.io/calico")
 
-	if !r.ran("felix", "release-build") {
-		t.Errorf("build did not run felix, ran: %v", r.args)
+	if r.ran("felix") {
+		t.Errorf("image build reached felix, ran: %v", r.args)
+	}
+	if !r.ran("node", "release-build") {
+		t.Fatalf("no image build ran at all, ran: %v", r.args)
 	}
 	for _, env := range r.envs {
 		for _, latch := range []string{"CONFIRM=true", "DRYRUN=true", "RELEASE=true"} {
@@ -239,13 +245,29 @@ func TestImagesNarrowedKeepsEveryVariant(t *testing.T) {
 	}
 }
 
-// felix is build-only: accepted for a build, absent from a publish.
-func TestImagesNarrowedToBuildOnlyDir(t *testing.T) {
-	r := runImages(t, fakeRepo(t, "v3.30.0"),
-		"build", "--registry", "quay.io/calico", "--image-release-dir", "felix")
+// felix is not an image directory, so narrowing a build to it is a mistake
+// worth reporting rather than a build that quietly does nothing.
+func TestImagesRejectsFelixAsAnImageDir(t *testing.T) {
+	prev := imagesRunner
+	r := &recordingRunner{}
+	imagesRunner = r
+	t.Cleanup(func() { imagesRunner = prev })
 
-	if len(r.args) != 1 || !r.ran("felix", "release-build") {
-		t.Fatalf("expected a single felix build, ran: %v", r.args)
+	root := fakeRepo(t, "v3.30.0")
+	cfg := &Config{
+		RepoRootDir: root,
+		TmpDir:      filepath.Join(root, "tmp"),
+		OutputDir:   filepath.Join(root, "_output"),
+		LogsDir:     filepath.Join(root, "_logs"),
+	}
+	cmd := imagesCommand(cfg)
+	err := cmd.Run(context.Background(),
+		[]string{"images", "build", "--registry", "quay.io/calico", "--image-release-dir", "felix"})
+	if err == nil {
+		t.Fatal("expected felix to be rejected as an image release dir")
+	}
+	if len(r.args) != 0 {
+		t.Errorf("ran make anyway: %v", r.args)
 	}
 }
 
@@ -351,5 +373,58 @@ func TestImagesPublishScansEveryImageDir(t *testing.T) {
 		if !slices.Contains(dirs, want) {
 			t.Errorf("scan dirs omit %s", want)
 		}
+	}
+}
+
+// The scanner files results under release/<stream> or hashrelease/<stream>.
+// A hashrelease scanned as a release lands in the wrong bucket, so the flag
+// and the field must stay opposed.
+func TestScanRequestSeparatesHashreleases(t *testing.T) {
+	for _, tc := range []struct {
+		name        string
+		args        []string
+		wantRelease bool
+	}{
+		{name: "release", args: nil, wantRelease: true},
+		{name: "hashrelease", args: []string{"--hashrelease"}, wantRelease: false},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			original := releaseImageList
+			releaseImageList = func(string, ...string) ([]string, error) {
+				return []string{"node"}, nil
+			}
+			defer func() { releaseImageList = original }()
+
+			var got *images.ScanRequest
+			// Fresh flags: the package-level slices keep parsed state between
+			// tests, and an earlier --no-image-scan would conflict here.
+			cmd := &cli.Command{
+				Flags: []cli.Flag{
+					hashreleaseFlag,
+					&cli.BoolFlag{Name: imageScanFlag.Name},
+					&cli.StringFlag{Name: imageScannerAPIFlag.Name},
+					&cli.StringFlag{Name: imageScannerTokenFlag.Name},
+				},
+				Action: func(_ context.Context, c *cli.Command) error {
+					var err error
+					got, err = scanRequest(c, &Config{}, []string{"node"}, "v3.30", "calico")
+					return err
+				},
+			}
+			args := append([]string{
+				"images", "--image-scan",
+				"--image-scanner-api", "https://scanner.example",
+				"--image-scanner-token", "t",
+			}, tc.args...)
+			if err := cmd.Run(context.Background(), args); err != nil {
+				t.Fatalf("run: %v", err)
+			}
+			if got == nil {
+				t.Fatal("no scan request built")
+			}
+			if got.Release != tc.wantRelease {
+				t.Errorf("Release=%v, want %v", got.Release, tc.wantRelease)
+			}
+		})
 	}
 }

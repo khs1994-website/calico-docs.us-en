@@ -58,6 +58,10 @@ var (
 	s3ACLPublicRead = []string{"--acl", "public-read"}
 
 	branchTagTarget = "retag-build-images-with-registries push-images-to-registries push-manifests"
+
+	// Windows images are published as a single manifest, so their branch tag
+	// is a registry-side copy rather than a retag of local arch images.
+	windowsBranchTagTarget = "retag-windows-image-with-registries"
 )
 
 func NewManager(opts ...Option) *CalicoManager {
@@ -1300,11 +1304,12 @@ func (r *CalicoManager) buildBinaries() error {
 		logrus.Info("Skipping building binaries")
 		return nil
 	}
-	// calicoctl needs to build unconditionally; everything else is produced
-	// as part of its image release-build target.
-	m := map[string]string{"calicoctl": "build-all"}
-	if !r.images {
-		m["felix"] = "release-build"
+
+	// calicoctl and felix ship binaries and no image, so nothing in the image
+	// step produces them.
+	m := map[string]string{
+		"calicoctl": "build-all",
+		"felix":     "release-build",
 	}
 	env := append(os.Environ(),
 		fmt.Sprintf("VERSION=%s", r.calicoVersion),
@@ -1570,11 +1575,18 @@ func (r *CalicoManager) publishBranchTag() error {
 	// them as its children.
 	if err := images.Publish(
 		r.repoRoot, branch,
-		images.NarrowVariants([]images.Variant{{
-			Name:        images.StandardVariant,
-			Target:      branchTagTarget,
-			ReleaseDirs: images.VariantDirs(images.PublishVariants),
-		}}, r.imageReleaseDirs),
+		images.NarrowVariants([]images.Variant{
+			{
+				Name:        images.StandardVariant,
+				Target:      branchTagTarget,
+				ReleaseDirs: images.VariantDirs(images.StandardVariants(images.PublishVariants)),
+			},
+			{
+				Name:        images.WindowsVariant,
+				Target:      windowsBranchTagTarget,
+				ReleaseDirs: slices.Clone(utils.WindowsReleaseDirs),
+			},
+		}, r.imageReleaseDirs),
 		!r.dryRun, r.digestResolver(),
 		images.WithRunner(r.runner),
 		images.WithRegistries(registry),
