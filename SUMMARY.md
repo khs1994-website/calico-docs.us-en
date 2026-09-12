@@ -64,6 +64,7 @@
     * [Bpf Xdp](felix/design/bpf-xdp.md)
     * [Calc Graph](felix/design/calc-graph.md)
     * [Dataplane](felix/design/dataplane.md)
+    * [Neighbour Discovery](felix/design/neighbour-discovery.md)
   - Docs
     * [Calc Graph Diagram](felix/docs/calc-graph-diagram.md)
     * [Config Params](felix/docs/config-params.md)
