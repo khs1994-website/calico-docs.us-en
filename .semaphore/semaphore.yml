@@ -46,6 +46,10 @@ global_job_config:
     commands:
       - export GITHUB_TOKEN=${MARVIN_GITHUB_TOKEN}
       - export CALICO_DIR_NAME=${SEMAPHORE_GIT_DIR}
+      # Pin the build cache inside the working copy, which is what the epilogue
+      # tars and restores between runs. Left unset, the agent's own GOCACHE wins
+      # and nothing is persisted.
+      - export LOCAL_GO_PKG_CACHE=$HOME/${CALICO_DIR_NAME}/.go-pkg-cache
       - export S3_CACHE_DIR=s3://$CALICO_S3_BUCKET/$CALICO_S3_KEY_PREFIX/cache/${CALICO_DIR_NAME}
       - export S3_WORKFLOW_DIR=s3://$CALICO_S3_BUCKET/$CALICO_S3_KEY_PREFIX/workflow/${SEMAPHORE_WORKFLOW_ID}
       # The FV test artifacts the GCP VMs exchange live in GCS (see
@@ -4076,12 +4080,14 @@ blocks:
   - name: E2E test set drift
     run:
       when: >-
-        change_in(['/.argoci/cron/',
+        change_in(['/.argoci/ciworkflow.yaml',
+        '/.argoci/cron/',
         '/.semaphore/semaphore.yml.d/01-preamble.yml',
         '/.semaphore/semaphore.yml.d/02-global_job_config.yml',
         '/.semaphore/semaphore.yml.d/03-promotions.yml',
         '/.semaphore/semaphore.yml.d/09-blocks.yml',
         '/.semaphore/semaphore.yml.d/99-after_pipeline.yml',
+        '/.semaphore/semaphore.yml.d/blocks/',
         '/.semaphore/semaphore.yml.d/blocks/20-e2e-test-sets.yml',
         '/Makefile',
         '/api/pkg/apis/projectcalico/v3/*.go',

@@ -3,7 +3,7 @@ PACKAGE_NAME = github.com/projectcalico/calico
 include metadata.mk
 include lib.Makefile
 
-DOCKER_RUN := mkdir -p ./.go-pkg-cache bin $(GOMOD_CACHE) && \
+DOCKER_RUN := mkdir -p $(LOCAL_GO_PKG_CACHE) bin $(GOMOD_CACHE) && \
 	docker run --rm \
 		--net=host \
 		--init \
@@ -17,7 +17,7 @@ DOCKER_RUN := mkdir -p ./.go-pkg-cache bin $(GOMOD_CACHE) && \
 		-e GOOS=$(BUILDOS) \
 		-e "GOFLAGS=$(GOFLAGS)" \
 		-v $(CURDIR):/go/src/github.com/projectcalico/calico:rw \
-		-v $(CURDIR)/.go-pkg-cache:/go-cache:rw \
+		-v $(LOCAL_GO_PKG_CACHE):/go-cache:rw \
 		-w /go/src/$(PACKAGE_NAME)
 
 .PHONY: update-file-copyrights
@@ -110,6 +110,7 @@ generate:
 	# Before the manifests, which take the operator's CRDs from its own tree.
 	$(MAKE) -C operator gen-files
 	$(MAKE) gen-manifests
+	$(MAKE) -C e2e gen-test-set
 	$(MAKE) fix-changed
 
 gen-manifests: bin/helm bin/yq
@@ -453,9 +454,6 @@ release: release/bin/release
 # Publish an already built release.
 release-publish: release/bin/release bin/gh bin/ghr bin/helm
 	@release/bin/release release publish
-
-release-public: bin/gh release/bin/release
-	@release/bin/release release public
 
 # Create a release branch.
 create-release-branch: release/bin/release
