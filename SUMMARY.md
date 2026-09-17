@@ -52,6 +52,8 @@
       * [DESIGN](e2e/images/rapidclient/DESIGN.md)
   - [Testsets](e2e/testsets/README.md)
 - [Felix](felix/README.md)
+  - Bpf Gpl
+    * [CLAUDE](felix/bpf-gpl/CLAUDE.md)
   - Design
     * [Bpf Conntrack Flowstate](felix/design/bpf-conntrack-flowstate.md)
     * [Bpf Encap Fragments Icmp](felix/design/bpf-encap-fragments-icmp.md)
