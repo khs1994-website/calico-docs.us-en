@@ -140,7 +140,12 @@ static CALI_BPF_INLINE int forward_or_drop(struct cali_tc_ctx *ctx)
 
 	if (rc == CALI_RES_REDIR_BACK) {
 		int redir_flags = 0;
-		if  (CALI_F_FROM_HOST) {
+		/* On netkit a to-workload program runs with skb->dev already swapped
+		 * to the pod-side peer, so skb->ifindex is the peer's and
+		 * BPF_F_INGRESS would deliver into the pod; transmitting out of it is
+		 * what sends the packet back towards the host. On veth skb->ifindex
+		 * is the host-side device and BPF_F_INGRESS is the way back. */
+		if (CALI_F_FROM_HOST && !ctx->globals->data.host_ifindex) {
 			redir_flags = BPF_F_INGRESS;
 		}
 
@@ -310,7 +315,7 @@ skip_redir_ifindex:
 				goto skip_fib;
 			}
 		}
-	} else if (CALI_F_TUNNEL && CALI_F_TO_HEP) {
+	} else if (IFACE_ENCAPS && CALI_F_TO_HEP) {
 		if (!(ctx->skb->mark & CALI_SKB_MARK_SEEN) ||
 			!skb_mark_equals(ctx->skb, CALI_SKB_MARK_TUNNEL_KEY_SET, CALI_SKB_MARK_TUNNEL_KEY_SET)) {
 			/* packet to vxlan from the host, needs to set tunnel key. Either
@@ -635,7 +640,10 @@ deny:
 	rc = TC_ACT_SHOT;
 
 allow:
-	if (CALI_F_VXLAN && CALI_F_TO_HOST && rc != TC_ACT_SHOT) {
+	/* In-kernel decap can deliver an inner frame addressed to the sender's
+	 * choice of MAC, which local delivery would drop. */
+	if (IFACE_ENCAPS && CALI_F_TO_HOST && rc != TC_ACT_SHOT &&
+			ctx->skb->pkt_type == PACKET_OTHERHOST) {
 		bpf_skb_change_type(ctx->skb, PACKET_HOST);
 	}
 
