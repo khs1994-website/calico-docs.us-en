@@ -139,6 +139,8 @@
 - Third Party
   - [Cni Plugins](third_party/cni-plugins/README.md)
 - [Typha](typha/README.md)
+  - Docs
+    * [Compression Analysis](typha/docs/compression-analysis.md)
   * [DESIGN](typha/DESIGN.md)
 - [Whisker](whisker/README.md)
   * [Pull Request Template](whisker/pull_request_template.md)
