@@ -119,6 +119,7 @@
           - [Templates](node/filesystem/etc/calico/confd/templates/README.md)
   * [DESIGN](node/DESIGN.md)
 - [Operator](operator/README.md)
+  - [Bundle](operator/bundle/README.md)
   - [Deploy](operator/deploy/README.md)
   - Docs
     * [Api Design](operator/docs/api_design.md)
