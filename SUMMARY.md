@@ -136,6 +136,7 @@
   - Skills
     - Branch Cut
       * [SKILL](release/skills/branch-cut/SKILL.md)
+  * [DESIGN](release/DESIGN.md)
   * [RELEASING](release/RELEASING.md)
 - Third Party
   - [Cni Plugins](third_party/cni-plugins/README.md)
