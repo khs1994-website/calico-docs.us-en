@@ -111,6 +111,7 @@
   - [Test](libcalico-go/test/README.md)
 - [Manifests](manifests/README.md)
 - [Networking Calico](networking-calico/README.md)
+  - [E 2 E](networking-calico/e2e/README.md)
 - [Node](node/README.md)
   - Filesystem
     - Etc
