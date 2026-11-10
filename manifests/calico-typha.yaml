@@ -1528,12 +1528,12 @@ spec:
                         <IPv4>:<port> or [<IPv6>]:<port>
                       reason: FieldValueInvalid
                       rule:
-                        self == '' || isIP(self) || (self.startsWith('[') && self.contains(']:')
-                        && isIP(self.substring(1, self.lastIndexOf(']:'))) && self.substring(self.lastIndexOf(']:')
-                        + 2).matches('^[0-9]{1,5}$') && int(self.substring(self.lastIndexOf(']:')
+                        self == '' || isIP(self) || (self.startsWith('[') && self.matches('[]]:[0-9]{1,5}$')
+                        && isIP(self.substring(1, self.lastIndexOf(']:'))) && int(self.substring(self.lastIndexOf(']:')
                         + 2)) >= 1 && int(self.substring(self.lastIndexOf(']:') + 2))
-                        <= 65535) || (self.matches('^[0-9.]+:[0-9]{1,5}$') && isIP(self.split(':')[0])
-                        && int(self.split(':')[1]) >= 1 && int(self.split(':')[1]) <=
+                        <= 65535) || (self.matches('^[0-9.]+:[0-9]{1,5}$') && isIP(self.substring(0,
+                        self.lastIndexOf(':'))) && int(self.substring(self.lastIndexOf(':')
+                        + 1)) >= 1 && int(self.substring(self.lastIndexOf(':') + 1)) <=
                         65535)
                 peerSelector:
                   description: |-
@@ -5343,6 +5343,8 @@ spec:
                     profile is applied in the order that they appear in this list.  Profile rules are applied
                     after the selector-based security policy.
                   items:
+                    maxLength: 253
+                    pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
                     type: string
                   type: array
                   x-kubernetes-list-type: set
