@@ -625,6 +625,7 @@ type FelixConfigurationSpec struct {
 	// +kubebuilder:validation:items:XIntOrString
 	// +kubebuilder:validation:items:MaxLength=11
 	// +kubebuilder:validation:items:XValidation:rule="type(self) != string || !self.contains(':') || int(self.split(':')[0]) <= int(self.split(':')[1])",message="port ranges must be written low:high",reason=FieldValueInvalid
+	// +kubebuilder:validation:XValidation:rule="self.all(p, type(p) == int || p.matches('^[0-9:]+$'))",message="kubeNodePortRanges must not contain named ports",reason=FieldValueInvalid
 	KubeNodePortRanges *[]numorstring.Port `json:"kubeNodePortRanges,omitempty" validate:"omitempty,dive"`
 
 	// PolicySyncPathPrefix is used to by Felix to communicate policy changes to external services,
@@ -1148,7 +1149,8 @@ type FelixConfigurationSpec struct {
 
 	// Calico programs additional Linux route tables for various purposes.
 	// RouteTableRanges specifies a set of table index ranges that Calico should use.
-	// Deprecates`RouteTableRange`, overrides `RouteTableRange`.
+	// Deprecates`RouteTableRange`, overrides `RouteTableRange`. The ranges may cover at most 65535
+	// tables in total.
 	RouteTableRanges *RouteTableRanges `json:"routeTableRanges,omitempty" validate:"omitempty,dive"`
 
 	// Deprecated in favor of RouteTableRanges.
@@ -1362,11 +1364,14 @@ type RouteTableRange struct {
 
 // +kubebuilder:validation:XValidation:rule="self.min >= 1",message="min must be >= 1",reason=FieldValueInvalid
 // +kubebuilder:validation:XValidation:rule="self.min <= self.max",message="min must not be greater than max",reason=FieldValueInvalid
+// +kubebuilder:validation:XValidation:rule="self.max <= 4294967295",message="max must be <= 4294967295",reason=FieldValueInvalid
 type RouteTableIDRange struct {
 	Min int `json:"min"`
 	Max int `json:"max"`
 }
 
+// +kubebuilder:validation:MaxItems=100
+// +kubebuilder:validation:XValidation:rule="self.map(r, r.max - r.min + 1).sum() <= 65535",message="routeTableRanges must cover at most 65535 tables in total",reason=FieldValueInvalid
 type RouteTableRanges []RouteTableIDRange
 
 func (r RouteTableRanges) NumDesignatedTables() int {
