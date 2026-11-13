@@ -2233,12 +2233,22 @@ spec:
                     flows over as well as any interfaces that handle incoming traffic to nodeports and services from outside the
                     cluster.  It should not match the workload interfaces (usually named cali...) or any other special device managed
                     by Calico itself (e.g., tunnels).
+                  maxLength: 1024
                   type: string
+                  x-kubernetes-validations:
+                    - message: must be a valid regular expression
+                      reason: FieldValueInvalid
+                      rule: type('x'.matches(self)) == bool
                 bpfDisableGROForIfaces:
                   description: |-
                     BPFDisableGROForIfaces is a regular expression that controls which interfaces Felix should disable the
                     Generic Receive Offload [GRO] option.  It should not match the workload interfaces (usually named cali...).
+                  maxLength: 1024
                   type: string
+                  x-kubernetes-validations:
+                    - message: must be a valid regular expression
+                      reason: FieldValueInvalid
+                      rule: type('x'.matches(self)) == bool
                 bpfDisableUnprivileged:
                   description: |-
                     BPFDisableUnprivileged, if enabled, Felix sets the kernel.unprivileged_bpf_disabled sysctl to disable
@@ -2363,7 +2373,12 @@ spec:
                     BPFL3IfacePattern is a regular expression that allows to list tunnel devices like wireguard or vxlan (i.e., L3 devices)
                     in addition to BPFDataIfacePattern. That is, tunnel interfaces not created by Calico, that Calico workload traffic flows
                     over as well as any interfaces that handle incoming traffic to nodeports and services from outside the cluster.
+                  maxLength: 1024
                   type: string
+                  x-kubernetes-validations:
+                    - message: must be a valid regular expression
+                      reason: FieldValueInvalid
+                      rule: type('x'.matches(self)) == bool
                 bpfLogFilters:
                   additionalProperties:
                     type: string
@@ -2634,9 +2649,18 @@ spec:
                   description: |-
                     ExternalNodesCIDRList is a list of CIDR's of external, non-Calico nodes from which VXLAN/IPIP overlay traffic
                     will be allowed.  By default, external tunneled traffic is blocked to reduce attack surface.
+                    Entries must be IPv4 CIDRs or IPv4 addresses.
                   items:
+                    maxLength: 49
                     type: string
+                  maxItems: 10000
                   type: array
+                  x-kubernetes-validations:
+                    - message: externalNodesList entries must be IPv4 CIDRs or IPv4 addresses
+                      reason: FieldValueInvalid
+                      rule:
+                        "self.all(c, isCIDR(c) ? cidr(c).ip().family() == 4 : (isIP(c)
+                        && ip(c).family() == 4))"
                 failsafeInboundHostPorts:
                   description: |-
                     FailsafeInboundHostPorts is a list of ProtoPort struct objects including UDP/TCP/SCTP ports and CIDRs that Felix will
@@ -3100,7 +3124,12 @@ spec:
                     LogDebugFilenameRegex controls which source code files have their Debug log output included in the logs.
                     Only logs from files with names that match the given regular expression are included.  The filter only applies
                     to Debug level logs.
+                  maxLength: 1024
                   type: string
+                  x-kubernetes-validations:
+                    - message: must be a valid regular expression
+                      reason: FieldValueInvalid
+                      rule: type('x'.matches(self)) == bool
                 logFilePath:
                   description:
                     "LogFilePath is the full path to the Felix log. Set to
@@ -3160,7 +3189,12 @@ spec:
                     MTUIfacePattern is a regular expression that controls which interfaces Felix should scan in order
                     to calculate the host's MTU.
                     This should not match workload interfaces (usually named cali...).
+                  maxLength: 1024
                   type: string
+                  x-kubernetes-validations:
+                    - message: must be a valid regular expression
+                      reason: FieldValueInvalid
+                      rule: type('x'.matches(self)) == bool
                 natOutgoingAddress:
                   description: |-
                     NATOutgoingAddress specifies an address to use when performing source NAT for traffic in a natOutgoing pool that
@@ -3214,7 +3248,12 @@ spec:
                     interfaces and local workloads is offloaded to the flowtable fast path. Leave empty to
                     offload only workload-to-workload traffic. Only takes effect when NFTablesFlowTableOffload
                     is not Disabled. [Default: ""]
+                  maxLength: 1024
                   type: string
+                  x-kubernetes-validations:
+                    - message: must be a valid regular expression
+                      reason: FieldValueInvalid
+                      rule: type('x'.matches(self)) == bool
                 nftablesFlowTableOffload:
                   default: Disabled
                   description: |-
@@ -3279,7 +3318,10 @@ spec:
                     OpenstackRegion is the name of the region that a particular Felix belongs to. In a multi-region
                     Calico/OpenStack deployment, this must be configured somehow for each Felix (here in the datamodel,
                     or in felix.cfg or the environment on each compute node), and must match the [calico]
-                    openstack_region value configured in neutron.conf on each node. [Default: Empty]
+                    openstack_region value configured in neutron.conf on each node. The region is used in a
+                    namespace name, so it must be a DNS label of at most 46 characters. [Default: Empty]
+                  maxLength: 46
+                  pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?)?$
                   type: string
                 policySyncPathPrefix:
                   description: |-
@@ -4332,6 +4374,29 @@ spec:
                           "!has(self.notProtocol) || (type(self.notProtocol) == int
                           ? self.notProtocol >= 1 && self.notProtocol <= 255 : self.notProtocol
                           in ['TCP', 'UDP', 'ICMP', 'ICMPv6', 'SCTP', 'UDPLite'])"
+                      - message:
+                          rules that specify ports must set protocol to TCP or
+                          UDP or SCTP
+                        reason: FieldValueInvalid
+                        rule:
+                          "!has(self.protocol) || (type(self.protocol) == int ? self.protocol
+                          in [6, 17, 132] : self.protocol in ['TCP', 'UDP', 'SCTP'])
+                          || ((!has(self.source) || ((!has(self.source.ports) || size(self.source.ports)
+                          == 0) && (!has(self.source.notPorts) || size(self.source.notPorts)
+                          == 0))) && (!has(self.destination) || ((!has(self.destination.ports)
+                          || size(self.destination.ports) == 0) && (!has(self.destination.notPorts)
+                          || size(self.destination.notPorts) == 0))))"
+                      - message:
+                          rules with a numeric port must set protocol to TCP or
+                          UDP or SCTP
+                        reason: FieldValueInvalid
+                        rule:
+                          has(self.protocol) || ((!has(self.source) || ((!has(self.source.ports)
+                          || self.source.ports.all(p, type(p) == string)) && (!has(self.source.notPorts)
+                          || self.source.notPorts.all(p, type(p) == string)))) && (!has(self.destination)
+                          || ((!has(self.destination.ports) || self.destination.ports.all(p,
+                          type(p) == string)) && (!has(self.destination.notPorts) || self.destination.notPorts.all(p,
+                          type(p) == string)))))
                   maxItems: 1024
                   type: array
                   x-kubernetes-list-type: atomic
@@ -4940,6 +5005,29 @@ spec:
                           "!has(self.notProtocol) || (type(self.notProtocol) == int
                           ? self.notProtocol >= 1 && self.notProtocol <= 255 : self.notProtocol
                           in ['TCP', 'UDP', 'ICMP', 'ICMPv6', 'SCTP', 'UDPLite'])"
+                      - message:
+                          rules that specify ports must set protocol to TCP or
+                          UDP or SCTP
+                        reason: FieldValueInvalid
+                        rule:
+                          "!has(self.protocol) || (type(self.protocol) == int ? self.protocol
+                          in [6, 17, 132] : self.protocol in ['TCP', 'UDP', 'SCTP'])
+                          || ((!has(self.source) || ((!has(self.source.ports) || size(self.source.ports)
+                          == 0) && (!has(self.source.notPorts) || size(self.source.notPorts)
+                          == 0))) && (!has(self.destination) || ((!has(self.destination.ports)
+                          || size(self.destination.ports) == 0) && (!has(self.destination.notPorts)
+                          || size(self.destination.notPorts) == 0))))"
+                      - message:
+                          rules with a numeric port must set protocol to TCP or
+                          UDP or SCTP
+                        reason: FieldValueInvalid
+                        rule:
+                          has(self.protocol) || ((!has(self.source) || ((!has(self.source.ports)
+                          || self.source.ports.all(p, type(p) == string)) && (!has(self.source.notPorts)
+                          || self.source.notPorts.all(p, type(p) == string)))) && (!has(self.destination)
+                          || ((!has(self.destination.ports) || self.destination.ports.all(p,
+                          type(p) == string)) && (!has(self.destination.notPorts) || self.destination.notPorts.all(p,
+                          type(p) == string)))))
                   maxItems: 1024
                   type: array
                   x-kubernetes-list-type: atomic
@@ -7086,6 +7174,29 @@ spec:
                           "!has(self.notProtocol) || (type(self.notProtocol) == int
                           ? self.notProtocol >= 1 && self.notProtocol <= 255 : self.notProtocol
                           in ['TCP', 'UDP', 'ICMP', 'ICMPv6', 'SCTP', 'UDPLite'])"
+                      - message:
+                          rules that specify ports must set protocol to TCP or
+                          UDP or SCTP
+                        reason: FieldValueInvalid
+                        rule:
+                          "!has(self.protocol) || (type(self.protocol) == int ? self.protocol
+                          in [6, 17, 132] : self.protocol in ['TCP', 'UDP', 'SCTP'])
+                          || ((!has(self.source) || ((!has(self.source.ports) || size(self.source.ports)
+                          == 0) && (!has(self.source.notPorts) || size(self.source.notPorts)
+                          == 0))) && (!has(self.destination) || ((!has(self.destination.ports)
+                          || size(self.destination.ports) == 0) && (!has(self.destination.notPorts)
+                          || size(self.destination.notPorts) == 0))))"
+                      - message:
+                          rules with a numeric port must set protocol to TCP or
+                          UDP or SCTP
+                        reason: FieldValueInvalid
+                        rule:
+                          has(self.protocol) || ((!has(self.source) || ((!has(self.source.ports)
+                          || self.source.ports.all(p, type(p) == string)) && (!has(self.source.notPorts)
+                          || self.source.notPorts.all(p, type(p) == string)))) && (!has(self.destination)
+                          || ((!has(self.destination.ports) || self.destination.ports.all(p,
+                          type(p) == string)) && (!has(self.destination.notPorts) || self.destination.notPorts.all(p,
+                          type(p) == string)))))
                   maxItems: 1024
                   type: array
                   x-kubernetes-list-type: atomic
@@ -7694,6 +7805,29 @@ spec:
                           "!has(self.notProtocol) || (type(self.notProtocol) == int
                           ? self.notProtocol >= 1 && self.notProtocol <= 255 : self.notProtocol
                           in ['TCP', 'UDP', 'ICMP', 'ICMPv6', 'SCTP', 'UDPLite'])"
+                      - message:
+                          rules that specify ports must set protocol to TCP or
+                          UDP or SCTP
+                        reason: FieldValueInvalid
+                        rule:
+                          "!has(self.protocol) || (type(self.protocol) == int ? self.protocol
+                          in [6, 17, 132] : self.protocol in ['TCP', 'UDP', 'SCTP'])
+                          || ((!has(self.source) || ((!has(self.source.ports) || size(self.source.ports)
+                          == 0) && (!has(self.source.notPorts) || size(self.source.notPorts)
+                          == 0))) && (!has(self.destination) || ((!has(self.destination.ports)
+                          || size(self.destination.ports) == 0) && (!has(self.destination.notPorts)
+                          || size(self.destination.notPorts) == 0))))"
+                      - message:
+                          rules with a numeric port must set protocol to TCP or
+                          UDP or SCTP
+                        reason: FieldValueInvalid
+                        rule:
+                          has(self.protocol) || ((!has(self.source) || ((!has(self.source.ports)
+                          || self.source.ports.all(p, type(p) == string)) && (!has(self.source.notPorts)
+                          || self.source.notPorts.all(p, type(p) == string)))) && (!has(self.destination)
+                          || ((!has(self.destination.ports) || self.destination.ports.all(p,
+                          type(p) == string)) && (!has(self.destination.notPorts) || self.destination.notPorts.all(p,
+                          type(p) == string)))))
                   maxItems: 1024
                   type: array
                   x-kubernetes-list-type: atomic
@@ -8516,6 +8650,29 @@ spec:
                           "!has(self.notProtocol) || (type(self.notProtocol) == int
                           ? self.notProtocol >= 1 && self.notProtocol <= 255 : self.notProtocol
                           in ['TCP', 'UDP', 'ICMP', 'ICMPv6', 'SCTP', 'UDPLite'])"
+                      - message:
+                          rules that specify ports must set protocol to TCP or
+                          UDP or SCTP
+                        reason: FieldValueInvalid
+                        rule:
+                          "!has(self.protocol) || (type(self.protocol) == int ? self.protocol
+                          in [6, 17, 132] : self.protocol in ['TCP', 'UDP', 'SCTP'])
+                          || ((!has(self.source) || ((!has(self.source.ports) || size(self.source.ports)
+                          == 0) && (!has(self.source.notPorts) || size(self.source.notPorts)
+                          == 0))) && (!has(self.destination) || ((!has(self.destination.ports)
+                          || size(self.destination.ports) == 0) && (!has(self.destination.notPorts)
+                          || size(self.destination.notPorts) == 0))))"
+                      - message:
+                          rules with a numeric port must set protocol to TCP or
+                          UDP or SCTP
+                        reason: FieldValueInvalid
+                        rule:
+                          has(self.protocol) || ((!has(self.source) || ((!has(self.source.ports)
+                          || self.source.ports.all(p, type(p) == string)) && (!has(self.source.notPorts)
+                          || self.source.notPorts.all(p, type(p) == string)))) && (!has(self.destination)
+                          || ((!has(self.destination.ports) || self.destination.ports.all(p,
+                          type(p) == string)) && (!has(self.destination.notPorts) || self.destination.notPorts.all(p,
+                          type(p) == string)))))
                   maxItems: 1024
                   type: array
                   x-kubernetes-list-type: atomic
@@ -9124,6 +9281,29 @@ spec:
                           "!has(self.notProtocol) || (type(self.notProtocol) == int
                           ? self.notProtocol >= 1 && self.notProtocol <= 255 : self.notProtocol
                           in ['TCP', 'UDP', 'ICMP', 'ICMPv6', 'SCTP', 'UDPLite'])"
+                      - message:
+                          rules that specify ports must set protocol to TCP or
+                          UDP or SCTP
+                        reason: FieldValueInvalid
+                        rule:
+                          "!has(self.protocol) || (type(self.protocol) == int ? self.protocol
+                          in [6, 17, 132] : self.protocol in ['TCP', 'UDP', 'SCTP'])
+                          || ((!has(self.source) || ((!has(self.source.ports) || size(self.source.ports)
+                          == 0) && (!has(self.source.notPorts) || size(self.source.notPorts)
+                          == 0))) && (!has(self.destination) || ((!has(self.destination.ports)
+                          || size(self.destination.ports) == 0) && (!has(self.destination.notPorts)
+                          || size(self.destination.notPorts) == 0))))"
+                      - message:
+                          rules with a numeric port must set protocol to TCP or
+                          UDP or SCTP
+                        reason: FieldValueInvalid
+                        rule:
+                          has(self.protocol) || ((!has(self.source) || ((!has(self.source.ports)
+                          || self.source.ports.all(p, type(p) == string)) && (!has(self.source.notPorts)
+                          || self.source.notPorts.all(p, type(p) == string)))) && (!has(self.destination)
+                          || ((!has(self.destination.ports) || self.destination.ports.all(p,
+                          type(p) == string)) && (!has(self.destination.notPorts) || self.destination.notPorts.all(p,
+                          type(p) == string)))))
                   maxItems: 1024
                   type: array
                   x-kubernetes-list-type: atomic
@@ -10450,6 +10630,29 @@ spec:
                           "!has(self.notProtocol) || (type(self.notProtocol) == int
                           ? self.notProtocol >= 1 && self.notProtocol <= 255 : self.notProtocol
                           in ['TCP', 'UDP', 'ICMP', 'ICMPv6', 'SCTP', 'UDPLite'])"
+                      - message:
+                          rules that specify ports must set protocol to TCP or
+                          UDP or SCTP
+                        reason: FieldValueInvalid
+                        rule:
+                          "!has(self.protocol) || (type(self.protocol) == int ? self.protocol
+                          in [6, 17, 132] : self.protocol in ['TCP', 'UDP', 'SCTP'])
+                          || ((!has(self.source) || ((!has(self.source.ports) || size(self.source.ports)
+                          == 0) && (!has(self.source.notPorts) || size(self.source.notPorts)
+                          == 0))) && (!has(self.destination) || ((!has(self.destination.ports)
+                          || size(self.destination.ports) == 0) && (!has(self.destination.notPorts)
+                          || size(self.destination.notPorts) == 0))))"
+                      - message:
+                          rules with a numeric port must set protocol to TCP or
+                          UDP or SCTP
+                        reason: FieldValueInvalid
+                        rule:
+                          has(self.protocol) || ((!has(self.source) || ((!has(self.source.ports)
+                          || self.source.ports.all(p, type(p) == string)) && (!has(self.source.notPorts)
+                          || self.source.notPorts.all(p, type(p) == string)))) && (!has(self.destination)
+                          || ((!has(self.destination.ports) || self.destination.ports.all(p,
+                          type(p) == string)) && (!has(self.destination.notPorts) || self.destination.notPorts.all(p,
+                          type(p) == string)))))
                   maxItems: 1024
                   type: array
                   x-kubernetes-list-type: atomic
@@ -11058,6 +11261,29 @@ spec:
                           "!has(self.notProtocol) || (type(self.notProtocol) == int
                           ? self.notProtocol >= 1 && self.notProtocol <= 255 : self.notProtocol
                           in ['TCP', 'UDP', 'ICMP', 'ICMPv6', 'SCTP', 'UDPLite'])"
+                      - message:
+                          rules that specify ports must set protocol to TCP or
+                          UDP or SCTP
+                        reason: FieldValueInvalid
+                        rule:
+                          "!has(self.protocol) || (type(self.protocol) == int ? self.protocol
+                          in [6, 17, 132] : self.protocol in ['TCP', 'UDP', 'SCTP'])
+                          || ((!has(self.source) || ((!has(self.source.ports) || size(self.source.ports)
+                          == 0) && (!has(self.source.notPorts) || size(self.source.notPorts)
+                          == 0))) && (!has(self.destination) || ((!has(self.destination.ports)
+                          || size(self.destination.ports) == 0) && (!has(self.destination.notPorts)
+                          || size(self.destination.notPorts) == 0))))"
+                      - message:
+                          rules with a numeric port must set protocol to TCP or
+                          UDP or SCTP
+                        reason: FieldValueInvalid
+                        rule:
+                          has(self.protocol) || ((!has(self.source) || ((!has(self.source.ports)
+                          || self.source.ports.all(p, type(p) == string)) && (!has(self.source.notPorts)
+                          || self.source.notPorts.all(p, type(p) == string)))) && (!has(self.destination)
+                          || ((!has(self.destination.ports) || self.destination.ports.all(p,
+                          type(p) == string)) && (!has(self.destination.notPorts) || self.destination.notPorts.all(p,
+                          type(p) == string)))))
                   maxItems: 1024
                   type: array
                   x-kubernetes-list-type: atomic
