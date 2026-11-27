@@ -546,6 +546,16 @@ func legacyIPTablesCleanupTables(
 	return tables
 }
 
+// legacyIPSetsCleanup returns an IPSets that sweeps the kernel IP sets iptables mode left behind.
+// Without the ip_set module there can be none to sweep, and every `ipset list` would fail until the
+// retry loop panics; some distros ship the module only in an optional package.
+func legacyIPSetsCleanup(ipVersionConfig *ipsets.IPVersionConfig, recorder logrusr.OpRecorder) []dpsets.IPSetsDataplane {
+	if !environment.IPSetModuleLoaded() {
+		return nil
+	}
+	return []dpsets.IPSetsDataplane{ipsets.NewIPSets(ipVersionConfig, recorder)}
+}
+
 func NewIntDataplaneDriver(config Config) *InternalDataplane {
 	if config.BPFLogLevel == "info" {
 		config.BPFLogLevel = "off"
@@ -757,7 +767,7 @@ func NewIntDataplaneDriver(config Config) *InternalDataplane {
 		rawTableV4 = rawTableV4NFT
 		filterTableV4 = filterTableV4NFT
 		ipSetsV4 = nftablesV4RootTable
-		cleanupIPSets = append(cleanupIPSets, ipsets.NewIPSets(config.RulesConfig.IPSetConfigV4, dp.loopSummarizer))
+		cleanupIPSets = append(cleanupIPSets, legacyIPSetsCleanup(config.RulesConfig.IPSetConfigV4, dp.loopSummarizer)...)
 	} else {
 		// Enable iptables.
 		mangleTableV4 = mangleTableV4IPT
@@ -1382,7 +1392,7 @@ func NewIntDataplaneDriver(config Config) *InternalDataplane {
 	)
 	dp.RegisterManager(epManager)
 	dp.endpointsSourceV4 = epManager
-	dp.liveMigrationMonitor.registerRouteModifierListener(epManager)
+	dp.liveMigrationMonitor.registerLiveMigrationListener(epManager)
 	if mainTablePolV4 != nil {
 		mainTablePolV4.IsWorkloadBGPPeerIface = epManager.ifaceIsForLocalBGPPeer
 	}
@@ -1484,7 +1494,7 @@ func NewIntDataplaneDriver(config Config) *InternalDataplane {
 			natTableV6 = natTableV6NFT
 			rawTableV6 = rawTableV6NFT
 			ipSetsV6 = nftablesV6RootTable
-			cleanupIPSets = append(cleanupIPSets, ipsets.NewIPSets(config.RulesConfig.IPSetConfigV6, dp.loopSummarizer))
+			cleanupIPSets = append(cleanupIPSets, legacyIPSetsCleanup(config.RulesConfig.IPSetConfigV6, dp.loopSummarizer)...)
 		} else {
 			// Enable iptables.
 			mangleTableV6 = mangleTableV6IPT
@@ -1628,7 +1638,7 @@ func NewIntDataplaneDriver(config Config) *InternalDataplane {
 			nil, // arpMaps
 		)
 		dp.RegisterManager(epManagerV6)
-		dp.liveMigrationMonitor.registerRouteModifierListener(epManagerV6)
+		dp.liveMigrationMonitor.registerLiveMigrationListener(epManagerV6)
 		if mainTablePolV6 != nil {
 			mainTablePolV6.IsWorkloadBGPPeerIface = epManagerV6.ifaceIsForLocalBGPPeer
 		}
