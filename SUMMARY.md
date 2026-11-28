@@ -46,6 +46,8 @@
     * [Ipam Datastore](design/ipam/ipam-datastore.md)
     * [Ipam Gc](design/ipam/ipam-gc.md)
     * [Ipam Other Callers](design/ipam/ipam-other-callers.md)
+  - Syncer
+    * [DESIGN](design/syncer/DESIGN.md)
 - [E 2 E](e2e/README.md)
   - Images
     - [Rapidclient](e2e/images/rapidclient/README.md)
@@ -106,6 +108,9 @@
         - [V 1](libcalico-go/lib/apis/crd.projectcalico.org/v1/README.md)
       - [Internalapi](libcalico-go/lib/apis/internalapi/README.md)
       - [V 1](libcalico-go/lib/apis/v1/README.md)
+    - Backend
+      - Syncersv 1
+        * [DESIGN](libcalico-go/lib/backend/syncersv1/DESIGN.md)
     - Ipam
       * [DESIGN](libcalico-go/lib/ipam/DESIGN.md)
   - [Test](libcalico-go/test/README.md)
@@ -142,6 +147,10 @@
 - Third Party
   - [Cni Plugins](third_party/cni-plugins/README.md)
 - [Typha](typha/README.md)
+  - Design
+    * [Client](typha/design/client.md)
+    * [Protocol](typha/design/protocol.md)
+    * [Server](typha/design/server.md)
   - Docs
     * [Compression Analysis](typha/docs/compression-analysis.md)
   * [DESIGN](typha/DESIGN.md)
